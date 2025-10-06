@@ -19,18 +19,14 @@ def quick_get():
             "index": 1,
             "items": [
                 {
-                    "clearCount": 38,
-                    "commentCount": 1,
-                    "difficulty": 2,
+                    "clearCount": 0,
+                    "commentCount": 0,
+                    "difficulty": 0,
                     "fav": False,
-                    "gamer": {
-                        "gamerId": 63125,
-                        "nickname": "ANNIN豆腐",
-                        "country": "JP",
-                    },
-                    "title": "噛まれるな！",
-                    "rating": 42,
-                    "tier": 1
+                    "gamer": {},
+                    "title": "temp level for response",
+                    "rating": 0,
+                    "tier": 0
                 }
             ]
         },
