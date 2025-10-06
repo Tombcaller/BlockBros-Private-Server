@@ -1,0 +1,19 @@
+{
+	"adminLevel": 0,
+	"builderPt": 0,
+	"channel": "",
+	"clearCount": 0,
+	"commentableAt": 0,
+	"country": "ZZ",
+	"emblemCount": 0,
+	"followerCount": 0,
+	"gem": 0,
+	"homeLevel": null,
+	"lang": "en",
+	"levelCount": 0,
+	"maxVideoId": 0,
+	"nameVersion": 0,
+	"nickname": null,
+	"playerPt": 0,
+  "inventory": "{\"blocks\":{}, \"avatars\":[1,1001], \"themes\":{}}"
+}
