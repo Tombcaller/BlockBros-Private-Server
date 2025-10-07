@@ -2,13 +2,15 @@
 	"adminLevel": 0,
  	"avatar": 1,
 	"builderPt": 0,
+	"campaigns": {},
 	"channel": "",
 	"clearCount": 0,
 	"commentableAt": 0,
 	"country": "ZZ",
 	"emblemCount": 0,
 	"followerCount": 0,
-	"gem": 0,
+	"gem": 100,
+	"hasUnfinishedIAP": false,
 	"homeLevel": null,
 	"lang": "en",
 	"levelCount": 0,
@@ -16,5 +18,7 @@
 	"nameVersion": 0,
 	"nickname": null,
 	"playerPt": 0,
-  "inventory": "{\"blocks\":{}, \"avatars\":[1,1001], \"themes\":{}}"
+	"researches": null,
+  	"inventory": "{\"blocks\":{\"4\": 100, \"5\": 20, \"6\": 20, \"7\": 5, \"8\": 1, \"9\": 3}, \"avatars\":[1, 1001], \"themes\":{\"1\": 1}}"
 }
+

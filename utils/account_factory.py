@@ -44,7 +44,7 @@ def build_account(lang="en"):
         "altPassword": generate_altPassword(),
         "createdAt": int(time.time()),
         "lastLoginAt": int(time.time()),
-        "id": random.randint(4000000000000000, 7000000000000000),
+        "internalId": random.randint(4000000000000000, 7000000000000000),
         "token": generate_token(),
         "lang": lang
     })
