@@ -3,7 +3,7 @@
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import account
+from models import account, db
 from utils.response import generateResponse
 from utils.account_factory import generate_token
 
@@ -40,6 +40,12 @@ def alt_login():
     if accountToLogin.altPassword != password:
         return {"error": "Invalid password"}, 403
     
+    #§ Generating new token for user and updating lastLoginAt time §#
+    token = generate_token()
+    accountToLogin.token = token
+    accountToLogin.lastLoginAt = int(time.time())
+    db.session.commit()
+
     #§ Creating body to send §#
     body = {
         "success": True,

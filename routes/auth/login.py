@@ -41,6 +41,9 @@ def login():
         print(accountToLogin.password + " " + password)
         return {"error": "Invalid password"}, 403
     
+    #§ Generating new token for user and updating lastLoginAt time §#
+    token = generate_token()
+    accountToLogin.token = token
     accountToLogin.lastLoginAt = int(time.time())
     db.session.commit()
 
@@ -49,7 +52,7 @@ def login():
         "success": True,
         "result":{
             "loginBonus": 0,
-            "token": generate_token(),
+            "token": token,
         },
         "updated":{
             "campaignInfo":{

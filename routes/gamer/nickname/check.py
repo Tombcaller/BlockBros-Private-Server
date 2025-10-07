@@ -8,7 +8,7 @@ from sympy import false
 
 #§ Server Utility Imports §#
 from models import account
-from utils.response import generateResponse
+from utils.response import generateResponse, checkToken, tokenMismatchResponse
 
 #§ Misc Imports §#
 import time
@@ -18,6 +18,10 @@ import time
 gamer_nickname_check = Blueprint("gamer_nickname_check", __name__, url_prefix="/gamer/nickname")
 @gamer_nickname_check.route("/check", methods=["POST"])
 def check():
+
+    #§ Checking token validity §#
+    if checkToken(request.headers.get("Authorization")) == False:
+        return tokenMismatchResponse()
 
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()
