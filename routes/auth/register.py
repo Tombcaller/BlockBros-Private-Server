@@ -50,7 +50,7 @@ def register():
         "result":{
             "loginBonus": 0,
             "token": newAccount.token,
-            "user_id": newAccount.id,
+            "user_id": newAccount.internalId,
         },
         "updated":{
             "campaignInfo":{
@@ -87,7 +87,7 @@ def register():
                 "gem": newAccount.gem,
                 "hasUnfinishedIAP": False,
                 "homeLevel": newAccount.homeLevel,
-                "id": newAccount.id,
+                "id": newAccount.internalId,
                 "inventory": json.loads(newAccount.inventory),
                 "lang": "en",
                 "lastLoginAt": newAccount.lastLoginAt,

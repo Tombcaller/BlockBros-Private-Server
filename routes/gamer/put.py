@@ -8,6 +8,7 @@ from flask import Blueprint, request
 #§ Server Utility Imports §#
 from models import account, db
 from utils.response import generateResponse, checkToken, tokenMismatchResponse
+from utils.get_db_data import getPublicPlayerData
 #§ ------------------------- §#
 
 #§ Creating endpoint blueprint & setting route §#
@@ -34,10 +35,13 @@ def put():
 
     #§ Looking up nickname in database §#
     if account.query.filter(func.lower(account.nickname) == nicknameToCheck.lower()).first() is not None:
+        print("Invalid.")
         return generateResponse({"success": False, "result": {}, "updated": {}, "timestamp": 1759854937})
     
-    currentUser = account.query.filter(account.id == loggedInId).first()
+    print("Invalid 2")
+    currentUser = account.query.filter(account.internalId == loggedInId).first()
     currentUser.nickname = nicknameToCheck
+    currentUser.nameVersion += 1
     db.session.commit()
 
     #§ Creating body to send §#
@@ -45,52 +49,12 @@ def put():
         "success": True,
         "result": {},
         "updated": {
-            "gamer": {
-            "adminLevel": currentUser.adminLevel,
-            "avatar": 1,
-            "builderPt": 0,
-            "campaigns": {},
-            "channel": "",
-            "clearCount": 0,
-            "commentableAt": 0,
-            "country": "GB",
-            "createdAt": 1730916323,
-            "emblemCount": 0,
-            "followerCount": 0,
-            "gamerId": 360684,
-            "gem": 85,
-            "hasUnfinishedIAP": False,
-            "id": 5067488613367808,
-            "inventory": {
-                "avatars": [
-                1
-                ],
-                "blocks": {
-                "3": 2,
-                "4": 80,
-                "5": 20,
-                "6": 20,
-                "7": 5,
-                "8": 1,
-                "9": 3
-                },
-                "themes": {
-                "1": 1
-                }
-            },
-            "lang": "en",
-            "lastLoginAt": 1759854921,
-            "levelCount": 1,
-            "maxVideoId": 0,
-            "nameVersion": 2,
-            "nickname": "HTTPS",
-            "playerPt": 2,
-            "researches": None,
-            "visibleAt": 0
-            }
+            "gamer": getPublicPlayerData(loggedInId)
         },
         "timestamp": 1759854961
         }
+    
+    body["updated"]["gamer"]["nameVersion"] = currentUser.nameVersion
 
     #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
     return generateResponse(body)

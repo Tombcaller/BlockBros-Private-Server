@@ -6,10 +6,10 @@ from flask import Blueprint, request
 from models import account, db
 from utils.response import generateResponse
 from utils.account_factory import generate_token
+from utils.get_db_data import getPrivatePlayerData
 
 #§ Misc Imports §#
 import time
-import json
 #§ ------------------------- §#
 
 #§ Creating endpoint blueprint & setting route §#
@@ -71,36 +71,7 @@ def alt_login():
                 "followers":[],
                 "follows":[]
             },
-            "gamer":{
-                "adminLevel": accountToLogin.adminLevel,
-                "altPassword": accountToLogin.altPassword,
-                "avatar": accountToLogin.avatar,
-                "builderPt": accountToLogin.builderPt,
-                "campaigns":{},
-                "channel": accountToLogin.channel,
-                "clearCount": accountToLogin.clearCount,
-                "commentableAt": accountToLogin.commentableAt,
-                "country": accountToLogin.country,
-                "createdAt": accountToLogin.createdAt,
-                "emblemCount": accountToLogin.emblemCount,
-                "followerCount": accountToLogin.followerCount,
-                "gamerId": accountToLogin.gamerId,
-                "gem": accountToLogin.gem,
-                "hasUnfinishedIAP": False,
-                "homeLevel": accountToLogin.homeLevel,
-                "id": accountToLogin.id,
-                "inventory": json.loads(accountToLogin.inventory),
-                "lang": accountToLogin.lang,
-                "lastLoginAt": accountToLogin.lastLoginAt,
-                "levelCount": accountToLogin.levelCount,
-                "maxVideoId": accountToLogin.maxVideoId,
-                "nameVersion": accountToLogin.nameVersion,
-                "nickname": accountToLogin.nickname,
-                "password": accountToLogin.password,
-                "playerPt": accountToLogin.playerPt,
-                "researches":[],
-                "visibleAt": accountToLogin.visibleAt
-            },
+            "gamer":getPrivatePlayerData(accountToLogin.internalId),
             "gifts":[],
             "notifications":[]
         },

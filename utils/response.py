@@ -14,28 +14,16 @@ import gzip
 def checkToken(auth):
 
     #§ Extracting id and token from Authorization header §#
-    id = auth.split(":")[0]
+    internalId = auth.split(":")[0]
     token = auth.split(":")[1]
 
-    #§ Querying DB to see if token from the auth header matches that of the ID from the header §#
-    user = account.query.filter_by(id=id).first()
+    #§ Querying DB to see if token from the auth header matches that of the id from the header §#
+    user = account.query.filter_by(internalId=internalId).first()
 
     if user and user.token == token:
         return True
     else:
         return False
-
-
-
-
-
-
-
-
-
-
-
-
 
 #§ Function to generate a response for token mismatch errors §#
 def tokenMismatchResponse():   
