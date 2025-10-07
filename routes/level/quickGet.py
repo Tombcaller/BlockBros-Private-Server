@@ -4,7 +4,6 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from utils.response import generateResponse, checkToken, tokenMismatchResponse
-from models import account
 #§ ------------------------- §#
 
 #§ Creating endpoint blueprint & setting route §#

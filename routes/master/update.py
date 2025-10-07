@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint
 import time
 
 master_update_bp = Blueprint("master_update", __name__, url_prefix="/master")
