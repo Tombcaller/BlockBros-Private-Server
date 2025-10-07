@@ -14,13 +14,15 @@ import time
 #§ ------------------------- §#
 
 #§ Creating endpoint blueprint & setting route §#
-gamer_nickname_check = Blueprint("gamer_nickname_check", __name__, url_prefix="/gamer/nickname")
-@gamer_nickname_check.route("/check", methods=["POST"])
+gamer_nickname_check_bp = Blueprint("gamer_nickname_check", __name__, url_prefix="/gamer/nickname")
+@gamer_nickname_check_bp.route("/check", methods=["POST"])
 def check():
 
     #§ Checking token validity §#
     if checkToken(request.headers.get("Authorization")) == False:
         return tokenMismatchResponse()
+    else:
+        loggedInId = request.headers.get("Authorization").split(":")[0]
 
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()

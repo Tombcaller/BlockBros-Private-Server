@@ -25,6 +25,18 @@ def checkToken(auth):
     else:
         return False
 
+
+
+
+
+
+
+
+
+
+
+
+
 #§ Function to generate a response for token mismatch errors §#
 def tokenMismatchResponse():   
     body = {

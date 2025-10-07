@@ -34,11 +34,11 @@ def alt_login():
 
     #§ Returning error if gamerId not found in DB §#
     if not accountToLogin:
-        return {"error": "Account not found"}, 404
+        return {"reason": "no_match"}
 
     #§ Verifiying that password from request matches that of accountToLogin §#
     if accountToLogin.altPassword != password:
-        return {"error": "Invalid password"}, 403
+        return {"reason": "no_match"}
     
     #§ Generating new token for user and updating lastLoginAt time §#
     token = generate_token()
@@ -51,7 +51,7 @@ def alt_login():
         "success": True,
         "result":{
             "loginBonus": 0,
-            "token": generate_token(),
+            "token": token,
         },
         "updated":{
             "campaignInfo":{
