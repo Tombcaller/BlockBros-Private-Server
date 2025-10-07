@@ -9,6 +9,10 @@ from flask import Blueprint, request
 from models import account, db
 from utils.response import generateResponse, checkToken, tokenMismatchResponse
 from utils.get_db_data import getPublicPlayerData
+
+#§ Misc Imports §#
+import time
+import json
 #§ ------------------------- §#
 
 #§ Creating endpoint blueprint & setting route §#
@@ -35,10 +39,8 @@ def put():
 
     #§ Looking up nickname in database §#
     if account.query.filter(func.lower(account.nickname) == nicknameToCheck.lower()).first() is not None:
-        print("Invalid.")
-        return generateResponse({"success": False, "result": {}, "updated": {}, "timestamp": 1759854937})
+        return generateResponse({"success": False, "result": {}, "updated": {}, "timestamp": int(time.time())})
     
-    print("Invalid 2")
     currentUser = account.query.filter(account.internalId == loggedInId).first()
     currentUser.nickname = nicknameToCheck
     currentUser.nameVersion += 1
@@ -55,6 +57,7 @@ def put():
         }
     
     body["updated"]["gamer"]["nameVersion"] = currentUser.nameVersion
+    body["updated"]["gamer"]["inventory"] = json.loads(currentUser.inventory)
 
     #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
     return generateResponse(body)
