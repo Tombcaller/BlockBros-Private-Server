@@ -5,16 +5,16 @@ from flask import Blueprint, request
 #§ Server Utility Imports §#
 from models import account
 from utils.response import generateResponse, checkToken, tokenMismatchResponse
-from utils.get_db_data import getPublicPlayerData
+from utils.get_db_data import getPlayerData
 
 #§ Misc Imports §#
 import time
 #§ ------------------------- §#
 
-gamer_search_bp = Blueprint("gamer_get", __name__, url_prefix="/gamer")
-@gamer_search_bp.route("/get", methods=["POST"])
+gamer_get_bp = Blueprint("gamer_get", __name__, url_prefix="/gamer")
+@gamer_get_bp.route("/get", methods=["POST"])
 
-def search():
+def get():
     #§ Checking token validity §#
     if checkToken(request.headers.get("Authorization")) == False:
         return tokenMismatchResponse()
@@ -41,11 +41,7 @@ def search():
     #§ Creating body to send §#
     body = {
         "success": success,
-        "result": {
-            "all_loaded": True,
-            "index": 1 if success else 0,
-            "items": [getPublicPlayerData(accountToReturn.internalId)] if success == True else [],
-        },
+        "result": getPlayerData(accountToReturn.internalId, 2) if success == True else {},
         "updated": {},
         "timestamp": int(time.time())
         }
