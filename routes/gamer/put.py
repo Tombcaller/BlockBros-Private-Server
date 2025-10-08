@@ -24,6 +24,8 @@ def put():
     validity = checkRequestValidity(request)
     if not validity["success"]: return validity["error"]
 
+    loggedInId = request.headers.get("Authorization").split(":")[0]
+
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()
 
