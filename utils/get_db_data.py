@@ -22,7 +22,7 @@ def getPlayerData(internalId, level = 1):
         "gamerId": accountData.gamerId,
         "homeLevel": accountData.homeLevel,
         "id": accountData.internalId,
-        "inventory": json.loads(accountData.inventory).get("avatars") if accountData.inventory else {},
+        "inventory": {"avatars": json.loads(accountData.inventory).get("avatars")} if accountData.inventory else {},
         "lastLoginAt": accountData.lastLoginAt,
         "levelCount": accountData.levelCount,
         "nickname": accountData.nickname,
@@ -31,7 +31,7 @@ def getPlayerData(internalId, level = 1):
         "visibleAt": accountData.visibleAt
         }
     
-    if level <= 2:
+    if level >= 2:
         accountToReturn["campaigns"] = json.loads(accountData.campaigns) if accountData.campaigns else {}
         accountToReturn["clearCount"] = accountData.clearCount
         accountToReturn["gem"] = accountData.gem
@@ -42,7 +42,7 @@ def getPlayerData(internalId, level = 1):
         accountToReturn["nameVersion"] = accountData.nameVersion
         accountToReturn["researches"] = accountData.researches
 
-    if level <= 3:
+    if level >= 3:
         accountToReturn["altPassword"] = accountData.altPassword
         accountToReturn["password"] = accountData.password
 
