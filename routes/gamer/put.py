@@ -41,6 +41,7 @@ def put():
     if account.query.filter(func.lower(account.nickname) == nicknameToCheck.lower()).first() is not None:
         return generateResponse({"success": False, "result": {}, "updated": {}, "timestamp": int(time.time())})
     
+    #§ Loading data from currently logged in user, updating name version and nickname §#
     currentUser = account.query.filter(account.internalId == loggedInId).first()
     currentUser.nickname = nicknameToCheck
     currentUser.nameVersion += 1
@@ -56,7 +57,9 @@ def put():
         "timestamp": 1759854961
         }
     
+    #§ Adding missing headers not returned by default §#
     body["updated"]["gamer"]["nameVersion"] = currentUser.nameVersion
+    body["updated"]["gamer"]["nameVersion"] = currentUser.gem
     body["updated"]["gamer"]["inventory"] = json.loads(currentUser.inventory)
 
     #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
