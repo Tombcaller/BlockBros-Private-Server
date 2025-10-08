@@ -7,7 +7,7 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import account
-from utils.response import generateResponse, checkToken, tokenMismatchResponse
+from utils.response import generateResponse, checkRequestValidity
 
 #§ Misc Imports §#
 import time
@@ -16,13 +16,11 @@ import time
 #§ Creating endpoint blueprint & setting route §#
 gamer_nickname_check_bp = Blueprint("gamer_nickname_check", __name__, url_prefix="/gamer/nickname")
 @gamer_nickname_check_bp.route("/check", methods=["POST"])
-def check():
 
-    #§ Checking token validity §#
-    if checkToken(request.headers.get("Authorization")) == False:
-        return tokenMismatchResponse()
-    else:
-        loggedInId = request.headers.get("Authorization").split(":")[0]
+def check():
+    #§ Checking Request (Token + CRC) validity §#
+    validity = checkRequestValidity(request)
+    if not validity["success"]: return validity["error"]
 
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()

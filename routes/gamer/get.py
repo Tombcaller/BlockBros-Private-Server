@@ -4,7 +4,7 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import account
-from utils.response import generateResponse, checkToken, tokenMismatchResponse
+from utils.response import generateResponse, checkRequestValidity
 from utils.get_db_data import getPlayerData
 
 #§ Misc Imports §#
@@ -15,11 +15,9 @@ gamer_get_bp = Blueprint("gamer_get", __name__, url_prefix="/gamer")
 @gamer_get_bp.route("/get", methods=["POST"])
 
 def get():
-    #§ Checking token validity §#
-    if checkToken(request.headers.get("Authorization")) == False:
-        return tokenMismatchResponse()
-    else:
-        loggedInId = request.headers.get("Authorization").split(":")[0]
+    #§ Checking Request (Token + CRC) validity §#
+    validity = checkRequestValidity(request)
+    if not validity["success"]: return validity["error"]
 
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()
