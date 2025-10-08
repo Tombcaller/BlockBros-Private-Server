@@ -8,7 +8,7 @@ from flask import Blueprint, request
 #§ Server Utility Imports §#
 from models import account
 from utils.response import generateResponse, checkToken, tokenMismatchResponse
-from utils.get_db_data import getPublicPlayerData
+from utils.get_db_data import getPlayerData
 
 #§ Misc Imports §#
 import time
@@ -47,7 +47,7 @@ def search():
         "result": {
             "all_loaded": True,
             "index": 1 if success else 0,
-            "items": [getPublicPlayerData(accountToReturn.internalId)] if success == True else [],
+            "items": [getPlayerData(accountToReturn.internalId)] if success == True else [],
         },
         "updated": {},
         "timestamp": int(time.time())

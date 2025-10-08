@@ -6,7 +6,7 @@ from flask import Blueprint, request
 from models import account, db
 from utils.response import generateResponse
 from utils.account_factory import generate_token
-from utils.get_db_data import getPrivatePlayerData
+from utils.get_db_data import getPlayerData
 
 #§ Misc Imports §#
 import time
@@ -71,7 +71,7 @@ def alt_login():
                 "followers":[],
                 "follows":[]
             },
-            "gamer":getPrivatePlayerData(accountToLogin.internalId),
+            "gamer":getPlayerData(accountToLogin.internalId, 3),
             "gifts":[],
             "notifications":[]
         },

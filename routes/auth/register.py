@@ -6,6 +6,7 @@ from flask import Blueprint, request
 from models import db
 from utils.response import generateResponse
 from utils.account_factory import build_account
+from utils.get_db_data import getPlayerData
 
 #§ Misc Imports §#
 import time
@@ -70,36 +71,7 @@ def register():
                 "followers":[],
                 "follows":[]
             },
-            "gamer":{
-                "adminLevel": newAccount.adminLevel,
-                "altPassword": newAccount.altPassword,
-                "avatar": newAccount.avatar,
-                "builderPt": newAccount.builderPt,
-                "campaigns":{},
-                "channel": newAccount.channel,
-                "clearCount": newAccount.clearCount,
-                "commentableAt": newAccount.commentableAt,
-                "country": newAccount.country,
-                "createdAt": newAccount.createdAt,
-                "emblemCount": newAccount.emblemCount,
-                "followerCount": newAccount.followerCount,
-                "gamerId": newAccount.gamerId,
-                "gem": newAccount.gem,
-                "hasUnfinishedIAP": False,
-                "homeLevel": newAccount.homeLevel,
-                "id": newAccount.internalId,
-                "inventory": json.loads(newAccount.inventory),
-                "lang": "en",
-                "lastLoginAt": newAccount.lastLoginAt,
-                "levelCount": newAccount.levelCount,
-                "maxVideoId": newAccount.maxVideoId,
-                "nameVersion": newAccount.nameVersion,
-                "nickname": newAccount.nickname,
-                "password": newAccount.password,
-                "playerPt": newAccount.playerPt,
-                "researches":[],
-                "visibleAt": newAccount.visibleAt
-            },
+            "gamer": getPlayerData(newAccount.internalId, 3),
             "gifts":[],
             "notifications":[]
         },

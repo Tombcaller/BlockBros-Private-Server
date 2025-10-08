@@ -6,7 +6,7 @@ from models import account
 import json
 #§ ------------------------- §#
 
-def getPlayerData(internalId, level):
+def getPlayerData(internalId, level = 1):
     accountData = account.query.filter_by(internalId=internalId).first()
 
     accountToReturn = {
@@ -44,5 +44,6 @@ def getPlayerData(internalId, level):
 
     if level <= 3:
         accountToReturn["altPassword"] = accountData.altPassword
+        accountToReturn["password"] = accountData.password
 
     return accountToReturn
