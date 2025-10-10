@@ -7,7 +7,7 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import account
-from utils.response import generateResponse, checkRequestValidity
+from utils.response import generateResponse, checkRequestValidity, errorResponse
 
 #§ Misc Imports §#
 import time
@@ -20,7 +20,8 @@ gamer_nickname_check_bp = Blueprint("gamer_nickname_check", __name__, url_prefix
 def check():
     #§ Checking Request (Token + CRC) validity §#
     validity = checkRequestValidity(request)
-    if not validity["success"]: return validity["error"]
+    if not validity["success"]: 
+        return errorResponse(validity["error"])
 
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()
@@ -30,7 +31,7 @@ def check():
 
     #§ Checking if request contains required paramaters §#
     if not nicknameToCheck:
-        return {"error": "Invalid request"}, 400
+        return errorResponse()
     
     #§ Looking up nickname in database §#
     if account.query.filter(func.lower(account.nickname) == nicknameToCheck.lower()).first() is None:

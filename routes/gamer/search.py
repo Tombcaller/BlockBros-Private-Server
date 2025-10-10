@@ -7,7 +7,7 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import account
-from utils.response import generateResponse, checkRequestValidity
+from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getPlayerData
 
 #§ Misc Imports §#
@@ -20,7 +20,8 @@ gamer_search_bp = Blueprint("gamer_search", __name__, url_prefix="/gamer")
 def search():
     #§ Checking Request (Token + CRC) validity §#
     validity = checkRequestValidity(request)
-    if not validity["success"]: return validity["error"]
+    if not validity["success"]: 
+        return errorResponse(validity["error"])
 
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()
@@ -30,7 +31,7 @@ def search():
 
     #§ Checking if request contains required paramaters §#
     if not nicknameToCheck:
-        return {"error": "Invalid request"}, 400
+        return errorResponse("missing_parameters")
     
     #§ Looking up nickname in database §#
     accountToReturn = account.query.filter(func.lower(account.nickname) == nicknameToCheck.lower()).first()
@@ -45,7 +46,7 @@ def search():
         "result": {
             "all_loaded": True,
             "index": 1 if success else 0,
-            "items": [getPlayerData(accountToReturn.internalId)] if success == True else [],
+            "items": [getPlayerData(accountToReturn.internalId)] if success else [],
         },
         "updated": {},
         "timestamp": int(time.time())

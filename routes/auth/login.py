@@ -4,7 +4,7 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import account, db
-from utils.response import generateResponse
+from utils.response import generateResponse, errorResponse
 from utils.account_factory import generate_token
 from utils.get_db_data import getPlayerData
 
@@ -28,24 +28,24 @@ def login():
 
     #§ Checking if request contains required paramaters §#
     if not internalId or not password:
-        return {"error": "Invalid request"}, 400
+        return errorResponse("missing_parameters")
 
     #§ Looking up user in database and saving their data to "accountToLogin" §#
     accountToLogin = account.query.filter_by(internalId=internalId).first()
 
     #§ Returning error if gamerId not found in DB §#
     if not accountToLogin:
-        return {"error": "Account not found"}, 404
+        return errorResponse("account_not_found")
 
     #§ Verifiying that password from request matches that of accountToLogin §#
     if accountToLogin.password != password:
         print(accountToLogin.password + " " + password)
-        return {"error": "Invalid password"}, 403
+        return errorResponse("no_match")
     
     #§ Generating new token for user and updating lastLoginAt time §#
     token = generate_token()
     accountToLogin.token = token
-    accountToLogin.lastLoginAt = int(time.time())
+    accountToLogin.lastLoginAt = time.time()
     db.session.commit()
 
     #§ Creating body to send §#

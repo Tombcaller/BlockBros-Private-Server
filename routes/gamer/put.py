@@ -7,7 +7,7 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import account, db
-from utils.response import generateResponse, checkRequestValidity
+from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getPlayerData
 
 #§ Misc Imports §#
@@ -22,8 +22,10 @@ gamer_put_bp = Blueprint("gamer_put", __name__, url_prefix="/gamer")
 def put():
     #§ Checking Request (Token + CRC) validity §#
     validity = checkRequestValidity(request)
-    if not validity["success"]: return validity["error"]
+    if not validity["success"]: 
+        return errorResponse(validity["error"])
 
+    #§ Grabbing current logged in user's internal ID for database usage §# 
     loggedInId = request.headers.get("Authorization").split(":")[0]
 
     #§ Getting user's request data from Flask §#
@@ -34,25 +36,24 @@ def put():
 
     #§ Checking if request contains required paramaters §#
     if not nicknameToCheck:
-        return {"error": "Invalid request"}, 400
+        return errorResponse("missing_parameters")
 
     #§ Looking up nickname in database §#
     if account.query.filter(func.lower(account.nickname) == nicknameToCheck.lower()).first() is not None:
-        return generateResponse({"success": False, "result": {}, "updated": {}, "timestamp": int(time.time())})
-    
-    #§ Loading data from currently logged in user, updating name version and nickname §#
-    currentUser = account.query.filter(account.internalId == loggedInId).first()
-    currentUser.nickname = nicknameToCheck
-    currentUser.nameVersion += 1
-    db.session.commit()
+        success = False
+    else:
+        #§ Loading data from currently logged in user, updating name version and nickname §#
+        currentUser = account.query.filter(account.internalId == loggedInId).first()
+        currentUser.nickname = nicknameToCheck
+        currentUser.nameVersion += 1
+        db.session.commit()
+        success = True
 
     #§ Creating body to send §#
     body = {
         "success": True,
         "result": {},
-        "updated": {
-            "gamer": getPlayerData(loggedInId)
-        },
+        "updated": {"gamer": getPlayerData(loggedInId)} if success == True else {},
         "timestamp": 1759854961
         }
     

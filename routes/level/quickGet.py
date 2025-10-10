@@ -3,7 +3,7 @@
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from utils.response import generateResponse, checkRequestValidity
+from utils.response import generateResponse, checkRequestValidity, errorResponse
 #§ ------------------------- §#
 
 #§ Creating endpoint blueprint & setting route §#
@@ -13,7 +13,8 @@ level_quickGet_bp = Blueprint("level_quickGet", __name__, url_prefix="/level")
 def quick_get():
     #§ Checking Request (Token + CRC) validity §#
     validity = checkRequestValidity(request)
-    if not validity["success"]: return validity["error"]
+    if not validity["success"]:
+        return errorResponse(validity["error"])
 
     body = {
         "success": True,

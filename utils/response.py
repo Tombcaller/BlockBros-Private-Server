@@ -11,7 +11,7 @@ import gzip
 import hashlib
 #§ ------------------------- §#
 
-#§ Function to check if are valid §#
+#§ Function to check if CRC & Token from request headers are valid §#
 def checkRequestValidity(request):
 
     #§ Extracting id and token from Authorization header §#
@@ -24,34 +24,28 @@ def checkRequestValidity(request):
     #§ Checking for valid token §#
     if user and user.token == token:
 
-        #§ If token is correct, check CRC §#
+        #§ If token is correct, calculate expected CRC header §#
         body = request.get_json()
         body = json.dumps(body, sort_keys=True, separators=(',', ':'))
         expectedCRC = hashlib.md5(str(body + token).encode("utf-8")).hexdigest()
 
+        #§ Checking if CRC header matches expected CRC §#
         if expectedCRC == request.headers.get("CRC"):
             return {"success":True, "error": None}
         else:
-            return {"success":False, "error":crcMismatchResponse()}
+            return {"success":False, "error":"crc_mismatch"}
     else:
-        return {"success":False, "error":tokenMismatchResponse()}
+        return {"success":False, "error":"token_mismatch"}
     
 
-def crcMismatchResponse():
-    body = {
-        "reason": "crc_mismatch",
-    }
-    #§ Generating token mismatch response with a 400 error §#
-    return generateResponse(body, status=400)
 
-
-#§ Function to generate a response for token mismatch errors §#
-def tokenMismatchResponse():   
+#§ Generating & returning custom error response with an error code of 400 §#
+def errorResponse(reason, status = 400):
     body = {
-        "reason": "token_mismatch",
+        "reason": reason,
     }
-    #§ Generating token mismatch response with a 400 error §#
-    return generateResponse(body, status=400)
+    return generateResponse(body, status)
+
 
 
 #§ Function to GZIP Flask response for BB client compatability §#

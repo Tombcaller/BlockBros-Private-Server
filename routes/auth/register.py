@@ -34,16 +34,17 @@ def register():
     if key != "Jq983":
         return {"error": "Invalid key"}, 403
 
-    #§ Creating new account with utils.account_factory account builder §#
-    newAccount = build_account(lang=lang)
+    for _ in range(200):
+        #§ Creating new account with utils.account_factory account builder §#
+        newAccount = build_account(lang=lang)
 
-    #§ Adding new account to DB §#
-    db.session.add(newAccount)
-    db.session.commit()
+        #§ Adding new account to DB §#
+        db.session.add(newAccount)
+        db.session.commit()
 
-    #§ Set nickname after ID is assigned §#
-    newAccount.nickname = f"{newAccount.gamerId:08d}"
-    db.session.commit()
+        #§ Set nickname after ID is assigned §#
+        newAccount.nickname = f"{newAccount.gamerId:08d}"
+        db.session.commit()
 
     #§ Creating body to send §#
     body = {
