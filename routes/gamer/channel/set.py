@@ -9,6 +9,7 @@ from utils.get_db_data import getPlayerData
 
 #§ Misc Imports §#
 import time
+import json
 #§ ------------------------- §#
 
 #§ Creating endpoint blueprint & setting route §#
@@ -46,6 +47,8 @@ def set():
         "updated": {"gamer": getPlayerData(loggedInId)} if success == True else {},
         "timestamp": int(time.time())
         }
+    
+    body["updated"]["gamer"]["inventory"] = json.loads(currentUser.inventory)
 
     #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
     return generateResponse(body)
