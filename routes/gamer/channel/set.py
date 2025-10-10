@@ -1,7 +1,4 @@
 #§ -------- IMPORTS -------- §#
-#§ SQLAlchemy Imports §#
-from sqlalchemy import func
-
 #§ Flask Imports §#
 from flask import Blueprint, request
 
@@ -12,14 +9,13 @@ from utils.get_db_data import getPlayerData
 
 #§ Misc Imports §#
 import time
-import json
 #§ ------------------------- §#
 
 #§ Creating endpoint blueprint & setting route §#
-gamer_put_bp = Blueprint("gamer_put", __name__, url_prefix="/gamer")
-@gamer_put_bp.route("/put", methods=["POST"])
+gamer_channel_set_bp = Blueprint("gamer_channel_set", __name__, url_prefix="/gamer/channel")
+@gamer_channel_set_bp.route("/set", methods=["POST"])
 
-def put():
+def set():
     #§ Checking Request (Token + CRC) validity §#
     validity = checkRequestValidity(request)
     if not validity["success"]: 
@@ -32,22 +28,16 @@ def put():
     request_data = request.get_json()
 
     #§ Defining login params to check in DB from user's request data §#
-    nicknameToCheck = request_data.get("nickname")
+    url = request_data.get("url")
 
     #§ Checking if request contains required paramaters §#
-    if not nicknameToCheck:
+    if not url:
         return errorResponse("missing_parameters")
 
-    #§ Looking up nickname in database §#
-    if account.query.filter(func.lower(account.nickname) == nicknameToCheck.lower()).first() is not None:
-        success = False
-    else:
-        #§ Loading data from currently logged in user, updating name version and nickname §#
-        currentUser = account.query.filter(account.internalId == loggedInId).first()
-        currentUser.nickname = nicknameToCheck
-        currentUser.nameVersion += 1
-        db.session.commit()
-        success = True
+    currentUser = account.query.filter(account.internalId == loggedInId).first()
+    currentUser.channel = url
+    db.session.commit()
+    success = True
 
     #§ Creating body to send §#
     body = {
@@ -56,11 +46,6 @@ def put():
         "updated": {"gamer": getPlayerData(loggedInId)} if success == True else {},
         "timestamp": int(time.time())
         }
-    
-    #§ Adding missing headers not returned by default §#
-    body["updated"]["gamer"]["nameVersion"] = currentUser.nameVersion
-    body["updated"]["gamer"]["nameVersion"] = currentUser.gem
-    body["updated"]["gamer"]["inventory"] = json.loads(currentUser.inventory)
 
     #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
     return generateResponse(body)
