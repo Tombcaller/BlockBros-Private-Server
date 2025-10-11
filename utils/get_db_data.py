@@ -52,8 +52,6 @@ def getPlayerData(internalId, level = 1):
 
     return accountToReturn
 
-
-
 #§ Function to load a page of a "gamer" list from a cursor §#
 def loadGamerListPage(base_query, cursor_field, cursor, limit=10):
 

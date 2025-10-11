@@ -11,6 +11,19 @@ import gzip
 import hashlib
 #§ ------------------------- §#
 
+#§ Function to GZIP Flask response for BB client compatability §#
+def generateResponse(data: dict, status: int = 200):
+
+    #§ GZIPping response data §#
+    json_str = json.dumps(data, ensure_ascii=False)
+    gzipped = gzip.compress(json_str.encode("utf-8"))
+
+    #§ Creating & returning Flask Response with GZIPped data and content encoding header §#
+    response = Response(gzipped, status=status, mimetype="application/json")
+    response.headers["Content-Encoding"] = "gzip"
+
+    return response
+
 #§ Function to check if CRC & Token from request headers are valid §#
 def checkRequestValidity(request):
 
@@ -37,8 +50,6 @@ def checkRequestValidity(request):
     else:
         return {"success":False, "error":"token_mismatch"}
     
-
-
 #§ Generating & returning custom error response with an error code of 400 §#
 def errorResponse(reason, status = 400):
     body = {
@@ -47,16 +58,3 @@ def errorResponse(reason, status = 400):
     return generateResponse(body, status)
 
 
-
-#§ Function to GZIP Flask response for BB client compatability §#
-def generateResponse(data: dict, status: int = 200):
-
-    #§ GZIPping response data §#
-    json_str = json.dumps(data, ensure_ascii=False)
-    gzipped = gzip.compress(json_str.encode("utf-8"))
-
-    #§ Creating & returning Flask Response with GZIPped data and content encoding header §#
-    response = Response(gzipped, status=status, mimetype="application/json")
-    response.headers["Content-Encoding"] = "gzip"
-
-    return response
