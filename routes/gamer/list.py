@@ -33,7 +33,7 @@ def list():
 
     #§ Checking if request contains valid paramaters §#
     if listType not in GAMER_LIST_TYPES:
-        return errorResponse("invalid_parameters")
+        return errorResponse("invalid_list_type", 200)
 
     #§ Grabbing config for specific list type from user request §#
     listTypeConfig = GAMER_LIST_TYPES[listType]
