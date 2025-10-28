@@ -27,14 +27,14 @@ def register():
     key = requestData.get("key")
 
     #§ Checking if request contains required paramaters §#
-    if not lang or not key:
+    if not lang:
         return {"error": "Invalid request"}, 400
 
-    #§ Checking if key is correct §#
-    if key != "Jq983":
-        return {"error": "Invalid key"}, 403
-
-    print(i)
+    if key:
+        #§ Checking if key is correct §#
+        if key != "Jq983":
+            return {"error": "Invalid key"}, 403
+        
     #§ Creating new account with utils.account_factory account builder §#
     newAccount = build_account(lang=lang)
 

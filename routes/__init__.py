@@ -3,7 +3,8 @@ from .auth import *
 from .master import *
 from .level import *
 from .gamer import *
+from .comment import *
 
 def register_blueprints(app):
-    for bp in [ping_bp, *auth_bps, *master_bps, *level_bps, *gamer_bps]:
+    for bp in [ping_bp, *auth_bps, *master_bps, *level_bps, *gamer_bps, *comment_bps]:
         app.register_blueprint(bp)
