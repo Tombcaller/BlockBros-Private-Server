@@ -5,7 +5,7 @@ from flask import Blueprint, request
 #§ Server Utility Imports §#
 from models import account, db
 from utils.response import generateResponse, errorResponse
-from utils.account_factory import generate_token
+from utils.db_item_factory import generate_token
 from utils.get_db_data import getPlayerData
 
 #§ Misc Imports §#

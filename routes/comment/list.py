@@ -6,9 +6,10 @@ from sqlalchemy import func
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import account, db
+from models import comment, db
 from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getPlayerData
+from utils.get_db_data import getCommentData, loadCommentListPage
+from config.listConfig import itemReturnLimit
 
 #§ Misc Imports §#
 import time
@@ -30,14 +31,31 @@ def list():
 
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()
+    group_key = request_data.get("group_key")
+    index = int(request_data.get("index", 0))
+    cursor = request_data.get("cursor")
+
+    if not group_key:
+        return errorResponse("missing_parameters")
+    
+    cursor_field = "createdAt"
+    query = comment.query.order_by(comment.createdAt.desc())
+    
+    items, cursorToReturn, allLoaded = loadCommentListPage(query, cursor_field, cursor, itemReturnLimit)
+    jsonCommentList = [getCommentData(c.internalId) for c in items]
 
     #§ Creating body to send §#
     body = {
         "success": True,
-        "result": {},
+        "result": {
+            "all_loaded": allLoaded,
+            "cursor": cursorToReturn,
+            "index": index + len(items),
+            "items": jsonCommentList
+        },
         "updated": {},
         "timestamp": int(time.time())
-        }
+    }
 
     #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
     return generateResponse(body)

@@ -5,7 +5,7 @@ from flask import Blueprint, request
 #§ Server Utility Imports §#
 from models import account, db
 from utils.response import generateResponse, errorResponse
-from utils.account_factory import generate_token
+from utils.db_item_factory import generate_token
 from utils.get_db_data import getPlayerData
 
 #§ Misc Imports §#
@@ -55,13 +55,11 @@ def alt_login():
         },
         "updated":{
             "campaignInfo":{
-                "comments":{
-                    "100": 39
-                }
+                "comments":{}
             },
             "feeds":{
                 "all_loaded": False,
-                "cursor": "bruh",
+                "cursor": "",
                 "index": 0,
                 "items": []
             },

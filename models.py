@@ -37,3 +37,13 @@ class account(db.Model):
     researches = db.Column(db.String)
     token = db.Column(db.String)
     visibleAt = db.Column(db.Integer)
+
+class comment(db.Model):
+    messageType = db.Column(db.String, default="plain")
+    groupKey = db.Column(db.String, default="feed")
+    internalId = db.Column(db.Integer, primary_key=True, unique=True)
+    args = db.Column(db.String, default={})
+    createdAt = db.Column(db.Integer, default=0)
+    gamerInternalId = db.Column(db.Integer)
+    message = db.Column(db.String)
+    

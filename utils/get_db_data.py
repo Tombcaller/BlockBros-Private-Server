@@ -1,6 +1,6 @@
 #§ -------- IMPORTS -------- §#
 #§ Server Utility Imports §#
-from models import account
+from models import account, comment
 from utils.cursor import encode_cursor, decode_cursor
 
 #§ Misc Imports §#
@@ -68,6 +68,52 @@ def loadGamerListPage(base_query, cursor_field, cursor, limit=10):
         #§ If there is a boundary in the cursor, add a filter to the base query §#
         if boundary is not None:
             base_query = base_query.filter(getattr(account, cursor_field) < boundary)
+
+    #§ Grabbing items from database query §#
+    results = base_query.limit(limit + 1).all()
+    allLoaded = len(results) < limit
+    items = results[:limit]
+
+    #§ Encoding a new cursor if not at the last page §#
+    nextCursor = None
+    if not allLoaded and len(items) > 0:
+        nextBoundary = getattr(items[-1], cursor_field)
+        nextCursor = encode_cursor({
+            cursor_field: nextBoundary,
+            "generated": int(time.time())
+        })
+
+    #§ Returning items, next page cursor and all loaded state §#
+    return items, nextCursor, allLoaded
+
+#§ Function to get the data of a comment by internalId §#
+def getCommentData(internalId):
+    commentData = comment.query.filter_by(internalId=internalId).first()
+
+    commentToReturn = {
+        "args": json.loads(commentData.args),
+        "commentId": commentData.internalId,
+        "createdAt": int(commentData.createdAt),
+        "gamer": getPlayerData(commentData.gamerInternalId),
+        "message": commentData.message,
+        "type": commentData.messageType 
+    }
+
+    return commentToReturn
+
+#§ Function to load a page of a "gamer" list from a cursor §#
+def loadCommentListPage(base_query, cursor_field, cursor, limit=10):
+
+    #§ Decode cursor from request (If there is one) §#
+    if cursor:
+        cursor_data = decode_cursor(cursor)
+
+        #§ Grabbing value from cursor to resume list loading from §#
+        boundary = cursor_data.get(cursor_field)
+
+        #§ If there is a boundary in the cursor, add a filter to the base query §#
+        if boundary is not None:
+            base_query = base_query.filter(getattr(comment, cursor_field) < boundary)
 
     #§ Grabbing items from database query §#
     results = base_query.limit(limit + 1).all()

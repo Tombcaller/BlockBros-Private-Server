@@ -6,9 +6,10 @@ from sqlalchemy import func
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import account, db
+from models import db
 from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getPlayerData
+from utils.get_db_data import getCommentData
+from utils.db_item_factory import get_comment_type, build_comment
 
 #§ Misc Imports §#
 import time
@@ -25,16 +26,27 @@ def post():
     if not validity["success"]: 
         return errorResponse(validity["error"])
 
-    #§ Grabbing current logged in user's internal ID for database usage §# 
+    #§ Grabbing current logged in user's internal ID for addition to comment §# 
     loggedInId = request.headers.get("Authorization").split(":")[0]
 
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()
 
+    commentMessage = request_data["comment"]
+    commentGroupKey = request_data["group_key"]
+
+    newComment = build_comment(commentMessage, commentGroupKey, loggedInId)
+    db.session.add(newComment)
+    db.session.commit()
+
+    result = {
+        "comment":getCommentData(newComment.internalId)
+    }
+
     #§ Creating body to send §#
     body = {
         "success": True,
-        "result": {},
+        "result": result,
         "updated": {},
         "timestamp": int(time.time())
         }

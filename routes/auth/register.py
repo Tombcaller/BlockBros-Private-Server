@@ -5,12 +5,11 @@ from flask import Blueprint, request
 #§ Server Utility Imports §#
 from models import db
 from utils.response import generateResponse
-from utils.account_factory import build_account
+from utils.db_item_factory import build_account
 from utils.get_db_data import getPlayerData
 
 #§ Misc Imports §#
 import time
-import json
 #§ ------------------------- §#
 
 #§ Creating endpoint blueprint & setting route §#
