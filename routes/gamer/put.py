@@ -59,7 +59,7 @@ def put():
     
     #§ Adding missing headers not returned by default §#
     body["updated"]["gamer"]["nameVersion"] = currentUser.nameVersion
-    body["updated"]["gamer"]["nameVersion"] = currentUser.gem
+    body["updated"]["gamer"]["gem"] = currentUser.gem
     body["updated"]["gamer"]["inventory"] = json.loads(currentUser.inventory)
 
     #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
