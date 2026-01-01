@@ -9,11 +9,10 @@ from flask import Blueprint, request
 from models import db
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getCommentData
-from utils.db_item_factory import get_comment_type, build_comment
+from utils.db_item_factory import build_comment
 
 #§ Misc Imports §#
 import time
-import json
 #§ ------------------------- §#
 
 #§ Creating endpoint blueprint & setting route §#

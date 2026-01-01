@@ -3,14 +3,14 @@
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import account, db
+from models import account, db, comment
 from utils.response import generateResponse, errorResponse
 from utils.db_item_factory import generate_token
-from utils.get_db_data import getPlayerData
+from utils.get_db_data import getPlayerData, loadCommentListPage, getCommentData
+from config.listConfig import homeFeedItemReturnLimit, FEED_CONFIG
 
 #§ Misc Imports §#
 import time
-import json
 #§ ------------------------- §#
 
 #§ Creating endpoint blueprint & setting route §#
@@ -48,6 +48,20 @@ def login():
     accountToLogin.lastLoginAt = time.time()
     db.session.commit()
 
+    #§ Assigning a group_key for initial feed based on device language §#
+    try:
+        lang = request.headers.get("Device-Language")
+        if lang != "jp":
+            group_key = "feed"
+        else:
+            group_key = "feed_ja"
+    except:
+        group_key = "feed"
+
+    items, cursorToReturn, allLoaded = loadCommentListPage(comment.query.filter(comment.groupKey == group_key).order_by(comment.createdAt.desc()), "", "", homeFeedItemReturnLimit)
+    jsonCommentList = [getCommentData(c.internalId) for c in items]
+
+
     #§ Creating body to send §#
     body = {
         "success": True,
@@ -62,10 +76,10 @@ def login():
                 }
             },
             "feeds":{
-                "all_loaded": False,
-                "cursor": "bruh",
-                "index": 0,
-                "items": []
+                "all_loaded": allLoaded,
+                "cursor": cursorToReturn,
+                "index": len(items),
+                "items": jsonCommentList
             },
             "follows":{
                 "blocked":[],

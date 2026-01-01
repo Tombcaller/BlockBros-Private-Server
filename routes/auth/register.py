@@ -3,10 +3,11 @@
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import db
+from models import db, comment
 from utils.response import generateResponse
 from utils.db_item_factory import build_account
-from utils.get_db_data import getPlayerData
+from utils.get_db_data import getPlayerData, loadCommentListPage, getCommentData
+from config.listConfig import homeFeedItemReturnLimit
 
 #§ Misc Imports §#
 import time
@@ -45,6 +46,19 @@ def register():
     newAccount.nickname = f"{newAccount.gamerId:08d}"
     db.session.commit()
 
+        #§ Assigning a group_key for initial feed based on device language §#
+    try:
+        lang = request.headers.get("Device-Language")
+        if lang != "jp":
+            group_key = "feed"
+        else:
+            group_key = "feed_ja"
+    except:
+        group_key = "feed"
+
+    items, cursorToReturn, allLoaded = loadCommentListPage(comment.query.filter(comment.groupKey == group_key).order_by(comment.createdAt.desc()), "", "", homeFeedItemReturnLimit)
+    jsonCommentList = [getCommentData(c.internalId) for c in items]
+
     #§ Creating body to send §#
     body = {
         "success": True,
@@ -56,14 +70,13 @@ def register():
         "updated":{
             "campaignInfo":{
                 "comments":{
-                    "100": 39
                 }
             },
             "feeds":{
-                "all_loaded": False,
-                "cursor": "bruh",
-                "index": 0,
-                "items": []
+                "all_loaded": allLoaded,
+                "cursor": cursorToReturn,
+                "index": len(items),
+                "items": jsonCommentList
             },
             "follows":{
                 "blocked":[],
