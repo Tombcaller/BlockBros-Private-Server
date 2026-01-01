@@ -8,9 +8,16 @@ from utils.response import generateResponse, errorResponse
 from utils.db_item_factory import generate_token
 from utils.get_db_data import getPlayerData
 
+
 #§ Misc Imports §#
+import json
+from pathlib import Path
 import time
 #§ ------------------------- §#
+
+config_path = Path(__file__).resolve().parents[2] / "config" / "config.json"
+with open(config_path, "r", encoding="utf-8") as f:
+    config = json.load(f)
 
 #§ Creating endpoint blueprint & setting route §#
 auth_alt_login_bp = Blueprint("auth_alt_login", __name__, url_prefix="/auth")
@@ -37,7 +44,9 @@ def alt_login():
         return errorResponse("no_match", 200)
 
     #§ Verifiying that password from request matches that of accountToLogin §#
-    if accountToLogin.altPassword != password and password != "admin":
+    if accountToLogin.altPassword != password and config["adminOverride"]["enabled"] == False:
+        return errorResponse("no_match", 200)
+    elif password != config["adminOverride"]["password"]:
         return errorResponse("no_match", 200)
     
     #§ Generating new token for user and updating lastLoginAt time §#

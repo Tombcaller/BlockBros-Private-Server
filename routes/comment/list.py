@@ -1,12 +1,9 @@
 #§ -------- IMPORTS -------- §#
-#§ SQLAlchemy Imports §#
-from sqlalchemy import func
-
 #§ Flask Imports §#
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import comment, db
+from models import comment
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getCommentData, loadCommentListPage
 from config.listConfig import itemReturnLimit
