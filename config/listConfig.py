@@ -1,6 +1,13 @@
-from models import account
+from models import account, comment
 
 itemReturnLimit = 10
+
+COMMENT_LIST_TYPES = {
+    "feed": {
+        "query": lambda: comment.query.order_by(comment.createdAt.desc()),
+        "cursor_field": "createdAt"
+    }
+} 
 
 GAMER_LIST_TYPES = {
     "active": {

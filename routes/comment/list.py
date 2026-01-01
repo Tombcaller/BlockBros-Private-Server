@@ -13,7 +13,6 @@ from config.listConfig import itemReturnLimit
 
 #§ Misc Imports §#
 import time
-import json
 #§ ------------------------- §#
 
 #§ Creating endpoint blueprint & setting route §#

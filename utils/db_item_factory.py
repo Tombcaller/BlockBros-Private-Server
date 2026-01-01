@@ -99,14 +99,12 @@ def build_account(lang="en"):
     return account(**data)
 
 def build_comment(message = "", groupKey = "feed", gamerInternalId = 0):
-
     typeData = get_comment_type(message)
-
     data = {
         "messageType": typeData["type"],
         "groupKey": groupKey,
         "internalId": generate_internalId(),
-        "args": str(typeData["args"]),
+        "args": json.dumps(typeData["args"]),
         "createdAt": time.time(),
         "gamerInternalId": gamerInternalId,
         "message": typeData["message"]
