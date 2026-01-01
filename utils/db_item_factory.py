@@ -29,7 +29,7 @@ def generate_token():
 def generate_internalId():
     return random.randint(4000000000000000, 7000000000000000)
 
-def get_comment_type(comment_message):
+def get_comment_type(comment_message, loggedInId):
     #§ Define regex patterns for each category #§
     level_pattern      = r"#[0-9]+"
     tag_pattern        = r"#[A-Za-z_]\w*"
@@ -49,7 +49,11 @@ def get_comment_type(comment_message):
         token = match.group(0)
 
         if re.fullmatch(youtube_pattern, token):
-            result = {"args": {"youtube": "watch/xAnHFn7Y39U?si=z1kVwEAhepNpfPpu"}, "type": "youtube", "message": comment_message.strip(token)}
+            channel = account.query.filter(account.internalId == loggedInId).first().channel
+            if channel != "":
+                result = {"args": {"youtube": channel}, "type": "youtube", "message": comment_message.strip(token)}
+            else:
+                result = {"args": {}, "type": "plain", "message": comment_message.strip(token)}
         
         elif re.fullmatch(emblem_pattern, token):
             result = {"args": {"refId": token[1:]}, "type": "emblem", "message": comment_message.strip(token)}
@@ -99,7 +103,7 @@ def build_account(lang="en"):
     return account(**data)
 
 def build_comment(message = "", groupKey = "feed", gamerInternalId = 0):
-    typeData = get_comment_type(message)
+    typeData = get_comment_type(message, gamerInternalId)
     data = {
         "messageType": typeData["type"],
         "groupKey": groupKey,
