@@ -25,9 +25,6 @@ def list():
     if not validity["success"]: 
         return errorResponse(validity["error"])
 
-    #§ Grabbing current logged in user's internal ID for database usage §# 
-    loggedInId = request.headers.get("Authorization").split(":")[0]
-
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()
     group_key = request_data.get("group_key")
@@ -38,7 +35,7 @@ def list():
         return errorResponse("missing_parameters")
     
     cursor_field = "createdAt"
-    query = comment.query.order_by(comment.createdAt.desc())
+    query = comment.query.filter(comment.groupKey == group_key).order_by(comment.createdAt.desc())
     
     items, cursorToReturn, allLoaded = loadCommentListPage(query, cursor_field, cursor, itemReturnLimit)
     jsonCommentList = [getCommentData(c.internalId) for c in items]
