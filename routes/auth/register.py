@@ -46,7 +46,7 @@ def register():
     newAccount.nickname = f"{newAccount.gamerId:08d}"
     db.session.commit()
 
-        #§ Assigning a group_key for initial feed based on device language §#
+    #§ Assigning a group_key for initial feed based on device language §#
     try:
         lang = request.headers.get("Device-Language")
         if lang != "jp":
@@ -56,7 +56,8 @@ def register():
     except:
         group_key = "feed"
 
-    items, cursorToReturn, allLoaded = loadCommentListPage(comment.query.filter(comment.groupKey == group_key).order_by(comment.createdAt.desc()), "", "", homeFeedItemReturnLimit)
+    cursor_field = "createdAt"
+    items, cursorToReturn, allLoaded = loadCommentListPage(comment.query.filter(comment.groupKey == group_key).order_by(comment.createdAt.desc()), cursor_field, "", homeFeedItemReturnLimit)
     jsonCommentList = [getCommentData(c.internalId) for c in items]
 
     #§ Creating body to send §#

@@ -58,7 +58,8 @@ def login():
     except:
         group_key = "feed"
 
-    items, cursorToReturn, allLoaded = loadCommentListPage(comment.query.filter(comment.groupKey == group_key).order_by(comment.createdAt.desc()), "", "", homeFeedItemReturnLimit)
+    cursor_field = "createdAt"
+    items, cursorToReturn, allLoaded = loadCommentListPage(comment.query.filter(comment.groupKey == group_key).order_by(comment.createdAt.desc()), cursor_field, "", homeFeedItemReturnLimit)
     jsonCommentList = [getCommentData(c.internalId) for c in items]
 
 
