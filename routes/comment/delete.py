@@ -5,7 +5,7 @@ from flask import Blueprint, request
 #§ Server Utility Imports §#
 from models import db, comment
 from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getCommentData, loadCommentListPage
+from utils.get_db_data import getCommentData, getPlayerData
 from config.listConfig import itemReturnLimit
 
 #§ Misc Imports §#
@@ -34,17 +34,17 @@ def delete():
 
     comment_data = getCommentData(comment_id)
 
-    if comment_data["gamer"]["id"] == int(loggedInId):
+    if comment_data["gamer"]["id"] == int(loggedInId) or getPlayerData(loggedInId)["adminLevel"] > 0:
         commentData = comment.query.get(comment_id)
         db.session.delete(commentData)
         db.session.commit()
+        result = {"commentId": comment_id}
+    else: result = {}
 
     #§ Creating body to send §#
     body = {
         "success": True,
-        "result": {
-            "commentId": comment_id
-        },
+        "result": result,
         "updated": {},
         "timestamp": int(time.time())
     }
