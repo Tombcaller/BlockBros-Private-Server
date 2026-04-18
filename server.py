@@ -31,6 +31,6 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-#§ Running server on 0.0.0.0 (To accept all incoming traffic addresses) on port 80 (HTTP) §#
+#§ Running server on 0.0.0.0 (To accept all incoming traffic addresses) on port 8108 §#
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80)
+    app.run(host="0.0.0.0", port=8108)
