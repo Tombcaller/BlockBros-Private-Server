@@ -22,8 +22,8 @@ CORS(app, resources={r"/*": {"origins": "*", "methods": ["POST"]}})
 register_blueprints(app)
 
 #§ Database config §#
-db_path = os.path.join(storage_dir, "data.db")
-app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
+db_path = os.path.abspath(os.path.join(storage_dir, "data.db"))
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + db_path
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
