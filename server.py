@@ -1,6 +1,7 @@
 #§ -------- IMPORTS -------- §#
 #§ Flask Imports §#
 from flask import Flask
+from flask_cors import CORS
 
 #§ Server Utility Imports §#
 from routes import register_blueprints
@@ -17,6 +18,7 @@ os.makedirs(storage_dir, exist_ok=True)
 
 #§ Registering blueprints with app §#
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*", "methods": ["POST"]}})
 register_blueprints(app)
 
 #§ Database config §#
