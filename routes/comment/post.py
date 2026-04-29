@@ -49,6 +49,7 @@ def post():
         "updated": {},
         "timestamp": int(time.time())
         }
-
+    print("request :"+str(request_data))
+    print("response :"+str(body))
     #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
     return generateResponse(body)

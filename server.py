@@ -34,3 +34,5 @@ with app.app_context():
 #§ Running server on 0.0.0.0 (To accept all incoming traffic addresses) on port 8108 §#
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8108)
+
+    
