@@ -1,4 +1,4 @@
-from models import account, comment
+from models import account
 
 itemReturnLimit = 10
 homeFeedItemReturnLimit = 20
