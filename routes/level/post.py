@@ -8,8 +8,10 @@ from flask import Blueprint, request
 #§ Server Utility Imports §#
 from models import db
 from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getCommentData
-from utils.db_item_factory import build_comment
+from utils.get_db_data import getLevelData #tempremental
+
+
+from utils.db_item_factory import buildLevel #tempremental
 
 #§ Misc Imports §#
 import time
@@ -31,24 +33,31 @@ def post():
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()
 
-    commentMessage = request_data["comment"]
-    commentGroupKey = request_data["group_key"]
+    title = request_data["title"]
+    levelMap = request_data["map"]
+    theme = request_data["theme"]
+    time = request_data["time"]
+    config = request_data["config"]
 
-    newComment = build_comment(commentMessage, commentGroupKey, loggedInId)
-    db.session.add(newComment)
+    if not title or not levelMap or not theme or not time or not config:
+        return {"error": "Invalid request"}, 400
+
+    newLevel = buildLevel(title, levelMap, theme, time, config, loggedInId)
+    db.session.add(newLevel)
     db.session.commit()
 
     result = {
-        "comment":getCommentData(newComment.internalId)
+        getLevelData(newLevel.internalId)
     }
 
     #§ Creating body to send §#
     body = {
         "success": True,
         "result": result,
-        "updated": {},
+        "updated": {getLevelData(loggedInId, 2)},
         "timestamp": int(time.time())
         }
+    
     print("request :"+str(request_data))
     print("response :"+str(body))
     #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#

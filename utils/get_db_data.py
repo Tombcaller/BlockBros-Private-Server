@@ -1,6 +1,6 @@
 #§ -------- IMPORTS -------- §#
 #§ Server Utility Imports §#
-from models import account, comment
+from models import Level, account, comment
 from utils.cursor import encode_cursor, decode_cursor
 
 #§ Misc Imports §#
@@ -100,6 +100,40 @@ def getCommentData(internalId):
     }
 
     return commentToReturn
+
+#§ Function to get the data of a comment by internalId §#
+def getLevelData(internalId):
+    levelData = Level.query.filter_by(internalId=internalId).first()
+
+    levelToReturn = {
+        "clearCount": levelData.clearCount,
+        "clearVersion": levelData.clearVersion,
+        "commentCount": levelData.commentCount,
+        "commentedAt": levelData.commentedAt,
+        "config": levelData.config,
+        "createdAt": int(levelData.createdAt),
+        "difficulty": levelData.difficulty,
+        "draft": levelData.draft,
+        "gamerId": levelData.gamerId,
+        "id": levelData.internalId,
+        "levelId": levelData.levelId,
+        "map": levelData.map,
+        "playCount": levelData.playCount,
+        "rating": levelData.rating,
+        "ratingCount": levelData.ratingCount,
+        "tag": levelData.tag,
+        "theme": levelData.theme,
+        "tier": levelData.tier,
+        "time": levelData.time,
+        "title": levelData.title,
+        "todayRating": levelData.todayRating,
+        "uuClearCount": levelData.uuClearCount,
+        "uuCount": levelData.uuCount,
+        "version": levelData.version,
+        "yesterdayRating": levelData.yesterdayRating       
+    }
+
+    return levelToReturn
 
 #§ Function to load a page of a "gamer" list from a cursor §#
 def loadCommentListPage(base_query, cursor_field, cursor, limit=10):

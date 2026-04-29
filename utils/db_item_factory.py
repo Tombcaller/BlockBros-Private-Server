@@ -1,7 +1,7 @@
 #§ -------- IMPORTS -------- §#
 #§ Server Utility Imports §#
 from pathlib import Path
-from models import account, comment
+from models import account, comment, Level
 
 #§ Misc Imports §#
 import json
@@ -114,3 +114,32 @@ def build_comment(message = "", groupKey = "feed", gamerInternalId = 0):
         "message": typeData["message"]
     }
     return comment(**data)
+
+
+def build_level(title = "", levelMap = "", theme = "", time = "", config = "", gamerInternalId = 0):
+    data = {
+        "title": title,
+        "map": levelMap,
+        "theme": theme,
+        "time": time,
+        "config": config,
+        "internalId": generate_internalId(),
+        "createdAt": time.time(),
+        "gamerInternalId": gamerInternalId,
+
+        "clearCount": 0,
+        "clearVersion": 0,
+        "commentCount": 0,
+        "commentedAt": 0,
+        "difficulty": 0,
+        "draft": 0,
+        "playCount": 0,
+        "rating": 0,
+        "ratingCount": 0,
+        "tag": "",
+        "tier": 0,
+        "todayRating": 0,
+        "uuClearCount": 0,
+        "uuCount": 0
+    }
+    return Level(**data)
