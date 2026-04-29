@@ -116,22 +116,22 @@ def build_comment(message = "", groupKey = "feed", gamerInternalId = 0):
     return comment(**data)
 
 
-def build_level(title = "", levelMap = "", theme = "", time = "", config = "", gamerInternalId = 0):
+def build_level(title = "", levelMap = "", theme = "", levelTime = "", config = "", gamerInternalId = 0):
     data = {
         "title": title,
         "map": levelMap,
         "theme": theme,
-        "time": time,
+        "time": levelTime,
         "config": config,
         "internalId": generate_internalId(),
         "createdAt": time.time(),
         "gamerInternalId": gamerInternalId,
 
-        "clearCount": 0,
-        "clearVersion": 0,
+        "clearCount": 1,
+        "clearVersion": 1,
         "commentCount": 0,
         "commentedAt": 0,
-        "difficulty": 0,
+        "difficulty": 1,
         "draft": 0,
         "playCount": 0,
         "rating": 0,
@@ -140,6 +140,9 @@ def build_level(title = "", levelMap = "", theme = "", time = "", config = "", g
         "tier": 0,
         "todayRating": 0,
         "uuClearCount": 0,
-        "uuCount": 0
+        "uuCount": 0,
+        "version": 1,
+        "yesterdayRating": 0
+        
     }
     return Level(**data)

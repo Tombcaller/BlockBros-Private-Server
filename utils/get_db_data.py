@@ -11,7 +11,7 @@ import time
 #§ Function to get the player data of a user by internalId §#
 def getPlayerData(internalId, level = 1):
     accountData = account.query.filter_by(internalId=internalId).first()
-
+    
     accountToReturn = {
         "adminLevel": accountData.adminLevel,
         "avatar": accountData.avatar,
@@ -104,7 +104,6 @@ def getCommentData(internalId):
 #§ Function to get the data of a comment by internalId §#
 def getLevelData(internalId):
     levelData = Level.query.filter_by(internalId=internalId).first()
-
     levelToReturn = {
         "clearCount": levelData.clearCount,
         "clearVersion": levelData.clearVersion,
@@ -114,8 +113,9 @@ def getLevelData(internalId):
         "createdAt": int(levelData.createdAt),
         "difficulty": levelData.difficulty,
         "draft": levelData.draft,
-        "gamerId": levelData.gamerId,
-        "id": levelData.internalId,
+        "gamerInternalId": levelData.gamerInternalId,
+        "gamer": getPlayerData(levelData.gamerInternalId),
+        "internalId": levelData.internalId,
         "levelId": levelData.levelId,
         "map": levelData.map,
         "playCount": levelData.playCount,
@@ -130,7 +130,7 @@ def getLevelData(internalId):
         "uuClearCount": levelData.uuClearCount,
         "uuCount": levelData.uuCount,
         "version": levelData.version,
-        "yesterdayRating": levelData.yesterdayRating       
+        "yesterdayRating": levelData.yesterdayRating  
     }
 
     return levelToReturn

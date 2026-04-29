@@ -48,10 +48,10 @@ class comment(db.Model):
     message = db.Column(db.String)
     
 class Level(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    levelId = db.Column(db.Integer)
+    internalId = db.Column(db.Integer)
+    levelId = db.Column(db.Integer, primary_key=True)
 
-    gamerId = db.Column(db.Integer)
+    gamerInternalId = db.Column(db.Integer)
 
     clearCount = db.Column(db.Integer)
     clearVersion = db.Column(db.Integer)
