@@ -47,3 +47,34 @@ class comment(db.Model):
     gamerInternalId = db.Column(db.Integer)
     message = db.Column(db.String)
     
+class Level(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    levelId = db.Column(db.Integer)
+
+    gamerId = db.Column(db.Integer)
+
+    clearCount = db.Column(db.Integer)
+    clearVersion = db.Column(db.Integer)
+    commentCount = db.Column(db.Integer)
+    commentedAt = db.Column(db.Integer)
+    config = db.Column(db.JSON)
+    createdAt = db.Column(db.Integer)
+    difficulty = db.Column(db.Integer)
+    draft = db.Column(db.Integer)
+
+    map = db.Column(db.JSON)
+
+    playCount = db.Column(db.Integer)
+    rating = db.Column(db.Integer)
+    ratingCount = db.Column(db.Integer)
+    tag = db.Column(db.String)
+    theme = db.Column(db.Integer)
+    tier = db.Column(db.Integer)
+    time = db.Column(db.Integer)
+    title = db.Column(db.String)
+
+    todayRating = db.Column(db.Integer)
+    uuClearCount = db.Column(db.Integer)
+    uuCount = db.Column(db.Integer)
+    version = db.Column(db.Integer)
+    yesterdayRating = db.Column(db.Integer)
