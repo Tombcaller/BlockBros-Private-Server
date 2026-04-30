@@ -6,7 +6,7 @@ from sqlalchemy import func
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import db
+from models import account, db
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getLevelData, getPlayerData #tempremental
 from utils.db_item_factory import build_level #tempremental
@@ -25,7 +25,7 @@ def post():
     validity = checkRequestValidity(request)
     if not validity["success"]: 
         return errorResponse(validity["error"])
-    #§ Grabbing current logged in user's internal ID for addition to comment §# 
+    #§ Grabbing current logged in user's internal ID §# 
     loggedInId = request.headers.get("Authorization").split(":")[0]
 
     #§ Getting user's request data from Flask §#
@@ -42,6 +42,7 @@ def post():
         
     newLevel = build_level(title, levelMap, theme, levelTime, config, loggedInId)
     db.session.add(newLevel)
+    account.query.filter_by(internalId=loggedInId).first().levelCount += 1
     db.session.commit()
 
     result = getLevelData(newLevel.internalId)
