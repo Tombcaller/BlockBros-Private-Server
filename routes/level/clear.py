@@ -66,7 +66,7 @@ def clear():
     body = {
         "success": True,
         "result": result,
-        "updated": getPlayerData(loggedInId,2),
+        "updated": { "gamer" : getPlayerData(loggedInId,2) },
         "timestamp": int(time.time())
     }
 

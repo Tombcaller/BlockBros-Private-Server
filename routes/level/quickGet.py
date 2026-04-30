@@ -25,8 +25,8 @@ def quickGet():
     validity = checkRequestValidity(request)
     if not validity["success"]:
         return errorResponse(validity["error"])
-
     randomEntry = db.session.query(Level).order_by(func.random()).first()
+
     randomLevel = getLevelData(randomEntry.internalId)
 
     body = {

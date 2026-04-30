@@ -139,7 +139,6 @@ def getCommentData(internalId):
 def getLevelData(internalId, gamerInternalId = None):
     levelData = Level.query.filter_by(internalId=internalId).first()
     levelCompletionData = Completion.query.filter_by(levelInternalId=internalId, gamerInternalId=gamerInternalId).first() if gamerInternalId else None
-    print('levelCompletionData:', levelCompletionData)
 
     levelToReturn = {
         "clearCount": levelData.clearCount,
