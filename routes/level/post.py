@@ -4,7 +4,7 @@
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import account, db
+from models import Account, db
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getLevelData, getPlayerData
 from utils.db_item_factory import build_level
@@ -43,7 +43,7 @@ def post():
     #§ Grabbing level object from build_level function §#
     newLevel = build_level(title, levelMap, theme, levelTime, config, loggedInId)
     db.session.add(newLevel)
-    account.query.filter_by(internalId=loggedInId).first().levelCount += 1
+    Account.query.filter_by(internalId=loggedInId).first().levelCount += 1
     db.session.commit()
 
     #§ Grabbing level data from database to send back (Including new levelId) §#

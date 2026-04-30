@@ -78,3 +78,9 @@ class Level(db.Model):
     uuCount = db.Column(db.Integer)
     version = db.Column(db.Integer)
     yesterdayRating = db.Column(db.Integer)
+
+class Completion(db.Model):
+    internalId = db.Column(db.Integer, primary_key=True)
+    levelInternalId = db.Column(db.Integer)
+    gamerInternalId = db.Column(db.Integer)
+    completionTime = db.Column(db.Integer)

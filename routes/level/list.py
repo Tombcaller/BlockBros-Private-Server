@@ -35,7 +35,7 @@ def list():
         return errorResponse("invalid_list_type", 200)
     
     #§ Grabbing config for specific list type from user request §#
-    # kelixe : "as of now only 'own' and 'new' are supported"
+    # kelixe : as of now only 'own' and 'new' are supported
     
     listTypeConfig = LEVEL_LIST_TYPES[listType]
     if listType == "own":
@@ -46,7 +46,7 @@ def list():
 
     #§ Grabbing items, next cursor and allLoaded
     items, cursorToReturn, allLoaded = loadLevelListPage(query, cursor_field, cursor, itemReturnLimit)
-    jsonLevelList = [getLevelData(u.internalId) for u in items]
+    jsonLevelList = [getLevelData(u.internalId, loggedInId) for u in items]
 
     body = {
         "success": True,

@@ -1,6 +1,6 @@
 #§ -------- IMPORTS -------- §#
 #§ Server Utility Imports §#
-from models import Level, Account, Comment
+from models import Completion, Level, Account, Comment
 from utils.cursor import encode_cursor, decode_cursor
 
 #§ Misc Imports §#
@@ -136,8 +136,11 @@ def getCommentData(internalId):
     return commentToReturn
 
 #§ Function to get the data of a level by internalId §#
-def getLevelData(internalId):
+def getLevelData(internalId, gamerInternalId = None):
     levelData = Level.query.filter_by(internalId=internalId).first()
+    levelCompletionData = Completion.query.filter_by(levelInternalId=internalId, gamerInternalId=gamerInternalId).first() if gamerInternalId else None
+    print('levelCompletionData:', levelCompletionData)
+
     levelToReturn = {
         "clearCount": levelData.clearCount,
         "clearVersion": levelData.clearVersion,
@@ -149,7 +152,7 @@ def getLevelData(internalId):
         "draft": levelData.draft,
         "gamerInternalId": levelData.gamerInternalId,
         "gamer": getPlayerData(levelData.gamerInternalId),
-        "internalId": levelData.internalId,
+        "id": levelData.internalId,
         "levelId": levelData.levelId,
         "map": levelData.map,
         "playCount": levelData.playCount,
@@ -158,17 +161,25 @@ def getLevelData(internalId):
         "tag": levelData.tag,
         "theme": levelData.theme,
         "tier": levelData.tier,
-        "time": levelData.time,
+        "time": levelCompletionData.completionTime if levelCompletionData else 0,
         "title": levelData.title,
         "todayRating": levelData.todayRating,
         "uuClearCount": levelData.uuClearCount,
         "uuCount": levelData.uuCount,
         "version": levelData.version,
-        "yesterdayRating": levelData.yesterdayRating  
+        "yesterdayRating": levelData.yesterdayRating,
     }
-
     return levelToReturn
 
+def getCompletionData(levelInternalId, gamerInternalId):
+    completionData = Completion.query.filter_by(levelInternalId=levelInternalId)
+    completionToReturn = {
+        "gamerInternalId": completionData.gamerInternalId,
+        "levelInternalId": completionData.levelInternalId,
+        "completionTime": completionData.completionTime
+    }
+
+    return completionToReturn
 #§ Function to load a page of a "gamer" list from a cursor §#
 def loadCommentListPage(base_query, cursor_field, cursor, limit=10):
 

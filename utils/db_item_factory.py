@@ -1,7 +1,7 @@
 #§ -------- IMPORTS -------- §#
 #§ Server Utility Imports §#
 from pathlib import Path
-from models import Account, Comment, Level
+from models import Account, Comment, Level, Completion
 
 #§ Misc Imports §#
 import json
@@ -146,3 +146,12 @@ def build_level(title = "", levelMap = "", theme = "", levelTime = "", config = 
         
     }
     return Level(**data)
+
+def build_completion(levelInternalId, gamerInternalId, completionTime):
+    data = {
+        "internalId": generate_internalId(),
+        "levelInternalId": levelInternalId,
+        "gamerInternalId": gamerInternalId,
+        "completionTime": completionTime
+    }
+    return Completion(**data)
