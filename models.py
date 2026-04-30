@@ -7,7 +7,7 @@ class PingLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.Float, default=time.time)
 
-class account(db.Model):
+class Account(db.Model):
     adminLevel = db.Column(db.Integer)
     altPassword = db.Column(db.String)
     avatar = db.Column(db.Integer)
@@ -38,7 +38,7 @@ class account(db.Model):
     token = db.Column(db.String)
     visibleAt = db.Column(db.Integer)
 
-class comment(db.Model):
+class Comment(db.Model):
     messageType = db.Column(db.String, default="plain")
     groupKey = db.Column(db.String, default="feed")
     internalId = db.Column(db.Integer, primary_key=True, unique=True)

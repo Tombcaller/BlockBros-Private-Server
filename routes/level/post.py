@@ -1,6 +1,4 @@
 #§ -------- IMPORTS -------- §#
-#§ SQLAlchemy Imports §#
-from sqlalchemy import func
 
 #§ Flask Imports §#
 from flask import Blueprint, request
@@ -8,8 +6,8 @@ from flask import Blueprint, request
 #§ Server Utility Imports §#
 from models import account, db
 from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getLevelData, getPlayerData #tempremental
-from utils.db_item_factory import build_level #tempremental
+from utils.get_db_data import getLevelData, getPlayerData
+from utils.db_item_factory import build_level
 
 #§ Misc Imports §#
 import time
@@ -25,6 +23,7 @@ def post():
     validity = checkRequestValidity(request)
     if not validity["success"]: 
         return errorResponse(validity["error"])
+
     #§ Grabbing current logged in user's internal ID §# 
     loggedInId = request.headers.get("Authorization").split(":")[0]
 
@@ -37,14 +36,17 @@ def post():
     levelTime = request_data["time"]
     config = request_data["config"]
 
+    #§ Returning error if any fields are missing §#
     if not title or not levelMap or not theme or not levelTime:
         return {"error": "Invalid request"}, 400
-        
+    
+    #§ Grabbing level object from build_level function §#
     newLevel = build_level(title, levelMap, theme, levelTime, config, loggedInId)
     db.session.add(newLevel)
     account.query.filter_by(internalId=loggedInId).first().levelCount += 1
     db.session.commit()
 
+    #§ Grabbing level data from database to send back (Including new levelId) §#
     result = getLevelData(newLevel.internalId)
 
     #§ Creating body to send §#

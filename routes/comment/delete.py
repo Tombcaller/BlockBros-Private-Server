@@ -3,7 +3,7 @@
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import db, comment
+from models import db, Comment
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getCommentData, getPlayerData
 from config.listConfig import itemReturnLimit
@@ -35,7 +35,7 @@ def delete():
     comment_data = getCommentData(comment_id)
 
     if comment_data["gamer"]["id"] == int(loggedInId) or getPlayerData(loggedInId)["adminLevel"] > 0:
-        commentData = comment.query.get(comment_id)
+        commentData = Comment.query.get(comment_id)
         db.session.delete(commentData)
         db.session.commit()
         result = {"commentId": comment_id}

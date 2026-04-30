@@ -1,6 +1,6 @@
 #§ -------- IMPORTS -------- §#
 #§ Server Utility Imports §#
-from models import Level, account, comment
+from models import Level, Account, Comment
 from utils.cursor import encode_cursor, decode_cursor
 
 #§ Misc Imports §#
@@ -10,7 +10,7 @@ import time
 
 #§ Function to get the player data of a user by internalId §#
 def getPlayerData(internalId, level = 1):
-    accountData = account.query.filter_by(internalId=internalId).first()
+    accountData = Account.query.filter_by(internalId=internalId).first()
     
     accountToReturn = {
         "adminLevel": accountData.adminLevel,
@@ -56,7 +56,7 @@ def getPlayerData(internalId, level = 1):
 def loadGamerListPage(base_query, cursor_field, cursor, limit=10):
 
     #§ Exclude accounts with 0 or less of the cursor field §#
-    base_query = base_query.filter(getattr(account, cursor_field) > 0)
+    base_query = base_query.filter(getattr(Account, cursor_field) > 0)
 
     #§ Decode cursor from request (If there is one) §#
     if cursor:
@@ -67,7 +67,7 @@ def loadGamerListPage(base_query, cursor_field, cursor, limit=10):
 
         #§ If there is a boundary in the cursor, add a filter to the base query §#
         if boundary is not None:
-            base_query = base_query.filter(getattr(account, cursor_field) < boundary)
+            base_query = base_query.filter(getattr(Account, cursor_field) < boundary)
 
     #§ Grabbing items from database query §#
     results = base_query.limit(limit + 1).all()
@@ -122,7 +122,7 @@ def loadLevelListPage(base_query, cursor_field, cursor, limit=10):
 
 #§ Function to get the data of a comment by internalId §#
 def getCommentData(internalId):
-    commentData = comment.query.filter_by(internalId=internalId).first()
+    commentData = Comment.query.filter_by(internalId=internalId).first()
 
     commentToReturn = {
         "args": json.loads(commentData.args),
@@ -135,7 +135,7 @@ def getCommentData(internalId):
 
     return commentToReturn
 
-#§ Function to get the data of a comment by internalId §#
+#§ Function to get the data of a level by internalId §#
 def getLevelData(internalId):
     levelData = Level.query.filter_by(internalId=internalId).first()
     levelToReturn = {
@@ -181,7 +181,7 @@ def loadCommentListPage(base_query, cursor_field, cursor, limit=10):
 
         #§ If there is a boundary in the cursor, add a filter to the base query §#
         if boundary is not None:
-            base_query = base_query.filter(getattr(comment, cursor_field) < boundary)
+            base_query = base_query.filter(getattr(Comment, cursor_field) < boundary)
 
     #§ Grabbing items from database query §#
     results = base_query.limit(limit + 1).all()

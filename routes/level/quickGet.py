@@ -8,7 +8,7 @@ from flask import Blueprint, request
 #§ Server Utility Imports §#
 from models import db, Level
 from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getLevelData #tempremental
+from utils.get_db_data import getLevelData
 
 #§ Misc Imports §#
 import time

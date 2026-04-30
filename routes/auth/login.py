@@ -3,7 +3,7 @@
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import account, db, comment
+from models import Account, db, Comment
 from utils.response import generateResponse, errorResponse
 from utils.db_item_factory import generate_token
 from utils.get_db_data import getPlayerData, loadCommentListPage, getCommentData
@@ -31,7 +31,7 @@ def login():
         return errorResponse("missing_parameters")
 
     #§ Looking up user in database and saving their data to "accountToLogin" §#
-    accountToLogin = account.query.filter_by(internalId=internalId).first()
+    accountToLogin = Account.query.filter_by(internalId=internalId).first()
 
     #§ Returning error if gamerId not found in DB §#
     if not accountToLogin:
@@ -59,7 +59,7 @@ def login():
         group_key = "feed"
 
     cursor_field = "createdAt"
-    items, cursorToReturn, allLoaded = loadCommentListPage(comment.query.filter(comment.groupKey == group_key).order_by(comment.createdAt.desc()), cursor_field, "", homeFeedItemReturnLimit)
+    items, cursorToReturn, allLoaded = loadCommentListPage(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), cursor_field, "", homeFeedItemReturnLimit)
     jsonCommentList = [getCommentData(c.internalId) for c in items]
 
 

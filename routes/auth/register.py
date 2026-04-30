@@ -3,7 +3,7 @@
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import db, comment
+from models import db, Comment
 from utils.response import generateResponse
 from utils.db_item_factory import build_account
 from utils.get_db_data import getPlayerData, loadCommentListPage, getCommentData
@@ -35,10 +35,10 @@ def register():
         if key != "Jq983":
             return {"error": "Invalid key"}, 403
         
-    #§ Creating new account with utils.account_factory account builder §#
+    #§ Creating new Account with utils.account_factory Account builder §#
     newAccount = build_account(lang=lang)
 
-    #§ Adding new account to DB §#
+    #§ Adding new Account to DB §#
     db.session.add(newAccount)
     db.session.commit()
 
@@ -57,7 +57,7 @@ def register():
         group_key = "feed"
 
     cursor_field = "createdAt"
-    items, cursorToReturn, allLoaded = loadCommentListPage(comment.query.filter(comment.groupKey == group_key).order_by(comment.createdAt.desc()), cursor_field, "", homeFeedItemReturnLimit)
+    items, cursorToReturn, allLoaded = loadCommentListPage(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), cursor_field, "", homeFeedItemReturnLimit)
     jsonCommentList = [getCommentData(c.internalId) for c in items]
 
     #§ Creating body to send §#

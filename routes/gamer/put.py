@@ -6,7 +6,7 @@ from sqlalchemy import func
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import account, db
+from models import Account, db
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getPlayerData
 
@@ -39,11 +39,11 @@ def put():
         return errorResponse("missing_parameters")
 
     #§ Looking up nickname in database §#
-    if account.query.filter(func.lower(account.nickname) == nicknameToCheck.lower()).first() is not None:
+    if Account.query.filter(func.lower(Account.nickname) == nicknameToCheck.lower()).first() is not None:
         success = False
     else:
         #§ Loading data from currently logged in user, updating name version and nickname §#
-        currentUser = account.query.filter(account.internalId == loggedInId).first()
+        currentUser = Account.query.filter(Account.internalId == loggedInId).first()
         currentUser.nickname = nicknameToCheck
         currentUser.nameVersion += 1
         db.session.commit()
