@@ -1,19 +1,19 @@
-from models import account
+from models import Account
 
 itemReturnLimit = 10
 homeFeedItemReturnLimit = 20
 
 GAMER_LIST_TYPES = {
     "active": {
-        "query": lambda: account.query.order_by(account.lastLoginAt.desc()),
+        "query": lambda: Account.query.order_by(Account.lastLoginAt.desc()),
         "cursor_field": "lastLoginAt"
     },
     "topPlayer": {
-        "query": lambda: account.query.order_by(account.playerPt.desc()),
+        "query": lambda: Account.query.order_by(Account.playerPt.desc()),
         "cursor_field": "playerPt"
     },
     "topBuilder": {
-        "query": lambda: account.query.order_by(account.builderPt.desc()),
+        "query": lambda: Account.query.order_by(Account.builderPt.desc()),
         "cursor_field": "builderPt"
     }
 }

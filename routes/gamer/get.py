@@ -3,7 +3,7 @@
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import account
+from models import Account
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getPlayerData
 
@@ -29,7 +29,7 @@ def get():
         return errorResponse("missing_parameters")
     
     #§ Looking up nickname in database §#
-    accountToReturn = account.query.filter(account.gamerId == gamerIdToCheck).first()
+    accountToReturn = Account.query.filter(Account.gamerId == gamerIdToCheck).first()
     if accountToReturn is None:
         success = False
     else:

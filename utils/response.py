@@ -3,7 +3,7 @@
 from flask import Response
 
 #§ Server Utility Imports §#
-from models import account
+from models import Account
 
 #§ Misc Imports §#
 import json
@@ -32,7 +32,7 @@ def checkRequestValidity(request):
     token = request.headers.get("Authorization").split(":")[1]
 
     #§ Querying DB to see if token from the auth header matches that of the id from the header §#
-    user = account.query.filter_by(internalId=internalId).first()
+    user = Account.query.filter_by(internalId=internalId).first()
 
     #§ Checking for valid token §#
     if user and user.token == token:

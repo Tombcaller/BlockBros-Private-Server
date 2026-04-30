@@ -1,7 +1,7 @@
 #§ -------- IMPORTS -------- §#
 #§ Server Utility Imports §#
 from pathlib import Path
-from models import account, comment, Level
+from models import Account, Comment, Level
 
 #§ Misc Imports §#
 import json
@@ -49,7 +49,7 @@ def get_comment_type(comment_message, loggedInId):
         token = match.group(0)
 
         if re.fullmatch(youtube_pattern, token):
-            channel = account.query.filter(account.internalId == loggedInId).first().channel
+            channel = Account.query.filter(Account.internalId == loggedInId).first().channel
             if channel != "":
                 result = {"args": {"youtube": channel}, "type": "youtube", "message": comment_message.strip(token)}
             else:
@@ -79,7 +79,7 @@ def get_comment_type(comment_message, loggedInId):
 #§ Account builder function with default language being "en". §#
 def build_account(lang="en"):
 
-    #§ Loading default account template from JSON config file §#
+    #§ Loading default Account template from JSON config file §#
     defaults_path = Path(__file__).resolve().parents[1] / "config" / "defaults" / "default_account.json"
     with open(defaults_path, "r", encoding="utf-8") as f:
         default_data = json.load(f)
@@ -99,8 +99,8 @@ def build_account(lang="en"):
         "lang": lang
     })
 
-    #§ Returning new account object §#
-    return account(**data)
+    #§ Returning new Account object §#
+    return Account(**data)
 
 def build_comment(message = "", groupKey = "feed", gamerInternalId = 0):
     typeData = get_comment_type(message, gamerInternalId)
@@ -113,7 +113,7 @@ def build_comment(message = "", groupKey = "feed", gamerInternalId = 0):
         "gamerInternalId": gamerInternalId,
         "message": typeData["message"]
     }
-    return comment(**data)
+    return Comment(**data)
 
 
 def build_level(title = "", levelMap = "", theme = "", levelTime = "", config = "", gamerInternalId = 0):

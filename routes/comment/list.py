@@ -3,7 +3,7 @@
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import comment
+from models import Comment
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getCommentData, loadCommentListPage
 from config.listConfig import itemReturnLimit
@@ -32,7 +32,7 @@ def list():
         return errorResponse("missing_parameters")
     
     cursor_field = "createdAt"
-    query = comment.query.filter(comment.groupKey == group_key).order_by(comment.createdAt.desc())
+    query = Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc())
     
     items, cursorToReturn, allLoaded = loadCommentListPage(query, cursor_field, cursor, itemReturnLimit)
     jsonCommentList = [getCommentData(c.internalId) for c in items]

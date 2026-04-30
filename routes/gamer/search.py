@@ -6,7 +6,7 @@ from sqlalchemy import func
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import account
+from models import Account
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getPlayerData
 
@@ -34,7 +34,7 @@ def search():
         return errorResponse("missing_parameters")
     
     #§ Looking up nickname in database §#
-    accountToReturn = account.query.filter(func.lower(account.nickname) == nicknameToCheck.lower()).first()
+    accountToReturn = Account.query.filter(func.lower(Account.nickname) == nicknameToCheck.lower()).first()
     if accountToReturn is None:
         success = False
     else:

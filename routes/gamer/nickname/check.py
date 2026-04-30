@@ -6,7 +6,7 @@ from sqlalchemy import func
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import account
+from models import Account
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 
 #§ Misc Imports §#
@@ -34,7 +34,7 @@ def check():
         return errorResponse()
     
     #§ Looking up nickname in database §#
-    if account.query.filter(func.lower(account.nickname) == nicknameToCheck.lower()).first() is None:
+    if Account.query.filter(func.lower(Account.nickname) == nicknameToCheck.lower()).first() is None:
         success = True
     else:
         success = False

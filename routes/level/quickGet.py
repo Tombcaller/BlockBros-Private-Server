@@ -8,7 +8,7 @@ from flask import Blueprint, request
 #§ Server Utility Imports §#
 from models import db, Level
 from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getLevelData #tempremental
+from utils.get_db_data import getLevelData
 
 #§ Misc Imports §#
 import time
@@ -26,6 +26,7 @@ def quickGet():
     if not validity["success"]:
         return errorResponse(validity["error"])
 
+    #§ Loading random level object from database §#
     randomEntry =  db.session.query(Level).order_by(func.random()).first()
     randomLevel = getLevelData(randomEntry.internalId)
 

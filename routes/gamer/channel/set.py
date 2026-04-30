@@ -3,7 +3,7 @@
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from models import account, db
+from models import Account, db
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getPlayerData
 
@@ -35,7 +35,7 @@ def set():
     if not url:
         return errorResponse("missing_parameters")
 
-    currentUser = account.query.filter(account.internalId == loggedInId).first()
+    currentUser = Account.query.filter(Account.internalId == loggedInId).first()
     currentUser.channel = url
     db.session.commit()
     success = True
