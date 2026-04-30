@@ -49,7 +49,7 @@ class Comment(db.Model):
     
 class Level(db.Model):
     internalId = db.Column(db.Integer)
-    levelId = db.Column(db.Integer, primary_key=True)
+    levelId = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
     gamerInternalId = db.Column(db.Integer)
 

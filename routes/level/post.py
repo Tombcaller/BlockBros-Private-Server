@@ -43,6 +43,7 @@ def post():
     #§ Grabbing level object from build_level function §#
     newLevel = build_level(title, levelMap, theme, levelTime, config, loggedInId)
     db.session.add(newLevel)
+    db.session.query(Account).filter_by(internalId=loggedInId).first().levelCount += 1
     Account.query.filter_by(internalId=loggedInId).first().levelCount += 1
     db.session.commit()
 
