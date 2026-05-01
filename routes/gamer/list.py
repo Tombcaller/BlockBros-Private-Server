@@ -5,7 +5,8 @@ from flask import Blueprint, request
 #§ Server Utility Imports §#
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getPlayerData, loadGamerListPage
-from config.listConfig import GAMER_LIST_TYPES, itemReturnLimit
+#from config.listConfig import GAMER_LIST_TYPES, itemReturnLimit
+from config.config import listConfig
 
 #§ Misc Imports §#
 import time
@@ -32,16 +33,16 @@ def list():
         return errorResponse("missing_parameters")
 
     #§ Checking if request contains valid paramaters §#
-    if listType not in GAMER_LIST_TYPES:
+    if listType not in listConfig["gamerListTypes"]:
         return errorResponse("invalid_list_type", 200)
 
     #§ Grabbing config for specific list type from user request §#
-    listTypeConfig = GAMER_LIST_TYPES[listType]
+    listTypeConfig = listConfig["gamerListTypes"][listType]
     query = listTypeConfig["query"]()
     cursor_field = listTypeConfig["cursor_field"]
 
     #§ Grabbing items, next cursor and allLoaded
-    items, cursorToReturn, allLoaded = loadGamerListPage(query, cursor_field, cursor, itemReturnLimit)
+    items, cursorToReturn, allLoaded = loadGamerListPage(query, cursor_field, cursor, listConfig["itemReturnLimit"])
     jsonPlayerList = [getPlayerData(u.internalId) for u in items]
 
     body = {

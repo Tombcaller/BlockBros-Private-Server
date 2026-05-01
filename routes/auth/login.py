@@ -7,7 +7,7 @@ from models import Account, db, Comment
 from utils.response import generateResponse, errorResponse
 from utils.db_item_factory import generate_token
 from utils.get_db_data import getPlayerData, loadCommentListPage, getCommentData
-from config.listConfig import homeFeedItemReturnLimit
+from config.config import listConfig
 
 #§ Misc Imports §#
 import time
@@ -59,7 +59,7 @@ def login():
         group_key = "feed"
 
     cursor_field = "createdAt"
-    items, cursorToReturn, allLoaded = loadCommentListPage(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), cursor_field, "", homeFeedItemReturnLimit)
+    items, cursorToReturn, allLoaded = loadCommentListPage(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), cursor_field, "", listConfig["homeFeedItemReturnLimit"])
     jsonCommentList = [getCommentData(c.internalId) for c in items]
 
 

@@ -6,7 +6,7 @@ from flask import Blueprint, request
 from models import Comment
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getCommentData, loadCommentListPage
-from config.listConfig import itemReturnLimit
+from config.config import listConfig
 
 #§ Misc Imports §#
 import time
@@ -34,7 +34,7 @@ def list():
     cursor_field = "createdAt"
     query = Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc())
     
-    items, cursorToReturn, allLoaded = loadCommentListPage(query, cursor_field, cursor, itemReturnLimit)
+    items, cursorToReturn, allLoaded = loadCommentListPage(query, cursor_field, cursor, listConfig["itemReturnLimit"])
     jsonCommentList = [getCommentData(c.internalId) for c in items]
 
     #§ Creating body to send §#

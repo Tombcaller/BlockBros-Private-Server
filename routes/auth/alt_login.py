@@ -7,17 +7,11 @@ from models import db, Account, Comment
 from utils.response import generateResponse, errorResponse
 from utils.db_item_factory import generate_token
 from utils.get_db_data import getPlayerData, loadCommentListPage, getCommentData
-from config.listConfig import homeFeedItemReturnLimit
+from config.config import listConfig, mainConfig
 
 #§ Misc Imports §#
-import json
-from pathlib import Path
 import time
 #§ ------------------------- §#
-
-config_path = Path(__file__).resolve().parents[2] / "config" / "config.json"
-with open(config_path, "r", encoding="utf-8") as f:
-    config = json.load(f)
 
 #§ Creating endpoint blueprint & setting route §#
 auth_alt_login_bp = Blueprint("auth_alt_login", __name__, url_prefix="/auth")
@@ -44,9 +38,10 @@ def alt_login():
         return errorResponse("no_match", 200)
 
     #§ Verifiying that password from request matches that of accountToLogin §#
-    if accountToLogin.altPassword != password and config["adminOverride"]["enabled"] == False:
+    if accountToLogin.altPassword != password and mainConfig["adminOverride"]["enabled"] == False:
         return errorResponse("no_match", 200)
-    elif password != config["adminOverride"]["password"]:
+    
+    elif password != mainConfig["adminOverride"]["password"]:
         return errorResponse("no_match", 200)
     
     #§ Generating new token for user and updating lastLoginAt time §#
@@ -65,7 +60,7 @@ def alt_login():
     except:
         group_key = "feed"
 
-    items, cursorToReturn, allLoaded = loadCommentListPage(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), "createdAt", "", homeFeedItemReturnLimit)
+    items, cursorToReturn, allLoaded = loadCommentListPage(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), "createdAt", "", listConfig["homeFeedItemReturnLimit"])
     jsonCommentList = [getCommentData(c.internalId) for c in items]
 
     #§ Creating body to send §#

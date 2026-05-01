@@ -6,7 +6,6 @@ from flask import Blueprint, request
 from models import db, Comment
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getCommentData, getPlayerData
-from config.listConfig import itemReturnLimit
 
 #§ Misc Imports §#
 import time

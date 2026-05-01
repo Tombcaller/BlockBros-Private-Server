@@ -1,7 +1,7 @@
 #§ -------- IMPORTS -------- §#
 #§ Server Utility Imports §#
-from pathlib import Path
 from models import Account, Comment, Level, Completion
+from config.config import defaultAccount
 
 #§ Misc Imports §#
 import json
@@ -79,13 +79,7 @@ def get_comment_type(comment_message, loggedInId):
 #§ Account builder function with default language being "en". §#
 def build_account(lang="en"):
 
-    #§ Loading default Account template from JSON config file §#
-    defaults_path = Path(__file__).resolve().parents[1] / "config" / "defaults" / "default_account.json"
-    with open(defaults_path, "r", encoding="utf-8") as f:
-        default_data = json.load(f)
-
-    #§ Initially copying data from json file §#
-    data = default_data.copy()
+    data = defaultAccount
     
     #§ Updating data with generated values §#
     data.update({

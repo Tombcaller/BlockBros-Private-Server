@@ -8,7 +8,7 @@ from utils.get_db_data import getLevelData, getPlayerData
 
 import time
 from random import randint
-from config.submaster import clearRewardList
+from config.config import clearRewardList
 
 
 
@@ -28,10 +28,12 @@ def clear():
 
     request_data = request.get_json()
     print('request data:', request_data)
+
     level_id = request_data.get("level_id")
     completionTime = request_data.get("time")
     version = request_data.get("version")
     video_loaded = request_data.get("video_loaded")
+
     batch = request_data.get("batch")
     levelDifficulty = db.session.query(Level).filter(Level.internalId == level_id).first().difficulty
 
@@ -39,9 +41,9 @@ def clear():
     Account.query.filter_by(internalId=loggedInId).first().playerPt += 1
     Level.query.filter_by(internalId=level_id).first().clearCount += 1
     Level.query.filter_by(internalId=level_id).first().playCount += batch["level"][str(level_id)]["play"]
+    
     db.session.add(build_completion(level_id, loggedInId, completionTime))
     db.session.commit()
-
 
     clearRewardItem = clearRewardList[str(levelDifficulty)][randint(1,len(clearRewardList[str(levelDifficulty)]))]
     clearReward = {

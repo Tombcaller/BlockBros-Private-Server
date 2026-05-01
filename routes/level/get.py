@@ -1,15 +1,11 @@
 # imports --------------------- #
 from flask import Blueprint, request
 
-from models import db, Level, Account
-from utils.db_item_factory import build_completion
+from models import db, Level
 from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getLevelData, getPlayerData
+from utils.get_db_data import getLevelData
 
 import time
-from random import randint
-from config.submaster import clearRewardList
-
 
 # blueprint & route stuff ----- #
 level_get_bp = Blueprint("level_get", __name__, url_prefix="/level")
