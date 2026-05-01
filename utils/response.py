@@ -12,7 +12,7 @@ import hashlib
 #§ ------------------------- §#
 
 #§ Function to GZIP Flask response for BB client compatability §#
-def generateResponse(data: dict, status: int = 200):
+def generate_response(data: dict, status: int = 200):
 
     #§ GZIPping response data §#
     json_str = json.dumps(data, ensure_ascii=False)
@@ -25,7 +25,7 @@ def generateResponse(data: dict, status: int = 200):
     return response
 
 #§ Function to check if CRC & Token from request headers are valid §#
-def checkRequestValidity(request):
+def check_request_validity(request):
 
     #§ Extracting id and token from Authorization header §#
     internalId = request.headers.get("Authorization").split(":")[0]
@@ -51,10 +51,10 @@ def checkRequestValidity(request):
         return {"success":False, "error":"token_mismatch"}
     
 #§ Generating & returning custom error response with an error code of 400 §#
-def errorResponse(reason, status = 400):
+def error_response(reason, status = 400):
     body = {
         "reason": reason,
     }
-    return generateResponse(body, status)
+    return generate_response(body, status)
 
 

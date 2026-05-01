@@ -4,8 +4,8 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import Comment
-from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getCommentData, loadCommentListPage
+from utils.response import generate_response, check_request_validity, error_response
+from utils.get_db_data import get_comment_data, load_comment_list_page
 from config import listConfig
 
 #§ Misc Imports §#
@@ -18,9 +18,9 @@ comment_list_bp = Blueprint("comment_list", __name__, url_prefix="/comment")
 
 def list():
     #§ Checking Request (Token + CRC) validity §#
-    validity = checkRequestValidity(request)
+    validity = check_request_validity(request)
     if not validity["success"]: 
-        return errorResponse(validity["error"])
+        return error_response(validity["error"])
 
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()
@@ -29,13 +29,13 @@ def list():
     cursor = request_data.get("cursor")
 
     if not group_key:
-        return errorResponse("missing_parameters")
+        return error_response("missing_parameters")
     
     cursor_field = "createdAt"
     query = Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc())
     
-    items, cursorToReturn, allLoaded = loadCommentListPage(query, cursor_field, cursor, listConfig["itemReturnLimit"])
-    jsonCommentList = [getCommentData(c.internalId) for c in items]
+    items, cursorToReturn, allLoaded = load_comment_list_page(query, cursor_field, cursor, listConfig["itemReturnLimit"])
+    jsonCommentList = [get_comment_data(c.internalId) for c in items]
 
     #§ Creating body to send §#
     body = {
@@ -50,5 +50,5 @@ def list():
         "timestamp": int(time.time())
     }
 
-    #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
-    return generateResponse(body)
+    #§ Use utils.response generate_response to format correctly (GZip + Headers) §#
+    return generate_response(body)

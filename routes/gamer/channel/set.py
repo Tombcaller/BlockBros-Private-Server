@@ -4,8 +4,8 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import Account, db
-from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getPlayerData
+from utils.response import generate_response, check_request_validity, error_response
+from utils.get_db_data import get_player_data
 
 #§ Misc Imports §#
 import time
@@ -18,9 +18,9 @@ gamer_channel_set_bp = Blueprint("gamer_channel_set", __name__, url_prefix="/gam
 
 def set():
     #§ Checking Request (Token + CRC) validity §#
-    validity = checkRequestValidity(request)
+    validity = check_request_validity(request)
     if not validity["success"]: 
-        return errorResponse(validity["error"])
+        return error_response(validity["error"])
 
     #§ Grabbing current logged in user's internal ID for database usage §# 
     loggedInId = request.headers.get("Authorization").split(":")[0]
@@ -33,7 +33,7 @@ def set():
 
     #§ Checking if request contains required paramaters §#
     if not url:
-        return errorResponse("missing_parameters")
+        return error_response("missing_parameters")
 
     currentUser = Account.query.filter(Account.internalId == loggedInId).first()
     currentUser.channel = url
@@ -44,11 +44,11 @@ def set():
     body = {
         "success": True,
         "result": {},
-        "updated": {"gamer": getPlayerData(loggedInId)} if success == True else {},
+        "updated": {"gamer": get_player_data(loggedInId)} if success == True else {},
         "timestamp": int(time.time())
         }
     
     body["updated"]["gamer"]["inventory"] = json.loads(currentUser.inventory)
 
-    #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
-    return generateResponse(body)
+    #§ Use utils.response generate_response to format correctly (GZip + Headers) §#
+    return generate_response(body)

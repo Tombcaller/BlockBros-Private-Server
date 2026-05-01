@@ -7,8 +7,8 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import Account, db
-from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getPlayerData
+from utils.response import generate_response, check_request_validity, error_response
+from utils.get_db_data import get_player_data
 
 #§ Misc Imports §#
 import time
@@ -21,9 +21,9 @@ gamer_put_bp = Blueprint("gamer_put", __name__, url_prefix="/gamer")
 
 def put():
     #§ Checking Request (Token + CRC) validity §#
-    validity = checkRequestValidity(request)
+    validity = check_request_validity(request)
     if not validity["success"]: 
-        return errorResponse(validity["error"])
+        return error_response(validity["error"])
 
     #§ Grabbing current logged in user's internal ID for database usage §# 
     loggedInId = request.headers.get("Authorization").split(":")[0]
@@ -36,7 +36,7 @@ def put():
 
     #§ Checking if request contains required paramaters §#
     if not nicknameToCheck:
-        return errorResponse("missing_parameters")
+        return error_response("missing_parameters")
 
     #§ Looking up nickname in database §#
     if Account.query.filter(func.lower(Account.nickname) == nicknameToCheck.lower()).first() is not None:
@@ -53,7 +53,7 @@ def put():
     body = {
         "success": True,
         "result": {},
-        "updated": {"gamer": getPlayerData(loggedInId)} if success == True else {},
+        "updated": {"gamer": get_player_data(loggedInId)} if success == True else {},
         "timestamp": int(time.time())
         }
     
@@ -62,5 +62,5 @@ def put():
     body["updated"]["gamer"]["gem"] = currentUser.gem
     body["updated"]["gamer"]["inventory"] = json.loads(currentUser.inventory)
 
-    #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
-    return generateResponse(body)
+    #§ Use utils.response generate_response to format correctly (GZip + Headers) §#
+    return generate_response(body)

@@ -3,8 +3,8 @@ from flask import Blueprint, request
 
 from models import db, Level, Account
 from utils.db_item_factory import build_completion
-from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getPlayerData
+from utils.response import generate_response, check_request_validity, error_response
+from utils.get_db_data import get_player_data
 
 import time
 from random import randint
@@ -18,9 +18,9 @@ level_clear_bp = Blueprint("level_clear", __name__, url_prefix="/level")
 
 def clear():
 
-    validity = checkRequestValidity(request)
+    validity = check_request_validity(request)
     if not validity["success"]:
-        return errorResponse(validity["error"])
+        return error_response(validity["error"])
 
     loggedInId = request.headers.get("Authorization").split(":")[0]
 
@@ -71,8 +71,8 @@ def clear():
     body = {
         "success": True,
         "result": result,
-        "updated": { "gamer" : getPlayerData(loggedInId,2) },
+        "updated": { "gamer" : get_player_data(loggedInId,2) },
         "timestamp": int(time.time())
     }
 
-    return generateResponse(body)  
+    return generate_response(body)  

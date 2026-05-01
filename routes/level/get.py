@@ -2,7 +2,7 @@
 from flask import Blueprint, request
 
 from models import db, Level
-from utils.response import generateResponse, checkRequestValidity, errorResponse
+from utils.response import generate_response, check_request_validity, error_response
 from utils.get_db_data import getLevelData
 
 import time
@@ -13,9 +13,9 @@ level_get_bp = Blueprint("level_get", __name__, url_prefix="/level")
 
 def get():
     # good ol validity check
-    validity = checkRequestValidity(request)
+    validity = check_request_validity(request)
     if not validity["success"]:
-        return errorResponse(validity["error"])
+        return error_response(validity["error"])
     
     # grabbing current logged in user's internal ID
     loggedInId = request.headers.get("Authorization").split(":")[0]
@@ -25,10 +25,10 @@ def get():
 
     levelEntry = db.session.query(Level).filter(Level.levelId == level_id).first()
     if not levelEntry:
-        return errorResponse("level not found") 
+        return error_response("level not found") 
     levelData = getLevelData(levelEntry.internalId, loggedInId)
     if not levelData:
-        return errorResponse("level not found")
+        return error_response("level not found")
     
     body = {
         "success": True,
@@ -36,4 +36,4 @@ def get():
         "updated": {},
         "timestamp": int(time.time())
     }
-    return generateResponse(levelData)
+    return generate_response(levelData)

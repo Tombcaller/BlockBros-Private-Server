@@ -4,8 +4,8 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import Account
-from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getPlayerData
+from utils.response import generate_response, check_request_validity, error_response
+from utils.get_db_data import get_player_data
 
 #§ Misc Imports §#
 import time
@@ -16,9 +16,9 @@ gamer_get_bp = Blueprint("gamer_get", __name__, url_prefix="/gamer")
 
 def get():
     #§ Checking Request (Token + CRC) validity §#
-    validity = checkRequestValidity(request)
+    validity = check_request_validity(request)
     if not validity["success"]: 
-        return errorResponse(validity["error"])
+        return error_response(validity["error"])
 
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()
@@ -26,7 +26,7 @@ def get():
 
     #§ Checking if request contains required paramaters §#
     if not gamerIdToCheck:
-        return errorResponse("missing_parameters")
+        return error_response("missing_parameters")
     
     #§ Looking up nickname in database §#
     accountToReturn = Account.query.filter(Account.gamerId == gamerIdToCheck).first()
@@ -38,10 +38,10 @@ def get():
     #§ Creating body to send §#
     body = {
         "success": success,
-        "result": getPlayerData(accountToReturn.internalId, 2) if success == True else {},
+        "result": get_player_data(accountToReturn.internalId, 2) if success == True else {},
         "updated": {},
         "timestamp": int(time.time())
         }
 
-    #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
-    return generateResponse(body)
+    #§ Use utils.response generate_response to format correctly (GZip + Headers) §#
+    return generate_response(body)

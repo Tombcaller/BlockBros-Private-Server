@@ -3,8 +3,8 @@
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
-from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getPlayerData, loadGamerListPage
+from utils.response import generate_response, check_request_validity, error_response
+from utils.get_db_data import get_player_data, loadGamerListPage
 #from config.listConfig import GAMER_LIST_TYPES, itemReturnLimit
 from config import listConfig
 
@@ -18,9 +18,9 @@ gamer_list_bp = Blueprint("gamer_list", __name__, url_prefix="/gamer")
 
 def list():
     #§ Checking Request (Token + CRC) validity §#
-    validity = checkRequestValidity(request)
+    validity = check_request_validity(request)
     if not validity["success"]:
-        return errorResponse(validity["error"])
+        return error_response(validity["error"])
 
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()
@@ -30,11 +30,11 @@ def list():
 
     #§ Checking if request contains required paramaters §#
     if not listType:
-        return errorResponse("missing_parameters")
+        return error_response("missing_parameters")
 
     #§ Checking if request contains valid paramaters §#
     if listType not in listConfig["gamerListTypes"]:
-        return errorResponse("invalid_list_type", 200)
+        return error_response("invalid_list_type", 200)
 
     #§ Grabbing config for specific list type from user request §#
     listTypeConfig = listConfig["gamerListTypes"][listType]
@@ -43,7 +43,7 @@ def list():
 
     #§ Grabbing items, next cursor and allLoaded
     items, cursorToReturn, allLoaded = loadGamerListPage(query, cursor_field, cursor, listConfig["itemReturnLimit"])
-    jsonPlayerList = [getPlayerData(u.internalId) for u in items]
+    jsonPlayerList = [get_player_data(u.internalId) for u in items]
 
     body = {
         "success": True,
@@ -57,5 +57,5 @@ def list():
         "timestamp": int(time.time())
     }
 
-    #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
-    return generateResponse(body)
+    #§ Use utils.response generate_response to format correctly (GZip + Headers) §#
+    return generate_response(body)

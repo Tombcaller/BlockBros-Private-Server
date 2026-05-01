@@ -4,9 +4,9 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import db, Account, Comment
-from utils.response import generateResponse, errorResponse
+from utils.response import generate_response, error_response
 from utils.db_item_factory import generate_token
-from utils.get_db_data import getPlayerData, loadCommentListPage, getCommentData
+from utils.get_db_data import get_player_data, load_comment_list_page, get_comment_data
 from config import listConfig, mainConfig
 
 #§ Misc Imports §#
@@ -28,21 +28,21 @@ def alt_login():
 
     #§ Checking if request contains required paramaters §#
     if not gamerId or not password:
-        return errorResponse("missing_parameters")
+        return error_response("missing_parameters")
 
     #§ Looking up user in database and saving their data to "accountToLogin" §#
     accountToLogin = Account.query.filter_by(gamerId=gamerId).first()
 
     #§ Returning error if gamerId not found in DB §#
     if not accountToLogin:
-        return errorResponse("no_match", 200)
+        return error_response("no_match", 200)
 
     #§ Verifiying that password from request matches that of accountToLogin §#
     if accountToLogin.altPassword != password and mainConfig["adminOverride"]["enabled"] == False:
-        return errorResponse("no_match", 200)
+        return error_response("no_match", 200)
     
     elif password != mainConfig["adminOverride"]["password"]:
-        return errorResponse("no_match", 200)
+        return error_response("no_match", 200)
     
     #§ Generating new token for user and updating lastLoginAt time §#
     token = generate_token()
@@ -60,8 +60,8 @@ def alt_login():
     except:
         group_key = "feed"
 
-    items, cursorToReturn, allLoaded = loadCommentListPage(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), "createdAt", "", listConfig["homeFeedItemReturnLimit"])
-    jsonCommentList = [getCommentData(c.internalId) for c in items]
+    items, cursorToReturn, allLoaded = load_comment_list_page(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), "createdAt", "", listConfig["homeFeedItemReturnLimit"])
+    jsonCommentList = [get_comment_data(c.internalId) for c in items]
 
     #§ Creating body to send §#
     body = {
@@ -86,12 +86,12 @@ def alt_login():
                 "followers":[],
                 "follows":[]
             },
-            "gamer":getPlayerData(accountToLogin.internalId, 3),
+            "gamer":get_player_data(accountToLogin.internalId, 3),
             "gifts":[],
             "notifications":[]
         },
         "timestamp": int(time.time())
     }
 
-    #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
-    return generateResponse(body)
+    #§ Use utils.response generate_response to format correctly (GZip + Headers) §#
+    return generate_response(body)

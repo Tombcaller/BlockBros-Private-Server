@@ -3,7 +3,7 @@
 from flask import Blueprint
 
 #§ Server Utility Imports §#
-from utils.response import generateResponse
+from utils.response import generate_response
 from config import mainConfig
 
 #§ Misc Imports §#
@@ -33,4 +33,4 @@ def update():
                 
         respCode = 409
 
-    return generateResponse(body, respCode)
+    return generate_response(body, respCode)

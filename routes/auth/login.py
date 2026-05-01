@@ -4,9 +4,9 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import Account, db, Comment
-from utils.response import generateResponse, errorResponse
+from utils.response import generate_response, error_response
 from utils.db_item_factory import generate_token
-from utils.get_db_data import getPlayerData, loadCommentListPage, getCommentData
+from utils.get_db_data import get_player_data, load_comment_list_page, get_comment_data
 from config import listConfig
 
 #§ Misc Imports §#
@@ -28,19 +28,19 @@ def login():
 
     #§ Checking if request contains required paramaters §#
     if not internalId or not password:
-        return errorResponse("missing_parameters")
+        return error_response("missing_parameters")
 
     #§ Looking up user in database and saving their data to "accountToLogin" §#
     accountToLogin = Account.query.filter_by(internalId=internalId).first()
 
     #§ Returning error if gamerId not found in DB §#
     if not accountToLogin:
-        return errorResponse("account_not_found")
+        return error_response("account_not_found")
 
     #§ Verifiying that password from request matches that of accountToLogin §#
     if accountToLogin.password != password:
         print(accountToLogin.password + " " + password)
-        return errorResponse("no_match")
+        return error_response("no_match")
     
     #§ Generating new token for user and updating lastLoginAt time §#
     token = generate_token()
@@ -59,8 +59,8 @@ def login():
         group_key = "feed"
 
     cursor_field = "createdAt"
-    items, cursorToReturn, allLoaded = loadCommentListPage(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), cursor_field, "", listConfig["homeFeedItemReturnLimit"])
-    jsonCommentList = [getCommentData(c.internalId) for c in items]
+    items, cursorToReturn, allLoaded = load_comment_list_page(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), cursor_field, "", listConfig["homeFeedItemReturnLimit"])
+    jsonCommentList = [get_comment_data(c.internalId) for c in items]
 
 
     #§ Creating body to send §#
@@ -88,12 +88,12 @@ def login():
                 "followers":[],
                 "follows":[]
             },
-            "gamer": getPlayerData(internalId, 3),
+            "gamer": get_player_data(internalId, 3),
             "gifts":[],
             "notifications":[]
         },
         "timestamp": int(time.time())
     }
 
-    #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
-    return generateResponse(body)
+    #§ Use utils.response generate_response to format correctly (GZip + Headers) §#
+    return generate_response(body)

@@ -5,8 +5,8 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import Account, db
-from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getLevelData, getPlayerData
+from utils.response import generate_response, check_request_validity, error_response
+from utils.get_db_data import getLevelData, get_player_data
 from utils.db_item_factory import build_level
 
 #§ Misc Imports §#
@@ -20,9 +20,9 @@ level_post_bp = Blueprint("level_post", __name__, url_prefix="/level")
 
 def post():
     #§ Checking Request (Token + CRC) validity §#
-    validity = checkRequestValidity(request)
+    validity = check_request_validity(request)
     if not validity["success"]: 
-        return errorResponse(validity["error"])
+        return error_response(validity["error"])
 
     #§ Grabbing current logged in user's internal ID §# 
     loggedInId = request.headers.get("Authorization").split(":")[0]
@@ -54,9 +54,9 @@ def post():
     body = {
         "success": True,
         "result": result,
-        "updated": getPlayerData(loggedInId,2),
+        "updated": get_player_data(loggedInId,2),
         "timestamp": int(time.time())
         }
     
-    #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
-    return generateResponse(body)
+    #§ Use utils.response generate_response to format correctly (GZip + Headers) §#
+    return generate_response(body)

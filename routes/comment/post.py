@@ -7,8 +7,8 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import db
-from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getCommentData
+from utils.response import generate_response, check_request_validity, error_response
+from utils.get_db_data import get_comment_data
 from utils.db_item_factory import build_comment
 
 #§ Misc Imports §#
@@ -21,9 +21,9 @@ comment_post_bp = Blueprint("comment_post", __name__, url_prefix="/comment")
 
 def post():
     #§ Checking Request (Token + CRC) validity §#
-    validity = checkRequestValidity(request)
+    validity = check_request_validity(request)
     if not validity["success"]: 
-        return errorResponse(validity["error"])
+        return error_response(validity["error"])
 
     #§ Grabbing current logged in user's internal ID for addition to comment §# 
     loggedInId = request.headers.get("Authorization").split(":")[0]
@@ -39,7 +39,7 @@ def post():
     db.session.commit()
 
     result = {
-        "comment":getCommentData(newComment.internalId)
+        "comment":get_comment_data(newComment.internalId)
     }
 
     #§ Creating body to send §#
@@ -50,5 +50,5 @@ def post():
         "timestamp": int(time.time())
         }
 
-    #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
-    return generateResponse(body)
+    #§ Use utils.response generate_response to format correctly (GZip + Headers) §#
+    return generate_response(body)

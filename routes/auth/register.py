@@ -4,9 +4,9 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import db, Comment
-from utils.response import generateResponse
+from utils.response import generate_response
 from utils.db_item_factory import build_account
-from utils.get_db_data import getPlayerData, loadCommentListPage, getCommentData
+from utils.get_db_data import get_player_data, load_comment_list_page, get_comment_data
 from config import listConfig
 
 #§ Misc Imports §#
@@ -57,8 +57,8 @@ def register():
         group_key = "feed"
 
     cursor_field = "createdAt"
-    items, cursorToReturn, allLoaded = loadCommentListPage(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), cursor_field, "", listConfig["homeFeedItemReturnLimit"])
-    jsonCommentList = [getCommentData(c.internalId) for c in items]
+    items, cursorToReturn, allLoaded = load_comment_list_page(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), cursor_field, "", listConfig["homeFeedItemReturnLimit"])
+    jsonCommentList = [get_comment_data(c.internalId) for c in items]
 
     #§ Creating body to send §#
     body = {
@@ -85,12 +85,12 @@ def register():
                 "followers":[],
                 "follows":[]
             },
-            "gamer": getPlayerData(newAccount.internalId, 3),
+            "gamer": get_player_data(newAccount.internalId, 3),
             "gifts":[],
             "notifications":[]
         },
         "timestamp": int(time.time())
     }
 
-    #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
-    return generateResponse(body)
+    #§ Use utils.response generate_response to format correctly (GZip + Headers) §#
+    return generate_response(body)

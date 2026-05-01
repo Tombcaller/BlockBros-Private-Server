@@ -7,8 +7,8 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import Account
-from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getPlayerData
+from utils.response import generate_response, check_request_validity, error_response
+from utils.get_db_data import get_player_data
 
 #§ Misc Imports §#
 import time
@@ -19,9 +19,9 @@ gamer_search_bp = Blueprint("gamer_search", __name__, url_prefix="/gamer")
 
 def search():
     #§ Checking Request (Token + CRC) validity §#
-    validity = checkRequestValidity(request)
+    validity = check_request_validity(request)
     if not validity["success"]: 
-        return errorResponse(validity["error"])
+        return error_response(validity["error"])
 
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()
@@ -31,7 +31,7 @@ def search():
 
     #§ Checking if request contains required paramaters §#
     if not nicknameToCheck:
-        return errorResponse("missing_parameters")
+        return error_response("missing_parameters")
     
     #§ Looking up nickname in database §#
     accountToReturn = Account.query.filter(func.lower(Account.nickname) == nicknameToCheck.lower()).first()
@@ -46,11 +46,11 @@ def search():
         "result": {
             "all_loaded": True,
             "index": 1 if success else 0,
-            "items": [getPlayerData(accountToReturn.internalId)] if success else [],
+            "items": [get_player_data(accountToReturn.internalId)] if success else [],
         },
         "updated": {},
         "timestamp": int(time.time())
         }
 
-    #§ Use utils.response generateResponse to format correctly (GZip + Headers) §#
-    return generateResponse(body)
+    #§ Use utils.response generate_response to format correctly (GZip + Headers) §#
+    return generate_response(body)

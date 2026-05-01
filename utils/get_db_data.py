@@ -9,7 +9,7 @@ import time
 #§ ------------------------- §#
 
 #§ Function to get the player data of a user by internalId §#
-def getPlayerData(internalId, level = 1):
+def get_player_data(internalId, level = 1):
     accountData = Account.query.filter_by(internalId=internalId).first()
     
     accountToReturn = {
@@ -53,7 +53,7 @@ def getPlayerData(internalId, level = 1):
     return accountToReturn
 
 #§ Function to load a page of a "gamer" list from a cursor §#
-def loadGamerListPage(base_query, cursor_field, cursor, limit=10):
+def load_gamer_list_page(base_query, cursor_field, cursor, limit=10):
 
     #§ Exclude accounts with 0 or less of the cursor field §#
     base_query = base_query.filter(getattr(Account, cursor_field) > 0)
@@ -87,7 +87,7 @@ def loadGamerListPage(base_query, cursor_field, cursor, limit=10):
     return items, nextCursor, allLoaded
 
 #§ Function to load a page of a "level" list from a cursor §#
-def loadLevelListPage(base_query, cursor_field, cursor, limit=10):
+def load_level_list_page(base_query, cursor_field, cursor, limit=10):
 
     #§ Exclude levels with 0 or less of the cursor field §#
     base_query = base_query.filter(getattr(Level, cursor_field) > 0)
@@ -121,14 +121,14 @@ def loadLevelListPage(base_query, cursor_field, cursor, limit=10):
     return items, nextCursor, allLoaded
 
 #§ Function to get the data of a comment by internalId §#
-def getCommentData(internalId):
+def get_comment_data(internalId):
     commentData = Comment.query.filter_by(internalId=internalId).first()
 
     commentToReturn = {
         "args": json.loads(commentData.args),
         "commentId": commentData.internalId,
         "createdAt": int(commentData.createdAt),
-        "gamer": getPlayerData(commentData.gamerInternalId),
+        "gamer": get_player_data(commentData.gamerInternalId),
         "message": commentData.message,
         "type": commentData.messageType 
     }
@@ -136,7 +136,7 @@ def getCommentData(internalId):
     return commentToReturn
 
 #§ Function to get the data of a level by internalId §#
-def getLevelData(internalId, gamerInternalId = None):
+def get_level_data(internalId, gamerInternalId = None):
     levelData = Level.query.filter_by(internalId=internalId).first()
     levelCompletionData = Completion.query.filter_by(levelInternalId=internalId, gamerInternalId=gamerInternalId).first() if gamerInternalId else None
 
@@ -150,7 +150,7 @@ def getLevelData(internalId, gamerInternalId = None):
         "difficulty": levelData.difficulty,
         "draft": levelData.draft,
         "gamerInternalId": levelData.gamerInternalId,
-        "gamer": getPlayerData(levelData.gamerInternalId),
+        "gamer": get_player_data(levelData.gamerInternalId),
         "id": levelData.internalId,
         "levelId": levelData.levelId,
         "map": levelData.map,
@@ -170,8 +170,8 @@ def getLevelData(internalId, gamerInternalId = None):
     }
     return levelToReturn
 
-def getCompletionData(levelInternalId, gamerInternalId):
-    completionData = Completion.query.filter_by(levelInternalId=levelInternalId)
+def get_completion_data(levelInternalId, gamerInternalId):
+    completionData = Completion.query.filter_by(levelInternalId=levelInternalId, gamerInternalId=gamerInternalId).first()
     completionToReturn = {
         "gamerInternalId": completionData.gamerInternalId,
         "levelInternalId": completionData.levelInternalId,
@@ -180,7 +180,7 @@ def getCompletionData(levelInternalId, gamerInternalId):
 
     return completionToReturn
 #§ Function to load a page of a "gamer" list from a cursor §#
-def loadCommentListPage(base_query, cursor_field, cursor, limit=10):
+def load_comment_list_page(base_query, cursor_field, cursor, limit=10):
 
     #§ Decode cursor from request (If there is one) §#
     if cursor:
