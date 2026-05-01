@@ -4,7 +4,7 @@ from flask import Blueprint
 
 #§ Server Utility Imports §#
 from utils.response import generateResponse
-from config.config import mainConfig
+from config import mainConfig
 
 #§ Misc Imports §#
 import time

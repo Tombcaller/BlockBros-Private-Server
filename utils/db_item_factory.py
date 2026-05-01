@@ -1,7 +1,7 @@
 #§ -------- IMPORTS -------- §#
 #§ Server Utility Imports §#
 from models import Account, Comment, Level, Completion
-from config.config import defaultAccount
+from config import defaultAccount
 
 #§ Misc Imports §#
 import json

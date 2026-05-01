@@ -8,7 +8,7 @@ import gzip
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getLevelData, loadLevelListPage
 #from config.listConfig import LEVEL_LIST_TYPES, itemReturnLimit
-from config.config import listConfig
+from config import listConfig
 
 #§ blueprint & route stuff §#
 level_list_bp = Blueprint("level_list", __name__, url_prefix="/level")

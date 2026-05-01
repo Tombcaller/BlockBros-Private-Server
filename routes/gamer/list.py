@@ -6,7 +6,7 @@ from flask import Blueprint, request
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getPlayerData, loadGamerListPage
 #from config.listConfig import GAMER_LIST_TYPES, itemReturnLimit
-from config.config import listConfig
+from config import listConfig
 
 #§ Misc Imports §#
 import time

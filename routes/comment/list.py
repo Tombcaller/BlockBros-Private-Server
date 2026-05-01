@@ -6,7 +6,7 @@ from flask import Blueprint, request
 from models import Comment
 from utils.response import generateResponse, checkRequestValidity, errorResponse
 from utils.get_db_data import getCommentData, loadCommentListPage
-from config.config import listConfig
+from config import listConfig
 
 #§ Misc Imports §#
 import time

@@ -8,7 +8,7 @@ from utils.get_db_data import getPlayerData
 
 import time
 from random import randint
-from config.config import clearRewardList
+from config import clearRewardList
 
 
 # blueprint, route ------------ #

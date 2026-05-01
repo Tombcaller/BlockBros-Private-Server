@@ -7,7 +7,7 @@ from models import db, Account, Comment
 from utils.response import generateResponse, errorResponse
 from utils.db_item_factory import generate_token
 from utils.get_db_data import getPlayerData, loadCommentListPage, getCommentData
-from config.config import listConfig, mainConfig
+from config import listConfig, mainConfig
 
 #§ Misc Imports §#
 import time
