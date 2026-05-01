@@ -13,10 +13,10 @@ import re
 
 #§ Functions -- §#
 def generate_password():
-    hex_chars = '0123456789abcdef'
-    hex_string = ''.join(random.choice(hex_chars) for _ in range(40))
-    random_string = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(11))
-    return f"{hex_string}$sha1${random_string}"
+    hexChars = '0123456789abcdef'
+    hexString = ''.join(random.choice(hexChars) for _ in range(40))
+    randomString = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(11))
+    return f"{hexString}$sha1${randomString}"
 
 def generate_altPassword():
     chars = string.ascii_letters + string.digits
@@ -29,49 +29,49 @@ def generate_token():
 def generate_internalId():
     return random.randint(4000000000000000, 7000000000000000)
 
-def get_comment_type(comment_message, loggedInId):
+def get_comment_type(commentMessage, loggedInId):
     #§ Define regex patterns for each category #§
-    level_pattern      = r"#[0-9]+"
-    tag_pattern        = r"#[A-Za-z_]\w*"
-    kamVideoId_pattern = r"%[0-9]+"
-    emblem_pattern     = r"\$[0-9]+"
-    youtube_pattern    = r":youtube"
-    review_pattern     = r"#star"
+    levelPattern      = r"#[0-9]+"
+    tagPattern        = r"#[A-Za-z_]\w*"
+    kamVideoIdPattern = r"%[0-9]+"
+    emblemPattern     = r"\$[0-9]+"
+    youtubePattern    = r":youtube"
+    reviewPattern     = r"#star"
 
     #§ Combined pattern to find the first occurrence of any of them §#
-    combined_pattern = rf"(?:{level_pattern}|{tag_pattern}|{emblem_pattern}|{kamVideoId_pattern}|{youtube_pattern}|{review_pattern})"
+    combinedPattern = rf"(?:{levelPattern}|{tagPattern}|{emblemPattern}|{kamVideoIdPattern}|{youtubePattern}|{reviewPattern})"
 
-    match = re.search(combined_pattern, comment_message)
+    match = re.search(combinedPattern, commentMessage)
 
     result = None
 
     if match:
         token = match.group(0)
 
-        if re.fullmatch(youtube_pattern, token):
+        if re.fullmatch(youtubePattern, token):
             channel = Account.query.filter(Account.internalId == loggedInId).first().channel
             if channel != "":
-                result = {"args": {"youtube": channel}, "type": "youtube", "message": comment_message.strip(token)}
+                result = {"args": {"youtube": channel}, "type": "youtube", "message": commentMessage.strip(token)}
             else:
-                result = {"args": {}, "type": "plain", "message": comment_message.strip(token)}
+                result = {"args": {}, "type": "plain", "message": commentMessage.strip(token)}
         
-        elif re.fullmatch(emblem_pattern, token):
-            result = {"args": {"refId": token[1:]}, "type": "emblem", "message": comment_message.strip(token)}
+        elif re.fullmatch(emblemPattern, token):
+            result = {"args": {"refId": token[1:]}, "type": "emblem", "message": commentMessage.strip(token)}
 
-        elif re.fullmatch(kamVideoId_pattern, token):
-            result = {"args": {"kamVideoId": token[1:]}, "type": "video", "message": comment_message.strip(token)}
+        elif re.fullmatch(kamVideoIdPattern, token):
+            result = {"args": {"kamVideoId": token[1:]}, "type": "video", "message": commentMessage.strip(token)}
 
-        elif re.fullmatch(tag_pattern, token) and token[1:] != "star":
-            result = {"args": {"tag": token[1:]}, "type": "tag", "message": comment_message.strip(token)}
+        elif re.fullmatch(tagPattern, token) and token[1:] != "star":
+            result = {"args": {"tag": token[1:]}, "type": "tag", "message": commentMessage.strip(token)}
 
-        elif re.fullmatch(level_pattern, token):
-            result = {"args": {"levelId": token[1:]}, "type": "level", "message": comment_message.strip(token)}
+        elif re.fullmatch(levelPattern, token):
+            result = {"args": {"levelId": token[1:]}, "type": "level", "message": commentMessage.strip(token)}
 
-        elif re.fullmatch(review_pattern, token):
-            result = {"args": {}, "type": "review", "message": comment_message.strip(token)}
+        elif re.fullmatch(reviewPattern, token):
+            result = {"args": {}, "type": "review", "message": commentMessage.strip(token)}
 
     else:
-        result = {"args": {}, "type": "plain", "message": comment_message}
+        result = {"args": {}, "type": "plain", "message": commentMessage}
 
     return(result)
 #§--------------§#

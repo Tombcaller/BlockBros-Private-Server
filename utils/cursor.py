@@ -10,12 +10,12 @@ def encode_cursor(payload: dict) -> str:
     return base64.urlsafe_b64encode(raw).decode().rstrip("=")
 
 #§ Function to decode json from an encoded cursor §#
-def decode_cursor(cursor_str: str) -> dict | None:
-    if not cursor_str:
+def decode_cursor(cursorStr: str) -> dict | None:
+    if not cursorStr:
         return None
-    padding = '=' * (-len(cursor_str) % 4)
+    padding = '=' * (-len(cursorStr) % 4)
     try:
-        return json.loads(base64.urlsafe_b64decode(cursor_str + padding))
+        return json.loads(base64.urlsafe_b64decode(cursorStr + padding))
     except Exception:
         return None
     

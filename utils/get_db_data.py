@@ -179,6 +179,7 @@ def get_completion_data(levelInternalId, gamerInternalId):
     }
 
     return completionToReturn
+
 #§ Function to load a page of a "gamer" list from a cursor §#
 def load_comment_list_page(baseQuery, cursorField, cursor, limit=10):
 
