@@ -31,8 +31,11 @@ def post():
     #§ Getting user's request data from Flask §#
     requestData = request.get_json()
 
-    commentMessage = requestData["comment"]
-    commentGroupKey = requestData["group_key"]
+    commentMessage = requestData.get("comment")
+    commentGroupKey = requestData.get("group_key")
+
+    if not commentMessage or not commentGroupKey:
+        return error_response("missing_parameters")
 
     newComment = build_comment(commentMessage, commentGroupKey, loggedInId)
     db.session.add(newComment)

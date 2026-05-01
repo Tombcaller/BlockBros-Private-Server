@@ -38,7 +38,7 @@ def clear():
 
     #§ Returning error if any keys are missing from request §#
     if not levelId or not completionTime or not version or not video_loaded:
-        return error_response("invalid_request", 400)
+        return error_response("missing_parameters")
 
     Level.query.filter_by(internalId=levelId).first().playCount += batch["level"][str(levelId)]["play"]
     #-------------------------§#

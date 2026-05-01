@@ -30,11 +30,11 @@ def post():
     #§ Getting user's request data from Flask §#
     requestData = request.get_json()
 
-    title = requestData["title"]
-    levelMap = requestData["map"]
-    theme = requestData["theme"]
-    levelTime = requestData["time"]
-    config = requestData["config"]
+    title = requestData.get("title")
+    levelMap = requestData.get("map")
+    theme = requestData.get("theme")
+    levelTime = requestData.get("time")
+    config = requestData.get("config")
 
     #§ Returning error if any fields are missing §#
     if not title or not levelMap or not theme or not levelTime:

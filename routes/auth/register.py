@@ -4,7 +4,7 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import db, Comment
-from utils.response import generate_response
+from utils.response import generate_response, error_response
 from utils.db_item_factory import build_account
 from utils.get_db_data import get_player_data, load_comment_list_page, get_comment_data
 from config import listConfig
@@ -27,13 +27,12 @@ def register():
     key = requestData.get("key")
 
     #§ Checking if request contains required paramaters §#
-    if not lang:
-        return {"error": "Invalid request"}, 400
+    if not lang or not key:
+        return error_response("missing_parameters")
 
-    if key:
-        #§ Checking if key is correct §#
-        if key != "Jq983":
-            return {"error": "Invalid key"}, 403
+    #§ Checking if key is correct §#
+    if key != "Jq983":
+        return error_response("invalid_key")
         
     #§ Creating new Account with utils.account_factory Account builder §#
     newAccount = build_account(lang=lang)

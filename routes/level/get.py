@@ -23,6 +23,9 @@ def get():
     requestData = request.get_json()
     levelId = requestData.get("levelId")
 
+    if not levelId:
+        return error_response("missing_parameters")
+
     levelEntry = db.session.query(Level).filter(Level.levelId == levelId).first()
     if not levelEntry:
         return error_response("level not found") 
