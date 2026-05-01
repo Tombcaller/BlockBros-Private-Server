@@ -6,6 +6,7 @@ from flask_cors import CORS
 #§ Server Utility Imports §#
 from routes import register_blueprints
 from models import db
+import config
 
 #§ Misc Imports §#
 import os
@@ -22,7 +23,7 @@ CORS(app, resources={r"/*": {"origins": "*", "methods": ["POST"]}})
 register_blueprints(app)
 
 #§ Database config §#
-db_path = os.path.abspath(os.path.join(storage_dir, "data.db"))
+db_path = os.path.abspath(os.path.join(storage_dir, config.serverConfig["db_name"]))
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + db_path
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
@@ -33,6 +34,8 @@ with app.app_context():
 
 #§ Running server on 0.0.0.0 (To accept all incoming traffic addresses) on port 8108 §#
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8108, debug=True)
+    app.run(host= config.serverConfig["host"],
+            port= config.serverConfig["port"],
+            debug=config.serverConfig["debug"])
 
     

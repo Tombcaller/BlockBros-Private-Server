@@ -1,5 +1,15 @@
 from models import Level, Account
 
+#§ General server settings §#
+serverConfig = {
+    "port": 8108,
+    "debug": True,
+    "host": "0.0.0.0",
+    "db_name": "data.db"
+}
+#§ ----------------------- §#
+
+#§ BlockBros server settings §#
 mainConfig = {
   "versionLoading": {
     "enabled": False,
@@ -10,8 +20,11 @@ mainConfig = {
     "password": "a"
   }
 }
+#§ ----------------------- §#
 
+#§ List response config §#
 listConfig = {
+    
   "itemReturnLimit": 10,
   "homeFeedItemReturnLimit": 20,
 
@@ -29,7 +42,6 @@ listConfig = {
           "cursor_field": "builderPt"
       }
   },
-
   "levelListTypes": {
       "own": {
           "query": lambda internalId: Level.query.filter_by(gamerInternalId=internalId).order_by(Level.createdAt.desc()),
@@ -41,7 +53,9 @@ listConfig = {
       },
   }
 }
+#§ ----------------------- §#
 
+#§ Default account settings §#
 defaultAccount = {
 	"adminLevel": 0,
  	"avatar": 1,
@@ -65,7 +79,9 @@ defaultAccount = {
 	"researches": None,
   "inventory": "{\"blocks\":{\"4\": 100, \"5\": 20, \"6\": 20, \"7\": 5, \"8\": 1, \"9\": 3}, \"avatars\":[1], \"themes\":{\"1\": 1}}"
 }
+#§ ----------------------- §#
 
+#§ Level reward settings §#
 clearRewardList = {
       "1": [
         {
@@ -336,3 +352,4 @@ clearRewardList = {
         }
       ]
     }
+#§ ----------------------- §#
