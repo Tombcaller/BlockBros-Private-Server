@@ -4,12 +4,11 @@ from flask import Blueprint, request
 from models import db, Level, Account
 from utils.db_item_factory import build_completion
 from utils.response import generateResponse, checkRequestValidity, errorResponse
-from utils.get_db_data import getLevelData, getPlayerData
+from utils.get_db_data import getPlayerData
 
 import time
 from random import randint
 from config.config import clearRewardList
-
 
 
 # blueprint, route ------------ #
@@ -17,41 +16,45 @@ level_clear_bp = Blueprint("level_clear", __name__, url_prefix="/level")
 @level_clear_bp.route("/clear", methods=["POST"])
 
 
-
 def clear():
+
     validity = checkRequestValidity(request)
     if not validity["success"]:
         return errorResponse(validity["error"])
 
     loggedInId = request.headers.get("Authorization").split(":")[0]
 
-
     request_data = request.get_json()
     print('request data:', request_data)
 
     level_id = request_data.get("level_id")
     completionTime = request_data.get("time")
+
+    #§ NOT YET IMPLEMENTED §#
     version = request_data.get("version")
     video_loaded = request_data.get("video_loaded")
-
+    #§ Kelixe, check discord for plans about this! §#
     batch = request_data.get("batch")
+    Level.query.filter_by(internalId=level_id).first().playCount += batch["level"][str(level_id)]["play"]
+    #-------------------------§#
+
     levelDifficulty = db.session.query(Level).filter(Level.internalId == level_id).first().difficulty
 
-
-    Account.query.filter_by(internalId=loggedInId).first().playerPt += 1
+    #§ Adding stats to level + player after level completion §#
+    Account.query.filter_by(internalId=loggedInId).first().playerPt += levelDifficulty
     Level.query.filter_by(internalId=level_id).first().clearCount += 1
-    Level.query.filter_by(internalId=level_id).first().playCount += batch["level"][str(level_id)]["play"]
-    
+
+    #§ Adding completion to db table §#
     db.session.add(build_completion(level_id, loggedInId, completionTime))
     db.session.commit()
 
+    #§ Generating clear reward based on level difficulty §#
     clearRewardItem = clearRewardList[str(levelDifficulty)][randint(1,len(clearRewardList[str(levelDifficulty)]))]
     clearReward = {
         "id": clearRewardItem["id"],
         "quantity": clearRewardItem["quantity"],
         "type": clearRewardItem["type"]
     }
-
 
     result = {
         "clearReward": clearReward,

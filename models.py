@@ -20,7 +20,7 @@ class Account(db.Model):
     createdAt = db.Column(db.Float)
     emblemCount = db.Column(db.Integer)
     followerCount = db.Column(db.Integer)
-    gamerId = db.Column(db.Integer, primary_key=True)
+    gamerId = db.Column(db.Integer, primary_key=True, autoincrement=True)
     gem = db.Column(db.Integer)
     hasUnfinishedIAP = db.Column(db.Integer)
     homeLevel = db.Column(db.String)
