@@ -24,10 +24,10 @@ def search():
         return error_response(validity["error"])
 
     #§ Getting user's request data from Flask §#
-    request_data = request.get_json()
+    requestData = request.get_json()
 
     #§ Defining params to check in DB from user's request data §#
-    nicknameToCheck = request_data.get("nickname")
+    nicknameToCheck = requestData.get("nickname")
 
     #§ Checking if request contains required paramaters §#
     if not nicknameToCheck:

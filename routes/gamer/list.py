@@ -23,10 +23,10 @@ def list():
         return error_response(validity["error"])
 
     #§ Getting user's request data from Flask §#
-    request_data = request.get_json()
-    listType = request_data.get("type")
-    index = int(request_data.get("index", 0))
-    cursor = request_data.get("cursor")
+    requestData = request.get_json()
+    listType = requestData.get("type")
+    index = int(requestData.get("index", 0))
+    cursor = requestData.get("cursor")
 
     #§ Checking if request contains required paramaters §#
     if not listType:

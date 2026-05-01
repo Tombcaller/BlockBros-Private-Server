@@ -23,10 +23,10 @@ def list():
         return error_response(validity["error"])
 
     #§ Getting user's request data from Flask §#
-    request_data = request.get_json()
-    group_key = request_data.get("group_key")
-    index = int(request_data.get("index", 0))
-    cursor = request_data.get("cursor")
+    requestData = request.get_json()
+    group_key = requestData.get("group_key")
+    index = int(requestData.get("index", 0))
+    cursor = requestData.get("cursor")
 
     if not group_key:
         return error_response("missing_parameters")

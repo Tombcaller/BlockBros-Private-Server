@@ -25,8 +25,8 @@ def delete():
     loggedInId = request.headers.get("Authorization").split(":")[0]
 
     #§ Getting user's request data from Flask §#
-    request_data = request.get_json()
-    comment_id = request_data.get("comment_id")
+    requestData = request.get_json()
+    comment_id = requestData.get("comment_id")
 
     if not comment_id:
         return error_response("missing_parameters")

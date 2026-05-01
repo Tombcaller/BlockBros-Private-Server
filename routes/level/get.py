@@ -20,10 +20,10 @@ def get():
     # grabbing current logged in user's internal ID
     loggedInId = request.headers.get("Authorization").split(":")[0]
 
-    request_data = request.get_json()
-    level_id = request_data.get("level_id")
+    requestData = request.get_json()
+    levelId = requestData.get("levelId")
 
-    levelEntry = db.session.query(Level).filter(Level.levelId == level_id).first()
+    levelEntry = db.session.query(Level).filter(Level.levelId == levelId).first()
     if not levelEntry:
         return error_response("level not found") 
     levelData = getLevelData(levelEntry.internalId, loggedInId)

@@ -26,11 +26,11 @@ def list():
     loggedInId = request.headers.get("Authorization").split(":")[0]
 
     #§ Getting user's request data from Flask §#
-    request_data = request.get_json()
-    listType = request_data.get("type")
-    index = int(request_data.get("index", 0))
-    cursor = request_data.get("cursor")
-    gamer_id = request_data.get("gamer_id")
+    requestData = request.get_json()
+    listType = requestData.get("type")
+    index = int(requestData.get("index", 0))
+    cursor = requestData.get("cursor")
+    gamer_id = requestData.get("gamer_id")
 
     if listType not in listConfig["levelListTypes"]:
         return error_response("invalid_list_type", 200)

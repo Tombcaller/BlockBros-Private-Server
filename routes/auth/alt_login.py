@@ -20,11 +20,11 @@ auth_alt_login_bp = Blueprint("auth_alt_login", __name__, url_prefix="/auth")
 def alt_login():
 
     #§ Getting user's request data from Flask §#
-    request_data = request.get_json()
+    requestData = request.get_json()
 
     #§ Defining login params to check in DB from user's request data §#
-    gamerId = request_data.get("gamer_id")
-    password = request_data.get("password")
+    gamerId = requestData.get("gamer_id")
+    password = requestData.get("password")
 
     #§ Checking if request contains required paramaters §#
     if not gamerId or not password:

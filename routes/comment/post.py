@@ -29,10 +29,10 @@ def post():
     loggedInId = request.headers.get("Authorization").split(":")[0]
 
     #§ Getting user's request data from Flask §#
-    request_data = request.get_json()
+    requestData = request.get_json()
 
-    commentMessage = request_data["comment"]
-    commentGroupKey = request_data["group_key"]
+    commentMessage = requestData["comment"]
+    commentGroupKey = requestData["group_key"]
 
     newComment = build_comment(commentMessage, commentGroupKey, loggedInId)
     db.session.add(newComment)

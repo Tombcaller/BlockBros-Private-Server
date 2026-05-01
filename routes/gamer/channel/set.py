@@ -26,10 +26,10 @@ def set():
     loggedInId = request.headers.get("Authorization").split(":")[0]
 
     #§ Getting user's request data from Flask §#
-    request_data = request.get_json()
+    requestData = request.get_json()
 
     #§ Defining login params to check in DB from user's request data §#
-    url = request_data.get("url")
+    url = requestData.get("url")
 
     #§ Checking if request contains required paramaters §#
     if not url:

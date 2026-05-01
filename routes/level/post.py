@@ -28,13 +28,13 @@ def post():
     loggedInId = request.headers.get("Authorization").split(":")[0]
 
     #§ Getting user's request data from Flask §#
-    request_data = request.get_json()
+    requestData = request.get_json()
 
-    title = request_data["title"]
-    levelMap = request_data["map"]
-    theme = request_data["theme"]
-    levelTime = request_data["time"]
-    config = request_data["config"]
+    title = requestData["title"]
+    levelMap = requestData["map"]
+    theme = requestData["theme"]
+    levelTime = requestData["time"]
+    config = requestData["config"]
 
     #§ Returning error if any fields are missing §#
     if not title or not levelMap or not theme or not levelTime:

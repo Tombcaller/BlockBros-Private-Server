@@ -53,33 +53,33 @@ def get_player_data(internalId, level = 1):
     return accountToReturn
 
 #§ Function to load a page of a "gamer" list from a cursor §#
-def load_gamer_list_page(base_query, cursor_field, cursor, limit=10):
+def load_gamer_list_page(baseQuery, cursorField, cursor, limit=10):
 
     #§ Exclude accounts with 0 or less of the cursor field §#
-    base_query = base_query.filter(getattr(Account, cursor_field) > 0)
+    baseQuery = baseQuery.filter(getattr(Account, cursorField) > 0)
 
     #§ Decode cursor from request (If there is one) §#
     if cursor:
         cursor_data = decode_cursor(cursor)
 
         #§ Grabbing value from cursor to resume list loading from §#
-        boundary = cursor_data.get(cursor_field)
+        boundary = cursor_data.get(cursorField)
 
         #§ If there is a boundary in the cursor, add a filter to the base query §#
         if boundary is not None:
-            base_query = base_query.filter(getattr(Account, cursor_field) < boundary)
+            baseQuery = baseQuery.filter(getattr(Account, cursorField) < boundary)
 
     #§ Grabbing items from database query §#
-    results = base_query.limit(limit + 1).all()
+    results = baseQuery.limit(limit + 1).all()
     allLoaded = len(results) < limit
     items = results[:limit]
 
     #§ Encoding a new cursor if not at the last page §#
     nextCursor = None
     if not allLoaded and len(items) > 0:
-        nextBoundary = getattr(items[-1], cursor_field)
+        nextBoundary = getattr(items[-1], cursorField)
         nextCursor = encode_cursor({
-            cursor_field: nextBoundary,
+            cursorField: nextBoundary,
             "generated": int(time.time())
         })
 
@@ -87,33 +87,33 @@ def load_gamer_list_page(base_query, cursor_field, cursor, limit=10):
     return items, nextCursor, allLoaded
 
 #§ Function to load a page of a "level" list from a cursor §#
-def load_level_list_page(base_query, cursor_field, cursor, limit=10):
+def load_level_list_page(baseQuery, cursorField, cursor, limit=10):
 
     #§ Exclude levels with 0 or less of the cursor field §#
-    base_query = base_query.filter(getattr(Level, cursor_field) > 0)
+    baseQuery = baseQuery.filter(getattr(Level, cursorField) > 0)
 
     #§ Decode cursor from request (If there is one) §#
     if cursor:
         cursor_data = decode_cursor(cursor)
 
         #§ Grabbing value from cursor to resume list loading from §#
-        boundary = cursor_data.get(cursor_field)
+        boundary = cursor_data.get(cursorField)
 
         #§ If there is a boundary in the cursor, add a filter to the base query §#
         if boundary is not None:
-            base_query = base_query.filter(getattr(Level, cursor_field) < boundary)
+            baseQuery = baseQuery.filter(getattr(Level, cursorField) < boundary)
 
     #§ Grabbing items from database query §#
-    results = base_query.limit(limit + 1).all()
+    results = baseQuery.limit(limit + 1).all()
     allLoaded = len(results) < limit
     items = results[:limit]
 
     #§ Encoding a new cursor if not at the last page §#
     nextCursor = None
     if not allLoaded and len(items) > 0:
-        nextBoundary = getattr(items[-1], cursor_field)
+        nextBoundary = getattr(items[-1], cursorField)
         nextCursor = encode_cursor({
-            cursor_field: nextBoundary,
+            cursorField: nextBoundary,
             "generated": int(time.time())
         })
 
@@ -180,30 +180,30 @@ def get_completion_data(levelInternalId, gamerInternalId):
 
     return completionToReturn
 #§ Function to load a page of a "gamer" list from a cursor §#
-def load_comment_list_page(base_query, cursor_field, cursor, limit=10):
+def load_comment_list_page(baseQuery, cursorField, cursor, limit=10):
 
     #§ Decode cursor from request (If there is one) §#
     if cursor:
         cursor_data = decode_cursor(cursor)
 
         #§ Grabbing value from cursor to resume list loading from §#
-        boundary = cursor_data.get(cursor_field)
+        boundary = cursor_data.get(cursorField)
 
         #§ If there is a boundary in the cursor, add a filter to the base query §#
         if boundary is not None:
-            base_query = base_query.filter(getattr(Comment, cursor_field) < boundary)
+            baseQuery = baseQuery.filter(getattr(Comment, cursorField) < boundary)
 
     #§ Grabbing items from database query §#
-    results = base_query.limit(limit + 1).all()
+    results = baseQuery.limit(limit + 1).all()
     allLoaded = len(results) < limit
     items = results[:limit]
 
     #§ Encoding a new cursor if not at the last page §#
     nextCursor = None
     if not allLoaded and len(items) > 0:
-        nextBoundary = getattr(items[-1], cursor_field)
+        nextBoundary = getattr(items[-1], cursorField)
         nextCursor = encode_cursor({
-            cursor_field: nextBoundary,
+            cursorField: nextBoundary,
             "generated": int(time.time())
         })
 

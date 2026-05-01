@@ -21,8 +21,8 @@ def get():
         return error_response(validity["error"])
 
     #§ Getting user's request data from Flask §#
-    request_data = request.get_json()
-    gamerIdToCheck = request_data.get("gamer_id")
+    requestData = request.get_json()
+    gamerIdToCheck = requestData.get("gamer_id")
 
     #§ Checking if request contains required paramaters §#
     if not gamerIdToCheck:

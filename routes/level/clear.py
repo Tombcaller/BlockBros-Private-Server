@@ -24,28 +24,33 @@ def clear():
 
     loggedInId = request.headers.get("Authorization").split(":")[0]
 
-    request_data = request.get_json()
-    print('request data:', request_data)
+    requestData = request.get_json()
+    print('request data:', requestData)
 
-    level_id = request_data.get("level_id")
-    completionTime = request_data.get("time")
+    levelId = requestData.get("levelId")
+    completionTime = requestData.get("time")
 
     #§ NOT YET IMPLEMENTED §#
-    version = request_data.get("version")
-    video_loaded = request_data.get("video_loaded")
+    version = requestData.get("version")
+    video_loaded = requestData.get("video_loaded")
     #§ Kelixe, check discord for plans about this! §#
-    batch = request_data.get("batch")
-    Level.query.filter_by(internalId=level_id).first().playCount += batch["level"][str(level_id)]["play"]
+    batch = requestData.get("batch")
+
+    #§ Returning error if any keys are missing from request §#
+    if not levelId or not completionTime or not version or not video_loaded:
+        return error_response("invalid_request", 400)
+
+    Level.query.filter_by(internalId=levelId).first().playCount += batch["level"][str(levelId)]["play"]
     #-------------------------§#
 
-    levelDifficulty = db.session.query(Level).filter(Level.internalId == level_id).first().difficulty
+    levelDifficulty = db.session.query(Level).filter(Level.internalId == levelId).first().difficulty
 
     #§ Adding stats to level + player after level completion §#
     Account.query.filter_by(internalId=loggedInId).first().playerPt += levelDifficulty
-    Level.query.filter_by(internalId=level_id).first().clearCount += 1
+    Level.query.filter_by(internalId=levelId).first().clearCount += 1
 
     #§ Adding completion to db table §#
-    db.session.add(build_completion(level_id, loggedInId, completionTime))
+    db.session.add(build_completion(levelId, loggedInId, completionTime))
     db.session.commit()
 
     #§ Generating clear reward based on level difficulty §#
