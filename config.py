@@ -105,36 +105,6 @@ clearRewardList = {
           "quantity": 1
         },
         {
-          "type": "block",
-          "id": 7,
-          "quantity": 0
-        },
-        {
-          "type": "block",
-          "id": 8,
-          "quantity": 0
-        },
-        {
-          "type": "block",
-          "id": 9,
-          "quantity": 0
-        },
-        {
-          "type": "block",
-          "id": 11,
-          "quantity": 0
-        },
-        {
-          "type": "block",
-          "id": 13,
-          "quantity": 0
-        },
-        {
-          "type": "block",
-          "id": 14,
-          "quantity": 0
-        },
-        {
           "type": "gem",
           "id": 0,
           "quantity": 1
@@ -163,11 +133,6 @@ clearRewardList = {
         },
         {
           "type": "block",
-          "id": 7,
-          "quantity": 0
-        },
-        {
-          "type": "block",
           "id": 8,
           "quantity": 1
         },
@@ -175,21 +140,6 @@ clearRewardList = {
           "type": "block",
           "id": 9,
           "quantity": 1
-        },
-        {
-          "type": "block",
-          "id": 11,
-          "quantity": 0
-        },
-        {
-          "type": "block",
-          "id": 13,
-          "quantity": 0
-        },
-        {
-          "type": "block",
-          "id": 14,
-          "quantity": 0
         },
         {
           "type": "gem",
