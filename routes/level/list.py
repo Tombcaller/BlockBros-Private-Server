@@ -27,7 +27,7 @@ def list():
     listType = requestData.get("type")
     index = int(requestData.get("index", 0))
     cursor = requestData.get("cursor")
-    gamer_id = requestData.get("gamer_id")
+    gamerId = requestData.get("gamer_id")
 
     if listType not in listConfig["levelListTypes"]:
         return error_response("invalid_list_type", 200)
@@ -37,7 +37,7 @@ def list():
     
     listTypeConfig = listConfig["levelListTypes"][listType]
     if listType == "own":
-        query = listTypeConfig["query"](gamer_id)
+        query = listTypeConfig["query"](gamerId)
     else:
         query = listTypeConfig["query"]()
     cursor_field = listTypeConfig["cursor_field"]
