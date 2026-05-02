@@ -42,7 +42,7 @@ class Comment(db.Model):
     messageType = db.Column(db.String, default="plain")
     groupKey = db.Column(db.String, default="feed")
     internalId = db.Column(db.Integer, primary_key=True, unique=True)
-    args = db.Column(db.String, default={})
+    args = db.Column(db.JSON, default={})
     createdAt = db.Column(db.Integer, default=0)
     gamerInternalId = db.Column(db.Integer)
     message = db.Column(db.String)

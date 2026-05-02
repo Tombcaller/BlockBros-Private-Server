@@ -25,7 +25,7 @@ def get_player_data(internalId, level = 1):
         "gamerId": accountData.gamerId,
         "homeLevel": accountData.homeLevel,
         "id": accountData.internalId,
-        "inventory": {"avatars": json.loads(accountData.inventory).get("avatars")} if accountData.inventory else {},
+        "inventory": {"avatars": accountData.inventory.get("avatars") if accountData.inventory else {}},
         "lastLoginAt": int(accountData.lastLoginAt),
         "levelCount": accountData.levelCount,
         "nickname": accountData.nickname,
@@ -36,11 +36,11 @@ def get_player_data(internalId, level = 1):
     
     #§ If requested, higher/more secretive levels of information can be returned §#
     if level >= 2:
-        accountToReturn["campaigns"] = json.loads(accountData.campaigns) if accountData.campaigns else {}
+        accountToReturn["campaigns"] = accountData.campaigns if accountData.campaigns else {}
         accountToReturn["clearCount"] = accountData.clearCount
         accountToReturn["gem"] = accountData.gem
         accountToReturn["hasUnfinishedIAP"] = accountData.hasUnfinishedIAP
-        accountToReturn["inventory"] = json.loads(accountData.inventory) if accountData.inventory else {}
+        accountToReturn["inventory"] = accountData.inventory if accountData.inventory else {}
         accountToReturn["lang"] = accountData.lang
         accountToReturn["maxVideoId"] = accountData.maxVideoId
         accountToReturn["nameVersion"] = accountData.nameVersion
@@ -125,7 +125,7 @@ def get_comment_data(internalId):
     commentData = Comment.query.filter_by(internalId=internalId).first()
 
     commentToReturn = {
-        "args": json.loads(commentData.args),
+        "args": commentData.args,
         "commentId": commentData.internalId,
         "createdAt": int(commentData.createdAt),
         "gamer": get_player_data(commentData.gamerInternalId),
