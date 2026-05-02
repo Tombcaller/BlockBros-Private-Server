@@ -23,7 +23,7 @@ def get():
 
     #§ Getting user's request data from Flask §#
     requestData = request.get_json()
-    decode_batch(requestData.get("batch"))
+    decode_batch(requestData.get("batch"), loggedInId)
 
     gamerIdToCheck = requestData.get("gamer_id")
 

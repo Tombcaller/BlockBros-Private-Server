@@ -29,7 +29,7 @@ def post():
     #§ Getting user's request data from Flask §#
     loggedInId = request.headers.get("Authorization").split(":")[0]
     requestData = request.get_json()
-    decode_batch(requestData.get("batch"))
+    decode_batch(requestData.get("batch"), loggedInId)
 
     commentMessage = requestData.get("comment")
     commentGroupKey = requestData.get("group_key")

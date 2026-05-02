@@ -21,7 +21,7 @@ def get():
     # grabbing current logged in user's internal ID
     loggedInId = request.headers.get("Authorization").split(":")[0]
     requestData = request.get_json()
-    decode_batch(requestData.get("batch"))
+    decode_batch(requestData.get("batch"), loggedInId)
 
     levelId = requestData.get("levelId")
 

@@ -1,6 +1,6 @@
 #§ -------- IMPORTS -------- §#
 #§ Server Utility Imports §#
-from models import Account, Comment, Level, Completion
+from models import Account, Comment, Level, Interactions
 from config import defaultAccount
 
 #§ Misc Imports §#
@@ -141,11 +141,13 @@ def build_level(title = "", levelMap = "", theme = "", levelTime = "", config = 
     }
     return Level(**data)
 
-def build_completion(levelInternalId, gamerInternalId, completionTime):
+def build_interaction(levelInternalId, gamerInternalId, completionTime, givenRating, fav):
     data = {
         "internalId": generate_internalId(),
         "levelInternalId": levelInternalId,
         "gamerInternalId": gamerInternalId,
-        "completionTime": completionTime
+        "completionTime": completionTime,
+        "givenRating": givenRating,
+        "fav": fav
     }
-    return Completion(**data)
+    return Interactions(**data)

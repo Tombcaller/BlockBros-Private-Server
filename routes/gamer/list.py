@@ -25,7 +25,7 @@ def list():
 
     #§ Getting user's request data from Flask §#
     requestData = request.get_json()
-    decode_batch(requestData.get("batch"))
+    decode_batch(requestData.get("batch"), loggedInId)
 
     listType = requestData.get("type")
     index = int(requestData.get("index", 0))

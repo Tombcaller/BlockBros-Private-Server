@@ -34,6 +34,7 @@ class Account(db.Model):
     nickname = db.Column(db.String)
     password = db.Column(db.String)
     playerPt = db.Column(db.Integer)
+    rank = db.Column(db.Integer)
     researches = db.Column(db.String)
     token = db.Column(db.String)
     visibleAt = db.Column(db.Integer)
@@ -79,8 +80,11 @@ class Level(db.Model):
     version = db.Column(db.Integer)
     yesterdayRating = db.Column(db.Integer)
 
-class Completion(db.Model):
+class Interactions(db.Model):
     internalId = db.Column(db.Integer, primary_key=True)
     levelInternalId = db.Column(db.Integer)
     gamerInternalId = db.Column(db.Integer)
     completionTime = db.Column(db.Integer)
+    givenRating = db.Column(db.Integer)
+    fav = db.Column(db.Integer)
+

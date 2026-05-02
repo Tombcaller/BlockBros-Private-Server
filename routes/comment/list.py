@@ -22,10 +22,11 @@ def list():
     validity = check_request_validity(request)
     if not validity["success"]: 
         return error_response(validity["error"])
+    loggedInId = request.headers.get("Authorization").split(":")[0]
 
     #§ Getting user's request data from Flask §#
     requestData = request.get_json()
-    decode_batch(requestData.get("batch"))
+    decode_batch(requestData.get("batch"), loggedInId)
     
     group_key = requestData.get("group_key")
     index = int(requestData.get("index", 0))

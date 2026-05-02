@@ -22,7 +22,8 @@ def alt_login():
 
     #§ Getting user's request data from Flask §#
     requestData = request.get_json()
-    decode_batch(requestData.get("batch"))
+    loggedInId = request.headers.get("Authorization").split(":")[0]
+    decode_batch(requestData.get("batch"), loggedInId)
 
     #§ Defining login params to check in DB from user's request data §#
     gamerId = requestData.get("gamer_id")

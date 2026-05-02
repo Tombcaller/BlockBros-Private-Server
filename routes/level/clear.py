@@ -1,8 +1,8 @@
 # imports --------------------- #
 from flask import Blueprint, request
 
-from models import db, Level, Account
-from utils.db_item_factory import build_completion
+from models import Interactions, db, Level, Account
+from utils.db_item_factory import build_interaction
 from utils.response import generate_response, check_request_validity, error_response
 from utils.get_db_data import get_player_data
 from utils.decode_batch import decode_batch
@@ -25,7 +25,8 @@ def clear():
     #§ Grabbing request data and decoding batch §#
     loggedInId = request.headers.get("Authorization").split(":")[0]
     requestData = request.get_json()
-    decode_batch(requestData.get("batch"))
+
+    decode_batch(requestData.get("batch"), loggedInId)
 
     levelId = requestData.get("levelId")
     completionTime = requestData.get("time")
@@ -39,13 +40,34 @@ def clear():
     #-------------------------§#
 
     levelDifficulty = db.session.query(Level).filter(Level.internalId == levelId).first().difficulty
+    firstClear = db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).filter(Interactions.completionTime > 0).first() is None
 
-    #§ Adding stats to level + player after level completion §#
-    Account.query.filter_by(internalId=loggedInId).first().playerPt += levelDifficulty
-    Level.query.filter_by(internalId=levelId).first().clearCount += 1
+    #§ Adding stats to player after level completion, and recalculate rank §#
+    if firstClear:
+        Account.query.filter_by(internalId=loggedInId).first().playerPt += levelDifficulty
 
-    #§ Adding completion to db table §#
-    db.session.add(build_completion(levelId, loggedInId, completionTime))
+    PP = Account.query.filter_by(internalId=loggedInId).first().playerPt
+    if PP in range(0, 500):
+        Account.query.filter_by(internalId=loggedInId).first().rank = 1 #bronze
+    if PP in range(500, 2000):
+        Account.query.filter_by(internalId=loggedInId).first().rank = 2 #silver
+    if PP in range(2000, 10000):
+        Account.query.filter_by(internalId=loggedInId).first().rank = 3 #gold
+    if PP in range(10000, 80000):
+        Account.query.filter_by(internalId=loggedInId).first().rank = 4 #platinum
+    if PP in range(80000, 250000):
+        Account.query.filter_by(internalId=loggedInId).first().rank = 5 #fire platinum
+    if PP in range(250000, 1000000):
+        Account.query.filter_by(internalId=loggedInId).first().rank = 6 #cores
+    if PP >= 1000000:
+        Account.query.filter_by(internalId=loggedInId).first().rank = 7 #love core
+
+    # grabbing already existing interaction for user+level. if not existing, creating new one.
+    existingInteraction = db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).first()
+    if existingInteraction:
+        existingInteraction.completionTime = completionTime
+    else:
+        db.session.add(build_interaction(levelId, loggedInId, completionTime, -1, 0))
     db.session.commit()
 
     #§ Generating clear reward based on level difficulty §#
@@ -59,10 +81,12 @@ def clear():
     result = {
         "clearReward": clearReward,
         "completed": True,
-        "firstClear": True, # kelixe : always true for now, need to add logic to check if player has cleared before"
-        "ownRecord": True, # kelixe : "same"
+        "firstClear": firstClear,
+        "ownRecord": db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).order_by(Interactions.completionTime.asc()).first().completionTime == completionTime,
         "playerPt" : levelDifficulty,
-        "rank": 1, # kelixe : "same"
+        "rank": db.session.query(Interactions).filter_by(levelInternalId=levelId).order_by(Interactions.completionTime.asc()).all().index(
+            db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).first()
+        ) + 1,
         "time": completionTime,
         "video" : "",
         "videoGem": 0

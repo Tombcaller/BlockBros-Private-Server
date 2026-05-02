@@ -19,14 +19,15 @@ auth_login_bp = Blueprint("auth_login", __name__, url_prefix="/auth")
 @auth_login_bp.route("/login", methods=["POST"])
 
 def login():
-
     #§ Getting user's request data from Flask §#
     requestData = request.get_json()
-    decode_batch(requestData.get("batch"))
+    loggedInId = request.headers.get("Authorization").split(":")[0]
 
     #§ Defining login params to check in DB from user's request data §#
     internalId = requestData.get("id")
     password = requestData.get("password")
+
+    decode_batch(requestData.get("batch"), loggedInId)
 
     #§ Checking if request contains required paramaters §#
     if not internalId or not password:

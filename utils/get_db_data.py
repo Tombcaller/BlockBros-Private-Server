@@ -1,6 +1,6 @@
 #§ -------- IMPORTS -------- §#
 #§ Server Utility Imports §#
-from models import Completion, Level, Account, Comment
+from models import Interactions, Level, Account, Comment
 from utils.cursor import encode_cursor, decode_cursor
 
 #§ Misc Imports §#
@@ -138,7 +138,7 @@ def get_comment_data(internalId):
 #§ Function to get the data of a level by internalId §#
 def get_level_data(internalId, gamerInternalId = None):
     levelData = Level.query.filter_by(internalId=internalId).first()
-    levelCompletionData = Completion.query.filter_by(levelInternalId=internalId, gamerInternalId=gamerInternalId).first() if gamerInternalId else None
+    levelInteractionsData = Interactions.query.filter_by(levelInternalId=internalId, gamerInternalId=gamerInternalId).first() if gamerInternalId else None
 
     levelToReturn = {
         "clearCount": levelData.clearCount,
@@ -149,8 +149,10 @@ def get_level_data(internalId, gamerInternalId = None):
         "createdAt": int(levelData.createdAt),
         "difficulty": levelData.difficulty,
         "draft": levelData.draft,
+        "fav": levelInteractionsData.fav == 1 if levelInteractionsData else False,
         "gamerInternalId": levelData.gamerInternalId,
         "gamer": get_player_data(levelData.gamerInternalId),
+        "givenRating": levelInteractionsData.givenRating if levelInteractionsData else -1,
         "id": levelData.internalId,
         "levelId": levelData.levelId,
         "map": levelData.map,
@@ -160,7 +162,7 @@ def get_level_data(internalId, gamerInternalId = None):
         "tag": levelData.tag,
         "theme": levelData.theme,
         "tier": levelData.tier,
-        "time": levelCompletionData.completionTime if levelCompletionData else 0,
+        "time": levelInteractionsData.completionTime if levelInteractionsData else 0,
         "title": levelData.title,
         "todayRating": levelData.todayRating,
         "uuClearCount": levelData.uuClearCount,
@@ -171,7 +173,7 @@ def get_level_data(internalId, gamerInternalId = None):
     return levelToReturn
 
 def get_completion_data(levelInternalId, gamerInternalId):
-    completionData = Completion.query.filter_by(levelInternalId=levelInternalId, gamerInternalId=gamerInternalId).first()
+    completionData = Interactions.query.filter_by(levelInternalId=levelInternalId, gamerInternalId=gamerInternalId).first()
     completionToReturn = {
         "gamerInternalId": completionData.gamerInternalId,
         "levelInternalId": completionData.levelInternalId,

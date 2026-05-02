@@ -25,7 +25,7 @@ def delete():
     #§ Getting user's request data from Flask §#
     loggedInId = request.headers.get("Authorization").split(":")[0]
     requestData = request.get_json()
-    decode_batch(requestData.get("batch"))
+    decode_batch(requestData.get("batch"), loggedInId)
 
     comment_id = requestData.get("comment_id")
 
