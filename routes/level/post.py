@@ -32,7 +32,7 @@ def post():
 
     title = requestData.get("title")
     levelMap = requestData.get("map")
-    theme = requestData.get("theme")
+    theme = requestData["theme"] # [""] to include theme 0 as valid
     completionTime = requestData.get("time")
     config = requestData.get("config")
 
