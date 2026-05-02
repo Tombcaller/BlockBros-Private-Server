@@ -138,7 +138,11 @@ def get_comment_data(internalId):
 #§ Function to get the data of a level by internalId §#
 def get_level_data(internalId, gamerInternalId = None):
     levelData = Level.query.filter_by(internalId=internalId).first()
-    levelInteractionsData = Interactions.query.filter_by(levelInternalId=internalId, gamerInternalId=gamerInternalId).first() if gamerInternalId else None
+
+    if gamerInternalId:
+        levelInteractionsData = Interactions.query\
+                                .filter_by(levelInternalId=internalId, gamerInternalId=gamerInternalId)\
+                                .first() if gamerInternalId else None
 
     levelToReturn = {
         "clearCount": levelData.clearCount,

@@ -8,7 +8,7 @@ from models import Account, db
 from utils.decode_batch import decode_batch
 from utils.response import generate_response, check_request_validity, error_response
 from utils.get_db_data import get_level_data, get_player_data
-from utils.db_item_factory import build_level
+from utils.db_item_factory import build_interaction, build_level
 
 #§ Misc Imports §#
 import time
@@ -33,15 +33,16 @@ def post():
     title = requestData.get("title")
     levelMap = requestData.get("map")
     theme = requestData.get("theme")
-    levelTime = requestData.get("time")
+    completionTime = requestData.get("time")
     config = requestData.get("config")
 
     #§ Returning error if any fields are missing §#
-    if not title or not levelMap or not theme or not levelTime:
+    if not title or not levelMap or not theme or not completionTime:
         return {"error": "Invalid request"}, 400
     
     #§ Grabbing level object from build_level function §#
-    newLevel = build_level(title, levelMap, theme, levelTime, config, loggedInId)
+    newLevel = build_level(title, levelMap, theme, completionTime, config, loggedInId)
+
     db.session.add(newLevel)
     db.session.query(Account).filter_by(internalId=loggedInId).first().levelCount += 1
     Account.query.filter_by(internalId=loggedInId).first().levelCount += 1
@@ -49,6 +50,10 @@ def post():
 
     #§ Grabbing level data from database to send back (Including new levelId) §#
     result = get_level_data(newLevel.internalId)
+
+    build_interaction(newLevel.internalId, loggedInId, completionTime, -1, 0)
+
+    
 
     #§ Creating body to send §#
     body = {
