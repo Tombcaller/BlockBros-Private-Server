@@ -20,6 +20,7 @@ def get():
     validity = check_request_validity(request)
     if not validity["success"]: 
         return error_response(validity["error"])
+    loggedInId = request.headers.get("Authorization").split(":")[0]
 
     #§ Getting user's request data from Flask §#
     requestData = request.get_json()

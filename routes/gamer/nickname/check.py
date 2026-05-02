@@ -26,7 +26,7 @@ def check():
 
     #§ Getting user's request data from Flask §#
     request_data = request.get_json()
-    decode_batch(request_data.get("batch"))
+    decode_batch(request_data.get("batch"),loggedInId=None)
 
     #§ Defining params to check in DB from user's request data §#
     nicknameToCheck = request_data.get("nickname")

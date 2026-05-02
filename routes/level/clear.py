@@ -71,7 +71,7 @@ def clear():
     db.session.commit()
 
     #§ Generating clear reward based on level difficulty §#
-    clearRewardItem = clearRewardList[str(levelDifficulty)][randint(1,len(clearRewardList[str(levelDifficulty)]))]
+    clearRewardItem = clearRewardList[str(levelDifficulty)][randint(1,len(clearRewardList[str(levelDifficulty)]))-1]
     clearReward = {
         "id": clearRewardItem["id"],
         "quantity": clearRewardItem["quantity"],
