@@ -3,9 +3,10 @@
 from flask import Blueprint, request
 
 #§ Server Utility Imports §#
+from utils.decode_batch import decode_batch
 from utils.response import generate_response, check_request_validity, error_response
-from utils.get_db_data import get_player_data, loadGamerListPage
-#from config.listConfig import GAMER_LIST_TYPES, itemReturnLimit
+from utils.get_db_data import get_player_data, load_gamer_list_page
+
 from config import listConfig
 
 #§ Misc Imports §#
@@ -24,6 +25,8 @@ def list():
 
     #§ Getting user's request data from Flask §#
     requestData = request.get_json()
+    decode_batch(requestData.get("batch"))
+
     listType = requestData.get("type")
     index = int(requestData.get("index", 0))
     cursor = requestData.get("cursor")
@@ -42,7 +45,7 @@ def list():
     cursor_field = listTypeConfig["cursor_field"]
 
     #§ Grabbing items, next cursor and allLoaded
-    items, cursorToReturn, allLoaded = loadGamerListPage(query, cursor_field, cursor, listConfig["itemReturnLimit"])
+    items, cursorToReturn, allLoaded = load_gamer_list_page(query, cursor_field, cursor, listConfig["itemReturnLimit"])
     jsonPlayerList = [get_player_data(u.internalId) for u in items]
 
     body = {

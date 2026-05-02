@@ -5,6 +5,7 @@ from models import db, Level, Account
 from utils.db_item_factory import build_completion
 from utils.response import generate_response, check_request_validity, error_response
 from utils.get_db_data import get_player_data
+from utils.decode_batch import decode_batch
 
 import time
 from random import randint
@@ -17,30 +18,24 @@ level_clear_bp = Blueprint("level_clear", __name__, url_prefix="/level")
 
 
 def clear():
-
     validity = check_request_validity(request)
     if not validity["success"]:
         return error_response(validity["error"])
 
+    #§ Grabbing request data and decoding batch §#
     loggedInId = request.headers.get("Authorization").split(":")[0]
-
     requestData = request.get_json()
-    print('request data:', requestData)
+    decode_batch(requestData.get("batch"))
 
     levelId = requestData.get("levelId")
     completionTime = requestData.get("time")
-
-    #§ NOT YET IMPLEMENTED §#
-    version = requestData.get("version")
-    video_loaded = requestData.get("video_loaded")
-    #§ Kelixe, check discord for plans about this! §#
-    batch = requestData.get("batch")
+    version = requestData.get("version")           # Useless for now
+    video_loaded = requestData.get("video_loaded") # Same as above
 
     #§ Returning error if any keys are missing from request §#
     if not levelId or not completionTime or not version or not video_loaded:
         return error_response("missing_parameters")
 
-    Level.query.filter_by(internalId=levelId).first().playCount += batch["level"][str(levelId)]["play"]
     #-------------------------§#
 
     levelDifficulty = db.session.query(Level).filter(Level.internalId == levelId).first().difficulty

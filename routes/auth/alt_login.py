@@ -4,6 +4,7 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import db, Account, Comment
+from utils.decode_batch import decode_batch
 from utils.response import generate_response, error_response
 from utils.db_item_factory import generate_token
 from utils.get_db_data import get_player_data, load_comment_list_page, get_comment_data
@@ -21,6 +22,7 @@ def alt_login():
 
     #§ Getting user's request data from Flask §#
     requestData = request.get_json()
+    decode_batch(requestData.get("batch"))
 
     #§ Defining login params to check in DB from user's request data §#
     gamerId = requestData.get("gamer_id")

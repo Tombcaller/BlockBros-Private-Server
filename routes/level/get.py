@@ -2,8 +2,9 @@
 from flask import Blueprint, request
 
 from models import db, Level
+from utils.decode_batch import decode_batch
 from utils.response import generate_response, check_request_validity, error_response
-from utils.get_db_data import getLevelData
+from utils.get_db_data import get_level_data
 
 import time
 
@@ -19,8 +20,9 @@ def get():
     
     # grabbing current logged in user's internal ID
     loggedInId = request.headers.get("Authorization").split(":")[0]
-
     requestData = request.get_json()
+    decode_batch(requestData.get("batch"))
+
     levelId = requestData.get("levelId")
 
     if not levelId:
@@ -29,7 +31,7 @@ def get():
     levelEntry = db.session.query(Level).filter(Level.levelId == levelId).first()
     if not levelEntry:
         return error_response("level not found") 
-    levelData = getLevelData(levelEntry.internalId, loggedInId)
+    levelData = get_level_data(levelEntry.internalId, loggedInId)
     if not levelData:
         return error_response("level not found")
     

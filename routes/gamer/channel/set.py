@@ -4,6 +4,7 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import Account, db
+from utils.decode_batch import decode_batch
 from utils.response import generate_response, check_request_validity, error_response
 from utils.get_db_data import get_player_data
 
@@ -22,11 +23,10 @@ def set():
     if not validity["success"]: 
         return error_response(validity["error"])
 
-    #§ Grabbing current logged in user's internal ID for database usage §# 
-    loggedInId = request.headers.get("Authorization").split(":")[0]
-
     #§ Getting user's request data from Flask §#
+    loggedInId = request.headers.get("Authorization").split(":")[0]
     requestData = request.get_json()
+    decode_batch(requestData.get("batch"))
 
     #§ Defining login params to check in DB from user's request data §#
     url = requestData.get("url")

@@ -4,6 +4,7 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import Comment
+from utils.decode_batch import decode_batch
 from utils.response import generate_response, check_request_validity, error_response
 from utils.get_db_data import get_comment_data, load_comment_list_page
 from config import listConfig
@@ -24,6 +25,8 @@ def list():
 
     #§ Getting user's request data from Flask §#
     requestData = request.get_json()
+    decode_batch(requestData.get("batch"))
+    
     group_key = requestData.get("group_key")
     index = int(requestData.get("index", 0))
     cursor = requestData.get("cursor")

@@ -5,8 +5,9 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import Account, db
+from utils.decode_batch import decode_batch
 from utils.response import generate_response, check_request_validity, error_response
-from utils.get_db_data import getLevelData, get_player_data
+from utils.get_db_data import get_level_data, get_player_data
 from utils.db_item_factory import build_level
 
 #§ Misc Imports §#
@@ -24,11 +25,10 @@ def post():
     if not validity["success"]: 
         return error_response(validity["error"])
 
-    #§ Grabbing current logged in user's internal ID §# 
-    loggedInId = request.headers.get("Authorization").split(":")[0]
-
     #§ Getting user's request data from Flask §#
+    loggedInId = request.headers.get("Authorization").split(":")[0]
     requestData = request.get_json()
+    decode_batch(requestData.get("batch"))
 
     title = requestData.get("title")
     levelMap = requestData.get("map")
@@ -48,7 +48,7 @@ def post():
     db.session.commit()
 
     #§ Grabbing level data from database to send back (Including new levelId) §#
-    result = getLevelData(newLevel.internalId)
+    result = get_level_data(newLevel.internalId)
 
     #§ Creating body to send §#
     body = {

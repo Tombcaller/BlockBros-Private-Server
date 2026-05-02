@@ -7,6 +7,7 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import db
+from utils.decode_batch import decode_batch
 from utils.response import generate_response, check_request_validity, error_response
 from utils.get_db_data import get_comment_data
 from utils.db_item_factory import build_comment
@@ -25,11 +26,10 @@ def post():
     if not validity["success"]: 
         return error_response(validity["error"])
 
-    #§ Grabbing current logged in user's internal ID for addition to comment §# 
-    loggedInId = request.headers.get("Authorization").split(":")[0]
-
     #§ Getting user's request data from Flask §#
+    loggedInId = request.headers.get("Authorization").split(":")[0]
     requestData = request.get_json()
+    decode_batch(requestData.get("batch"))
 
     commentMessage = requestData.get("comment")
     commentGroupKey = requestData.get("group_key")

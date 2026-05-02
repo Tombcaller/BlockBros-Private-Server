@@ -4,6 +4,7 @@ from flask import Blueprint, request
 
 #§ Server Utility Imports §#
 from models import Account
+from utils.decode_batch import decode_batch
 from utils.response import generate_response, check_request_validity, error_response
 from utils.get_db_data import get_player_data
 
@@ -22,6 +23,8 @@ def get():
 
     #§ Getting user's request data from Flask §#
     requestData = request.get_json()
+    decode_batch(requestData.get("batch"))
+
     gamerIdToCheck = requestData.get("gamer_id")
 
     #§ Checking if request contains required paramaters §#
