@@ -28,7 +28,7 @@ def clear():
 
     decode_batch(requestData.get("batch"), loggedInId)
 
-    levelId = requestData.get("levelId")
+    levelId = requestData.get("level_id")
     completionTime = requestData.get("time")
     version = requestData.get("version")           # Useless for now
     video_loaded = requestData.get("video_loaded") # Same as above

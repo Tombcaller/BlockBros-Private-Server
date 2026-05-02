@@ -2,7 +2,6 @@ from models import Account, Level, Interactions, db
 from utils.db_item_factory import build_interaction
 import time
 
-# REALLLLLLLY BAD CODE AS OF RIGHT NOW !!! #
 
 def decode_batch(batch, loggedInId):
     if not batch:
