@@ -78,7 +78,7 @@ def clear():
         "clearReward": clearReward,
         "completed": True,
         "firstClear": firstClear,
-        "ownRecord": db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).order_by(Interactions.completionTime.asc()).first().completionTime == completionTime,
+        "ownRecord": db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).order_by(Interactions.completionTime.asc()).first().completionTime == completionTime and firstClear == False,
         "playerPt" : levelDifficulty,
         "rank": db.session.query(Interactions).filter_by(levelInternalId=levelId).order_by(Interactions.completionTime.asc()).all().index(
             db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).first()
