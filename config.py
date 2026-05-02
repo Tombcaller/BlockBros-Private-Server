@@ -76,7 +76,6 @@ defaultAccount = {
 	"nameVersion": 0,
 	"nickname": None,
 	"playerPt": 0,
-  "rank": 1,
 	"researches": None,
   "inventory": "{\"blocks\":{\"4\": 100, \"5\": 20, \"6\": 20, \"7\": 5, \"8\": 1, \"9\": 3}, \"avatars\":[1], \"themes\":{\"1\": 1}}"
 }

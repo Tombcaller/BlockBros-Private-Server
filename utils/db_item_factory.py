@@ -65,7 +65,7 @@ def get_comment_type(commentMessage, loggedInId):
             result = {"args": {"tag": token[1:]}, "type": "tag", "message": commentMessage.strip(token)}
 
         elif re.fullmatch(levelPattern, token):
-            result = {"args": {"levelId": token[1:]}, "type": "level", "message": commentMessage.strip(token)}
+            result = {"args": {"levelId": int(token[1:]) + 10000}, "type": "level", "message": commentMessage.strip(token)}
 
         elif re.fullmatch(reviewPattern, token):
             result = {"args": {}, "type": "review", "message": commentMessage.strip(token)}

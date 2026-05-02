@@ -21,23 +21,21 @@ def get():
     # grabbing current logged in user's internal ID
     loggedInId = request.headers.get("Authorization").split(":")[0]
     requestData = request.get_json()
-    print("before")
+
     decode_batch(requestData.get("batch"), loggedInId)
-    print("after")
 
     levelId = requestData.get("level_id")
-    print("levelId:", levelId)
 
     if not levelId:
         return error_response("missing_parameters")
-    print("wtf2")
+
     levelEntry = db.session.query(Level).filter(Level.levelId == levelId).first()
     if not levelEntry:
         return error_response("level not found") 
     levelData = get_level_data(levelEntry.internalId, loggedInId)
     if not levelData:
         return error_response("level not found")
-    print("test1")
+
     body = {
         "success": True,
         "result": {
@@ -48,5 +46,6 @@ def get():
         "updated": {},
         "timestamp": int(time.time())
     }
+    
     print(body)
     return generate_response(body)
