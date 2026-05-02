@@ -27,15 +27,13 @@ def quickGet():
     if not validity["success"]:
         return error_response(validity["error"])
     
-    loggedInId = request.headers.get("Authorization").split(":")[0]
-    
     #§ Getting user's request data from Flask §#
+    loggedInId = request.headers.get("Authorization").split(":")[0]
     requestData = request.get_json()
     decode_batch(requestData.get("batch"), loggedInId)
 
     randomEntry = db.session.query(Level).order_by(func.random()).first()
-
-    randomLevel = get_level_data(randomEntry.internalId)
+    randomLevel = get_level_data(randomEntry.internalId, loggedInId)
 
     body = {
         "success": True,

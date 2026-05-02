@@ -32,6 +32,7 @@ def get():
     levelEntry = db.session.query(Level).filter(Level.levelId == levelId).first()
     if not levelEntry:
         return error_response("level not found") 
+    
     levelData = get_level_data(levelEntry.internalId, loggedInId)
     if not levelData:
         return error_response("level not found")
@@ -46,6 +47,6 @@ def get():
         "updated": {},
         "timestamp": int(time.time())
     }
-    
+
     print(body)
     return generate_response(body)
