@@ -212,3 +212,17 @@ def load_comment_list_page(baseQuery, cursorField, cursor, limit=10):
 
     #§ Returning items, next page cursor and all loaded state §#
     return items, nextCursor, allLoaded
+
+def get_player_rank(gamerInternalId):
+    account = Account.query.filter_by(internalId=gamerInternalId).first()
+    pp = account.playerPt
+
+    #§ Calculating rank to find correct star amount §#
+    if   pp in range(0, 500):          return 1 #bronze
+    elif pp in range(500, 2000):       return 2 #silver
+    elif pp in range(2000, 10000):     return 3 #gold
+    elif pp in range(10000, 80000):    return 4 #platinum
+    elif pp in range(80000, 250000):   return 5 #fire platinum
+    elif pp in range(250000, 1000000): return 6 #cores
+    elif pp >= 1000000:                return 7 #love core
+    else:                              return 0 #unranked, negative player points

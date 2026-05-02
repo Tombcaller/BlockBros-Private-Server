@@ -37,37 +37,32 @@ def clear():
     if not levelId or not completionTime or not version or not video_loaded:
         return error_response("missing_parameters")
 
-    #-------------------------§#
+    #§-------------------------§#
 
-    levelDifficulty = db.session.query(Level).filter(Level.internalId == levelId).first().difficulty
-    firstClear = db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).filter(Interactions.completionTime > 0).first() is None
+    level = db.session.query(Level).filter(Level.internalId == levelId).first()
+    if not level:
+        return error_response("invalid_level_id")
+
+    levelDifficulty = level.difficulty
+    
+    interaction = db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).first()
+    
+    #§ Checking if player has already completed level §#
+    firstClear = db.session.query(Interactions)\
+        .filter_by(levelInternalId=levelId, gamerInternalId=loggedInId)\
+        .filter(Interactions.completionTime > 0).first() is None
+    
+    account = Account.query.filter_by(internalId=loggedInId).first()
 
     #§ Adding stats to player after level completion, and recalculate rank §#
-    if firstClear:
-        Account.query.filter_by(internalId=loggedInId).first().playerPt += levelDifficulty
-
-    PP = Account.query.filter_by(internalId=loggedInId).first().playerPt
-    if PP in range(0, 500):
-        Account.query.filter_by(internalId=loggedInId).first().rank = 1 #bronze
-    if PP in range(500, 2000):
-        Account.query.filter_by(internalId=loggedInId).first().rank = 2 #silver
-    if PP in range(2000, 10000):
-        Account.query.filter_by(internalId=loggedInId).first().rank = 3 #gold
-    if PP in range(10000, 80000):
-        Account.query.filter_by(internalId=loggedInId).first().rank = 4 #platinum
-    if PP in range(80000, 250000):
-        Account.query.filter_by(internalId=loggedInId).first().rank = 5 #fire platinum
-    if PP in range(250000, 1000000):
-        Account.query.filter_by(internalId=loggedInId).first().rank = 6 #cores
-    if PP >= 1000000:
-        Account.query.filter_by(internalId=loggedInId).first().rank = 7 #love core
+    if firstClear: account.playerPt += levelDifficulty
 
     # grabbing already existing interaction for user+level. if not existing, creating new one.
-    existingInteraction = db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).first()
-    if existingInteraction:
-        existingInteraction.completionTime = completionTime
-    else:
-        db.session.add(build_interaction(levelId, loggedInId, completionTime, -1, 0))
+    if interaction: interaction.completionTime = completionTime
+
+    # will rarely trigger; batch should create interaction normally
+    else: db.session.add(build_interaction(levelId, loggedInId, completionTime, -1, 0))
+
     db.session.commit()
 
     #§ Generating clear reward based on level difficulty §#
@@ -78,6 +73,7 @@ def clear():
         "type": clearRewardItem["type"]
     }
 
+    #§ Building result §#
     result = {
         "clearReward": clearReward,
         "completed": True,
