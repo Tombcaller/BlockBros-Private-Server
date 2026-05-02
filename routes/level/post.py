@@ -45,13 +45,13 @@ def post():
 
     db.session.add(newLevel)
     db.session.query(Account).filter_by(internalId=loggedInId).first().levelCount += 1
-    Account.query.filter_by(internalId=loggedInId).first().levelCount += 1
+
     db.session.commit()
+
+    build_interaction(newLevel.internalId, loggedInId, completionTime, -1, 0)
 
     #§ Grabbing level data from database to send back (Including new levelId) §#
     result = get_level_data(newLevel.internalId)
-
-    build_interaction(newLevel.internalId, loggedInId, completionTime, -1, 0)
 
     
 
