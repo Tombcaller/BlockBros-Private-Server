@@ -55,6 +55,20 @@ listConfig = {
 }
 #§ ----------------------- §#
 
+'''"blocks": {
+        "4": 100,
+        "5": 20,
+        "6": 20,
+        "7": 5,
+        "8": 1,
+        "9": 3
+      },
+      "avatars": [1],
+      "themes": {
+        "1": 1
+      }
+'''
+
 #§ Default account settings §#
 defaultAccount = {
 	"adminLevel": 0,
@@ -78,20 +92,6 @@ defaultAccount = {
 	"playerPt": 0,
 	"researches": None,
   "inventory": {
-      
-  '''"blocks": {
-        "4": 100,
-        "5": 20,
-        "6": 20,
-        "7": 5,
-        "8": 1,
-        "9": 3
-      },
-      "avatars": [1,69],
-      "themes": {
-        "1": 1
-      }
-    '''
     "blocks": {
         "1": 1000,
         "2": 1000,
