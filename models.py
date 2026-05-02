@@ -34,7 +34,6 @@ class Account(db.Model):
     nickname = db.Column(db.String)
     password = db.Column(db.String)
     playerPt = db.Column(db.Integer)
-    rank = db.Column(db.Integer)
     researches = db.Column(db.String)
     token = db.Column(db.String)
     visibleAt = db.Column(db.Integer)
