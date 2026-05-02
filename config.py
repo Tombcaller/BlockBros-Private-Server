@@ -60,7 +60,7 @@ defaultAccount = {
 	"adminLevel": 0,
  	"avatar": 1,
 	"builderPt": 0,
-	"campaigns": "{}",
+	"campaigns": {},
 	"channel": "",
 	"clearCount": 0,
 	"commentableAt": 0,
