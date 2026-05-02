@@ -42,18 +42,16 @@ def post():
     
     #§ Grabbing level object from build_level function §#
     newLevel = build_level(title, levelMap, theme, completionTime, config, loggedInId)
-
     db.session.add(newLevel)
+
     db.session.query(Account).filter_by(internalId=loggedInId).first().levelCount += 1
 
     db.session.commit()
 
-    build_interaction(newLevel.internalId, loggedInId, completionTime, -1, 0)
+    db.session.add(build_interaction(newLevel.internalId, loggedInId, completionTime, -1, 0))
 
     #§ Grabbing level data from database to send back (Including new levelId) §#
     result = get_level_data(newLevel.internalId, loggedInId)
-
-    
 
     #§ Creating body to send §#
     body = {

@@ -18,8 +18,7 @@ def decode_batch(batch, loggedInId):
             interaction = Interactions.query.filter_by(levelInternalId=levelId,gamerInternalId=loggedInId).first()
             
             if not interaction:
-                interaction = build_interaction(levelInternalId=levelId,gamerInternalId=loggedInId,completionTime=0,givenRating=-1,fav=0)
-                db.session.add(interaction)
+                db.session.add(build_interaction(levelInternalId=levelId,gamerInternalId=loggedInId,completionTime=0,givenRating=-1,fav=0))
 
             #§ Adding play, clear and rating data to level and interaction models §#
             if levelData.get("play"):
