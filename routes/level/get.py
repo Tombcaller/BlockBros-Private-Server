@@ -26,7 +26,7 @@ def get():
 
     levelId = requestData.get("level_id")
 
-    if not levelId:
+    if not levelId or levelId == 0:
         return error_response("missing_parameters")
 
     levelEntry = db.session.query(Level).filter(Level.levelId == levelId).first()
