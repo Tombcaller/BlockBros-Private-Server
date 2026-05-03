@@ -1,5 +1,4 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Sequence
 import time
 
 db = SQLAlchemy()
@@ -50,7 +49,7 @@ class Comment(db.Model):
     
 class Level(db.Model):
     internalId = db.Column(db.Integer)
-    levelId = db.Column(db.Integer, Sequence('levelIdSequence', start=10000),primary_key=True)
+    levelId = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
     gamerInternalId = db.Column(db.Integer)
 

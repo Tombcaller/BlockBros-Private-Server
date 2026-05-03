@@ -28,9 +28,13 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + db_path
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
-#§ Creating database tables (from models.py)§#
+#§ Creating database tables (from models.py) §#
 with app.app_context():
     db.create_all()
+
+    #§ Set levelId autoincrement to start at 10000 §#
+    db.session.execute(db.text("UPDATE sqlite_sequence SET seq = 9999 WHERE name = 'level'"))
+    db.session.commit()
 
 #§ Running server on 0.0.0.0 (To accept all incoming traffic addresses) on port 8108 §#
 if __name__ == "__main__":
