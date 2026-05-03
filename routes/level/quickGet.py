@@ -33,7 +33,7 @@ def quickGet():
     decode_batch(requestData.get("batch"), loggedInId)
 
     randomEntry = db.session.query(Level).order_by(func.random()).first()
-    if randomEntry: randomLevel = get_level_data(randomEntry.internalId, loggedInId)
+    if randomEntry and randomEntry.internalId != 0: randomLevel = get_level_data(randomEntry.internalId, loggedInId)
 
     body = {
         "success": True,
