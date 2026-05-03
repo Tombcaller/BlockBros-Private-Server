@@ -102,7 +102,7 @@ def build_comment(message = "", groupKey = "feed", gamerInternalId = 0):
         "messageType": typeData["type"],
         "groupKey": groupKey,
         "internalId": generate_internalId(),
-        "args": json.dumps(typeData["args"]),
+        "args": typeData["args"],
         "createdAt": time.time(),
         "gamerInternalId": gamerInternalId,
         "message": typeData["message"]
