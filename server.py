@@ -5,7 +5,7 @@ from flask_cors import CORS
 
 #§ Server Utility Imports §#
 from routes import register_blueprints
-from models import db
+from models import db, Level
 import config
 
 #§ Misc Imports §#
@@ -32,9 +32,11 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-    #§ Set levelId autoincrement to start at 10000 §#
-    db.session.execute(db.text("UPDATE sqlite_sequence SET seq = 9999 WHERE name = 'level'"))
-    db.session.commit()
+    #§ Set levelId autoincrement to start at 10001 by making placeholder level §#
+    if not Level.query.first():
+        placeholderLevel = Level(levelId=10000, internalId=0, gamerInternalId=0, title="Placeholder", theme=0, levelMap="{}", completionTime=0)
+        db.session.add(placeholderLevel)
+        db.session.commit()
 
 #§ Running server on 0.0.0.0 (To accept all incoming traffic addresses) on port 8108 §#
 if __name__ == "__main__":
