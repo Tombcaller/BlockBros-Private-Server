@@ -33,15 +33,15 @@ def quickGet():
     decode_batch(requestData.get("batch"), loggedInId)
 
     randomEntry = db.session.query(Level).order_by(func.random()).first()
-    randomLevel = get_level_data(randomEntry.internalId, loggedInId)
+    if randomEntry: randomLevel = get_level_data(randomEntry.internalId, loggedInId)
 
     body = {
         "success": True,
         "result": {
             "all_loaded": True,
-            "index": 1,
+            "index": 1 if randomLevel else 0,
             "items": [
-                randomLevel
+                randomLevel if randomLevel else None
             ]
         },
         "updated": {},
