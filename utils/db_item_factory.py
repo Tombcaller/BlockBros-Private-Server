@@ -113,7 +113,7 @@ def build_comment(message = "", groupKey = "feed", gamerInternalId = 0):
 def build_level(title = "", levelMap = "", theme = "", levelTime = "", config = "", gamerInternalId = 0):
     data = {
         "title": title,
-        "map": levelMap,
+        "levelMap": levelMap,
         "theme": theme,
         "time": levelTime,
         "config": config,
