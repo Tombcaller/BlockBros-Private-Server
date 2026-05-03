@@ -34,7 +34,7 @@ with app.app_context():
 
     #§ Set levelId autoincrement to start at 10001 by making placeholder level §#
     if not Level.query.first():
-        placeholderLevel = Level(levelId=10000, internalId=0, gamerInternalId=0, title="Placeholder", theme=0, levelMap="{}", completionTime=0)
+        placeholderLevel = Level(levelId=10000, internalId=0, gamerInternalId=0, title="Placeholder", theme=0, levelMap=[], config={})
         db.session.add(placeholderLevel)
         db.session.commit()
 
