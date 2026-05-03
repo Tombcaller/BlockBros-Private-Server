@@ -33,17 +33,15 @@ def quickGet():
     decode_batch(requestData.get("batch"), loggedInId)
 
     randomEntry = db.session.query(Level).order_by(func.random()).first()
-    if randomEntry and randomEntry.internalId != 0: randomLevel = get_level_data(randomEntry.internalId, loggedInId)
+    if randomEntry and randomEntry.internalId != 0: 
+        randomLevel = get_level_data(randomEntry.internalId, loggedInId)
+        result = {"all_loaded": True, "index": 1, "items": [randomLevel]}
+    else:
+        result = {"all_loaded": True, "index": 0, "items": []}
 
     body = {
         "success": True,
-        "result": {
-            "all_loaded": True,
-            "index": 1 if randomLevel else 0,
-            "items": [
-                randomLevel if randomLevel else None
-            ]
-        },
+        "result": result,
         "updated": {},
         "timestamp": int(time.time())
     }
