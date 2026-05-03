@@ -54,14 +54,15 @@ def put():
     body = {
         "success": True,
         "result": {},
-        "updated": {"gamer": get_player_data(loggedInId)} if success == True else {},
+        "updated": {"gamer": get_player_data(loggedInId)} if success else {},
         "timestamp": int(time.time())
         }
     
-    #§ Adding missing headers not returned by default §#
-    body["updated"]["gamer"]["nameVersion"] = currentUser.nameVersion
-    body["updated"]["gamer"]["gem"] = currentUser.gem
-    body["updated"]["gamer"]["inventory"] = currentUser.inventory
+    if success:
+        #§ Adding missing headers not returned by default §#
+        body["updated"]["gamer"]["nameVersion"] = currentUser.nameVersion
+        body["updated"]["gamer"]["gem"] = currentUser.gem
+        body["updated"]["gamer"]["inventory"] = currentUser.inventory
 
     #§ Use utils.response generate_response to format correctly (GZip + Headers) §#
     return generate_response(body)
