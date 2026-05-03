@@ -159,7 +159,7 @@ def get_level_data(internalId, gamerInternalId = None):
         "givenRating": levelInteractionsData.givenRating if levelInteractionsData else -1,
         "id": levelData.internalId,
         "levelId": levelData.levelId,
-        "map": levelData.map,
+        "map": levelData.levelMap,
         "playCount": levelData.playCount,
         "rating": levelData.rating,
         "ratingCount": levelData.ratingCount,

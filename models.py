@@ -62,7 +62,7 @@ class Level(db.Model):
     difficulty = db.Column(db.Integer)
     draft = db.Column(db.Integer)
 
-    map = db.Column(db.JSON)
+    levelMap = db.Column(db.JSON)
 
     playCount = db.Column(db.Integer)
     rating = db.Column(db.Integer)
