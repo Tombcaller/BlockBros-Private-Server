@@ -1,5 +1,5 @@
 #§ imports ------------------ §#
-from flask import Blueprint, request
+from flask import Blueprint, json, request
 
 from models import Interactions, db, Level
 from utils.decode_batch import decode_batch
@@ -28,34 +28,34 @@ def update():
     #§ grabbing data if valid §#
     level_id = requestData.get("level_id")
     title = requestData.get("title")
-    map = requestData.get("map")
+    levelMap = requestData.get("map")
     theme = requestData.get("theme")
     clear_ranking = requestData.get("clear_ranking")
     level_group_id = requestData.get("level_group_id")
     config = requestData.get("config")
-    if not level_id or not title or not map or not theme or not clear_ranking or level_group_id is None:
+    if not level_id or not title or not levelMap or not theme or clear_ranking is None:
         return error_response("missing_parameters")
-    
+
     #§ updating level in database§#
     levelEntry = db.session.query(Level).filter_by(internalId=level_id).first()
     if not levelEntry:
         return error_response("level_not_found")
-    if levelEntry.gamerInternalId != loggedInId:
+    if levelEntry.gamerInternalId != int(loggedInId):
         return error_response("not_level_creator")
     levelEntry.title = title
-    levelEntry.map = map
+    levelEntry.levelMap = levelMap
     levelEntry.theme = theme
     if config is not None:
         levelEntry.config = config
     levelEntry.version = (levelEntry.version or 0) + 1
-    if clear_ranking == 1:
+    if clear_ranking:
         db.session.query(Interactions).filter_by(levelInternalId=level_id).delete()
     db.session.commit()
 
     body = {
         "success": True,
-        "result": {},
-        "updated": get_level_data(levelEntry.internalId, loggedInId),
+        "result": get_level_data(levelEntry.internalId, loggedInId),
+        "updated": {},
         "timestamp": int(time.time())
     }
 

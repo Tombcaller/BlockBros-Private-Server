@@ -217,6 +217,36 @@ def load_comment_list_page(baseQuery, cursorField, cursor, limit=10):
     #§ Returning items, next page cursor and all loaded state §#
     return items, nextCursor, allLoaded
 
+def load_ranking_list_page(baseQuery, cursorField, cursor, limit=10):
+
+    #§ Decode cursor from request (If there is one) §#
+    if cursor:
+        cursor_data = decode_cursor(cursor)
+
+        #§ Grabbing value from cursor to resume list loading from §#
+        boundary = cursor_data.get(cursorField)
+
+        #§ If there is a boundary in the cursor, add a filter to the base query §#
+        if boundary is not None:
+            baseQuery = baseQuery.filter(getattr(Interactions, cursorField) < boundary)
+
+    #§ Grabbing items from database query §#
+    results = baseQuery.limit(limit + 1).all()
+    allLoaded = len(results) < limit
+    items = results[:limit]
+
+    #§ Encoding a new cursor if not at the last page §#
+    nextCursor = None
+    if not allLoaded and len(items) > 0:
+        nextBoundary = getattr(items[-1], cursorField)
+        nextCursor = encode_cursor({
+            cursorField: nextBoundary,
+            "generated": int(time.time())
+        })
+
+    #§ Returning items, next page cursor and all loaded state §#
+    return items, nextCursor, allLoaded
+
 def get_player_rank(gamerInternalId):
     account = Account.query.filter_by(internalId=gamerInternalId).first()
     pp = account.playerPt
