@@ -40,8 +40,7 @@ def clear():
     #§-------------------------§#
 
     level = db.session.query(Level).filter(Level.internalId == levelId).first()
-    if not level:
-        return error_response("invalid_level_id")
+    if not level: return error_response("invalid_level_id")
 
     levelDifficulty = level.difficulty
     levelOwnerId = level.gamerInternalId
@@ -57,8 +56,7 @@ def clear():
 
     #§ Checking if player has already completed level §#
     firstClear = interaction.completionTime is None
-
-    
+    #§ *untested and no idea if this works i need to remind myself to check tonight* §#
 
     #§ Checking if player has completed level already or owns the level §#
     if firstClear and loggedInId != levelOwnerId:
