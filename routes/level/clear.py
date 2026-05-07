@@ -82,18 +82,26 @@ def clear():
     #§ Returning no rewards if level completed previously or owned by logged in player §#
     else:
         clearReward = {}
-        playerPtReward = 0    
+        playerPtReward = 0
+
+    #§ Finding rank on leaderboard from interactions database §#
+    leaderboardRank = db.session.query(Interactions).filter_by(levelInternalId=levelId)\
+            .order_by(Interactions.completionTime.asc()).all().index(db.session.query(Interactions)\
+            .filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).first()) + 1
+
+    #§ Checking if the player already has a *faster* completion time §#
+    ownRecord = db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId)\
+            .order_by(Interactions.completionTime.asc()).first()\
+            .completionTime == completionTime and firstClear == False
 
     #§ Building result §#
     result = {
         "clearReward": clearReward,
         "completed": True,
         "firstClear": firstClear,
-        "ownRecord": db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).order_by(Interactions.completionTime.asc()).first().completionTime == completionTime and firstClear == False,
+        "ownRecord": ownRecord,
         "playerPt" : playerPtReward,
-        "rank": db.session.query(Interactions).filter_by(levelInternalId=levelId).order_by(Interactions.completionTime.asc()).all().index(
-            db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).first()
-        ) + 1,
+        "rank": leaderboardRank,
         "time": completionTime,
         "video" : "",
         "videoGem": 0
@@ -102,7 +110,7 @@ def clear():
     body = {
         "success": True,
         "result": result,
-        "updated": { "gamer" : get_player_data(loggedInId,2) },
+        "updated": {"gamer": get_player_data(loggedInId,2)},
         "timestamp": int(time.time())
     }
 
