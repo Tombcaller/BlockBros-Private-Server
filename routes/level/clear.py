@@ -46,25 +46,19 @@ def clear():
     levelDifficulty = level.difficulty
     levelOwnerId = level.gamerInternalId
     
-    interaction = db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).first()
-    
-    #§ Checking if player has already completed level §#
-    firstClear = db.session.query(Interactions)\
-        .filter_by(levelInternalId=levelId, gamerInternalId=loggedInId)\
-        .filter(Interactions.completionTime > 0).first() is None
-    
+    #§ Adding stats to player after level completion §#
     account = Account.query.filter_by(internalId=loggedInId).first()
 
-    #§ Adding stats to player after level completion, and recalculate rank §#
-    if firstClear: account.playerPt += levelDifficulty
+    # grabbing already existing interaction for user+level.
+    interaction = db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).first()
 
-    # grabbing already existing interaction for user+level. if not existing, creating new one.
     if interaction: interaction.completionTime = completionTime
+    else:           db.session.add(build_interaction(levelId, loggedInId, completionTime, -1, 0))
 
-    # will rarely trigger; batch should create interaction normally
-    else: db.session.add(build_interaction(levelId, loggedInId, completionTime, -1, 0))
+    #§ Checking if player has already completed level §#
+    firstClear = interaction.completionTime is None
 
-    db.session.commit()
+    
 
     #§ Checking if player has completed level already or owns the level §#
     if firstClear and loggedInId != levelOwnerId:
@@ -78,6 +72,9 @@ def clear():
         }
 
         playerPtReward = levelDifficulty
+
+        if firstClear: account += playerPtReward
+        db.session.commit()
 
     #§ Returning no rewards if level completed previously or owned by logged in player §#
     else:
@@ -103,6 +100,8 @@ def clear():
         "playerPt" : playerPtReward,
         "rank": leaderboardRank,
         "time": completionTime,
+
+        #§ *Not yet implemented* §#
         "video" : "",
         "videoGem": 0
     }
