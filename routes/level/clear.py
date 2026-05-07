@@ -44,6 +44,7 @@ def clear():
         return error_response("invalid_level_id")
 
     levelDifficulty = level.difficulty
+    levelOwnerId = level.gamerInternalId
     
     interaction = db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).first()
     
@@ -65,13 +66,23 @@ def clear():
 
     db.session.commit()
 
-    #§ Generating clear reward based on level difficulty §#
-    clearRewardItem = clearRewardList[str(levelDifficulty)][randint(1,len(clearRewardList[str(levelDifficulty)]))-1]
-    clearReward = {
-        "id": clearRewardItem["id"],
-        "quantity": clearRewardItem["quantity"],
-        "type": clearRewardItem["type"]
-    }
+    #§ Checking if player has completed level already or owns the level §#
+    if firstClear and loggedInId != levelOwnerId:
+
+        #§ Generating clear reward based on level difficulty §#
+        clearRewardItem = clearRewardList[str(levelDifficulty)][randint(1,len(clearRewardList[str(levelDifficulty)]))-1]
+        clearReward = {
+            "id": clearRewardItem["id"],
+            "quantity": clearRewardItem["quantity"],
+            "type": clearRewardItem["type"]
+        }
+
+        playerPtReward = levelDifficulty
+
+    #§ Returning no rewards if level completed previously or owned by logged in player §#
+    else:
+        clearReward = {}
+        playerPtReward = 0    
 
     #§ Building result §#
     result = {
@@ -79,7 +90,7 @@ def clear():
         "completed": True,
         "firstClear": firstClear,
         "ownRecord": db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).order_by(Interactions.completionTime.asc()).first().completionTime == completionTime and firstClear == False,
-        "playerPt" : levelDifficulty,
+        "playerPt" : playerPtReward,
         "rank": db.session.query(Interactions).filter_by(levelInternalId=levelId).order_by(Interactions.completionTime.asc()).all().index(
             db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).first()
         ) + 1,
@@ -95,4 +106,4 @@ def clear():
         "timestamp": int(time.time())
     }
 
-    return generate_response(body)  
+    return generate_response(body)
