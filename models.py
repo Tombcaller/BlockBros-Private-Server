@@ -79,6 +79,15 @@ class Level(db.Model):
     version = db.Column(db.Integer)
     yesterdayRating = db.Column(db.Integer)
 
+class Emblem(db.Model):
+    createdAt = db.Column(db.Integer)
+    creatorInternalId = db.Column(db.Integer)
+    desc = db.Column(db.String)
+    emblemInternalId = db.Column(db.Integer, primary_key=True, unique=True)
+    owners = db.Column(db.JSON)
+    refId = db.Column(db.Integer)
+    title = db.Column(db.String)
+
 class Interactions(db.Model):
     internalId = db.Column(db.Integer, primary_key=True)
     levelInternalId = db.Column(db.Integer)

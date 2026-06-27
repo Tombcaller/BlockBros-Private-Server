@@ -1,6 +1,6 @@
 #§ -------- IMPORTS -------- §#
 #§ Server Utility Imports §#
-from models import Account, Comment, Level, Interactions
+from models import Account, Comment, Level, Emblem, Interactions
 from config import defaultAccount
 
 #§ Misc Imports §#
@@ -140,6 +140,18 @@ def build_level(title = "", levelMap = "", theme = "", levelTime = "", config = 
         
     }
     return Level(**data)
+
+def build_emblem(title = "", desc = "", emblemMap = "", gamerInternalId = 0):
+    data = {
+        "title": title,
+        "desc": desc,
+        "emblemMap": emblemMap,
+        "internalId": generate_internalId(),
+        "createdAt": time.time(),
+        "gamerInternalId": gamerInternalId
+    }
+    return Emblem(**data)
+
 
 def build_interaction(levelInternalId, gamerInternalId, completionTime, givenRating, fav):
     data = {

@@ -1,6 +1,6 @@
 #§ -------- IMPORTS -------- §#
 #§ Server Utility Imports §#
-from models import Interactions, Level, Account, Comment
+from models import Interactions, Level, Account, Comment, Emblem
 from utils.cursor import encode_cursor, decode_cursor
 
 #§ Misc Imports §#
@@ -175,6 +175,21 @@ def get_level_data(internalId, gamerInternalId = None):
         "yesterdayRating": levelData.yesterdayRating,
     }
     return levelToReturn
+
+def get_emblem_data(internalId, gamerInternalId = None):
+    emblemData = Emblem.query.filter_by(emblemInternalId=internalId).first()
+
+    emblemToReturn = {
+        "createdAt": int(emblemData.createdAt),
+        "creatorInternalId": emblemData.creatorInternalId,
+        "desc": emblemData.desc,
+        "emblemInternalId": emblemData.emblemInternalId,
+        "owners": emblemData.owners,
+        "refId": emblemData.refId,
+        "title": emblemData.title
+    }
+
+    return emblemToReturn
 
 def get_completion_data(levelInternalId, gamerInternalId):
     completionData = Interactions.query.filter_by(levelInternalId=levelInternalId, gamerInternalId=gamerInternalId).first()
