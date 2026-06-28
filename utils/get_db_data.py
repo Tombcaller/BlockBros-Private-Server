@@ -51,7 +51,7 @@ def get_player_data(internalId, level = 1):
 
     return accountToReturn
 
-#§ Function to load a page of a "gamer" list from a cursor §#
+#§ Function to load a page of a gamer list from a cursor §#
 def load_gamer_list_page(baseQuery, cursorField, cursor, limit=10):
 
     #§ Exclude accounts with 0 or less of the cursor field §#
@@ -119,7 +119,7 @@ def load_level_list_page(baseQuery, cursorField, cursor, limit=10):
     #§ Returning items, next page cursor and all loaded state §#
     return items, nextCursor, allLoaded
 
-#§ Function to load a page of a "emblem" list from a cursor §#
+#§ Function to load a page of an emblem list from a cursor §#
 def load_emblem_list_page(baseQuery, cursorField, cursor, limit=10):    
 
     #§ Exclude levels with 0 or less of the cursor field §#
@@ -209,7 +209,7 @@ def get_level_data(internalId, gamerInternalId = None):
     }
     return levelToReturn
 
-def get_emblem_data(emblemInternalId, gamerInternalId = None):
+def get_emblem_data(emblemInternalId):
     
     emblemData = Emblem.query.filter_by(emblemInternalId=emblemInternalId).first()
 
