@@ -4,7 +4,6 @@ from models import Interactions, Level, Account, Comment, Emblem
 from utils.cursor import encode_cursor, decode_cursor
 
 #§ Misc Imports §#
-import json
 import time
 #§ ------------------------- §#
 
@@ -121,7 +120,7 @@ def load_level_list_page(baseQuery, cursorField, cursor, limit=10):
     return items, nextCursor, allLoaded
 
 #§ Function to load a page of a "emblem" list from a cursor §#
-def load_emblem_list_page(baseQuery, cursorField, cursor, limit=10):
+def load_emblem_list_page(baseQuery, cursorField, cursor, limit=10):    
 
     #§ Exclude levels with 0 or less of the cursor field §#
     baseQuery = baseQuery.filter(getattr(Emblem, cursorField) > 0)
@@ -211,6 +210,7 @@ def get_level_data(internalId, gamerInternalId = None):
     return levelToReturn
 
 def get_emblem_data(emblemInternalId, gamerInternalId = None):
+    
     emblemData = Emblem.query.filter_by(emblemInternalId=emblemInternalId).first()
 
     emblemToReturn = {

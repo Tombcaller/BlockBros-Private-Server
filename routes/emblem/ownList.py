@@ -18,7 +18,7 @@ emblem_ownList_bp = Blueprint("emblem_ownList", __name__, url_prefix="/emblem")
 @emblem_ownList_bp.route("/ownList", methods=["POST"])
 
 def ownList():
-    print("0)")
+
     #§ Checking Request (Token + CRC) validity §#
     validity = check_request_validity(request)
     if not validity["success"]:
