@@ -214,6 +214,7 @@ def get_emblem_data(emblemInternalId):
     emblemData = Emblem.query.filter_by(emblemInternalId=emblemInternalId).first()
 
     emblemToReturn = {
+        "id": emblemData.emblemInternalId,
         "createdAt": int(emblemData.createdAt),
         "creatorInternalId": emblemData.creatorInternalId,
         "desc": emblemData.desc,

@@ -43,20 +43,20 @@ def update():
 
     print("2")
     #§ updating level in database§#
-    emblemEntry = db.session.query(Emblem).filter_by(internalId=emblemId).first()
+    emblemEntry = db.session.query(Emblem).filter_by(emblemInternalId=emblemId).first()
     if not emblemEntry:
         return error_response("emblem_not_found")
     if emblemEntry.creatorInternalId != int(loggedInId):
         return error_response("not_emblem_creator")
     emblemEntry.title = title
     emblemEntry.desc = desc
-    emblemEntry.map = emblemMap
+    emblemEntry.emblemMap = emblemMap
     db.session.commit()
 
     print("3")
     body = {
         "success": True,
-        "result": get_emblem_data(emblemEntry.internalId, loggedInId),
+        "result": get_emblem_data(emblemEntry.emblemInternalId),
         "updated": {},
         "timestamp": int(time.time())
     }
