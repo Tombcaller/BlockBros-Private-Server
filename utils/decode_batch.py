@@ -23,11 +23,14 @@ def decode_batch(batch, loggedInId):
                 level.playCount += levelData["play"]
             if levelData.get("clear"):
                 level.clearCount += levelData["clear"]
+
             if levelData.get("rating"):
                 if interaction.givenRating != -1: #if user already rated, ignore new rating
                     continue
+                
                 level.rating += levelData["rating"] * get_player_rank(loggedInId) # rating increases with player rank in 3s
                 interaction.givenRating = levelData["rating"]
+
             if levelData.get("fav"):
                 if levelData["fav"] == True:
                     level.favCount += 1

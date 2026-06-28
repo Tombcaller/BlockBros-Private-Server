@@ -51,15 +51,18 @@ def clear():
     # grabbing already existing interaction for user+level.
     interaction = db.session.query(Interactions).filter_by(levelInternalId=levelId, gamerInternalId=loggedInId).first()
 
+    #§ Checking if player has already completed level §#
+    if interaction.completionTime > 0: firstClear = False
+    else:                              firstClear = True
+
+    #§ Adding new interaction to database if player has not completed level yet §#
     if interaction: interaction.completionTime = completionTime
     else:           db.session.add(build_interaction(levelId, loggedInId, completionTime, -1, 0))
 
-    #§ Checking if player has already completed level §#
-    firstClear = interaction.completionTime is None
-    #§ *untested and no idea if this works i need to remind myself to check tonight* §#
-
     #§ Checking if player has completed level already or owns the level §#
     if firstClear and loggedInId != levelOwnerId:
+
+        print("yes")
 
         #§ Generating clear reward based on level difficulty §#
         clearRewardItem = clearRewardList[str(levelDifficulty)][randint(1,len(clearRewardList[str(levelDifficulty)]))-1]
@@ -71,7 +74,7 @@ def clear():
 
         playerPtReward = levelDifficulty
 
-        if firstClear: account += playerPtReward
+        if firstClear: account.playerPt += playerPtReward
         db.session.commit()
 
     #§ Returning no rewards if level completed previously or owned by logged in player §#
