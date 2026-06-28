@@ -44,7 +44,7 @@ listConfig = {
 
   "levelListTypes": {
       "own": {
-          "query": lambda internalId: Level.query.filter_by(creatorInternalId=internalId).order_by(Level.createdAt.desc()),
+          "query": lambda internalId: Level.query.filter_by(gamerInternalId=internalId).order_by(Level.createdAt.desc()),
           "cursor_field": "createdAt"
       },
       "new": {
