@@ -43,5 +43,3 @@ if __name__ == "__main__":
     app.run(host= config.serverConfig["host"],
             port= config.serverConfig["port"],
             debug=config.serverConfig["debug"])
-
-    
