@@ -32,10 +32,13 @@ def delete():
     
     #§ deleting level from database after validation §#
     levelEntry = db.session.query(Level).filter_by(internalId=level_id).first()
+
     if not levelEntry:
         return error_response("level_not_found")
-    if levelEntry.gamerInternalId != loggedInId:
+
+    if levelEntry.gamerInternalId != int(loggedInId):
         return error_response("not_level_creator")
+    
     db.session.delete(levelEntry)
     db.session.commit()
 
