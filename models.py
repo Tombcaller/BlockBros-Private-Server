@@ -84,7 +84,7 @@ class Emblem(db.Model):
     creatorInternalId = db.Column(db.Integer)
     desc = db.Column(db.String)
     emblemInternalId = db.Column(db.Integer)
-    map = db.Column(db.JSON)
+    emblemMap = db.Column(db.JSON)
     owners = db.Column(db.JSON)
     refId = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String)

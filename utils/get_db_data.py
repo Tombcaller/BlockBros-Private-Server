@@ -218,7 +218,7 @@ def get_emblem_data(emblemInternalId, gamerInternalId = None):
         "creatorInternalId": emblemData.creatorInternalId,
         "desc": emblemData.desc,
         "emblemInternalId": emblemData.emblemInternalId,
-        "map": emblemData.map,
+        "map": emblemData.emblemMap,
         "owners": emblemData.owners,
         "refId": emblemData.refId,
         "title": emblemData.title
