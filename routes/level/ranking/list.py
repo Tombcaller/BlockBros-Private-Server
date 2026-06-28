@@ -14,7 +14,6 @@ level_ranking_list_bp = Blueprint("level_ranking_list", __name__, url_prefix="/l
 @level_ranking_list_bp.route("/ranking/list", methods=["POST"])
 
 def list():
-    print("called?")
     #§ Checking Request (Token + CRC) validity §#
     validity = check_request_validity(request)
     if not validity["success"]:
@@ -46,7 +45,7 @@ def list():
             "gamer": gamer_data,
             "time": interaction.completionTime
         })
-    print("test")
+
     body = {
         "success": True,
         "result": {
