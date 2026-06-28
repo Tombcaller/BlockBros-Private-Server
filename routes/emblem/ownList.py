@@ -5,7 +5,7 @@ from flask import Blueprint, request
 #§ Server Utility Imports §#
 from utils.decode_batch import decode_batch
 from utils.response import generate_response, check_request_validity, error_response
-from utils.get_db_data import get_player_data, load_gamer_list_page
+from utils.get_db_data import get_emblem_data, load_emblem_list_page
 
 from config import listConfig
 
@@ -28,26 +28,21 @@ def ownList():
     requestData = request.get_json()
     decode_batch(requestData.get("batch"), loggedInId)
 
-    listType = requestData.get("type")
     index = int(requestData.get("index", 0))
     cursor = requestData.get("cursor")
 
     #§ Checking if request contains required paramaters §#
-    if not listType:
+    if "index" not in requestData or "cursor" not in requestData:
         return error_response("missing_parameters")
-
-    #§ Checking if request contains valid paramaters §#
-    if listType not in listConfig["gamerListTypes"]:
-        return error_response("invalid_list_type", 200)
-
+    
     #§ Grabbing config for specific list type from user request §#
-    listTypeConfig = listConfig["gamerListTypes"][listType]
-    query = listTypeConfig["query"]()
+    listTypeConfig = listConfig["emblemListTypes"]["own"]
+    query = listTypeConfig["query"](gamerId=loggedInId)
     cursor_field = listTypeConfig["cursor_field"]
 
     #§ Grabbing items, next cursor and allLoaded
-    items, cursorToReturn, allLoaded = load_gamer_list_page(query, cursor_field, cursor, listConfig["itemReturnLimit"])
-    jsonPlayerList = [get_player_data(u.internalId) for u in items]
+    items, cursorToReturn, allLoaded = load_emblem_list_page(query, cursor_field, cursor, listConfig["itemReturnLimit"])
+    jsonEmblemList = [get_emblem_data(u.internalId) for u in items]
 
     body = {
         "success": True,
@@ -55,7 +50,7 @@ def ownList():
             "all_loaded": allLoaded,
             "cursor": cursorToReturn,
             "index": index + len(items),
-            "items": jsonPlayerList
+            "items": jsonEmblemList
         },
         "updated": {},
         "timestamp": int(time.time())

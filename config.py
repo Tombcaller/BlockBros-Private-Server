@@ -1,4 +1,4 @@
-from models import Level, Account
+from models import Emblem, Level, Account
 
 #§ General server settings §#
 serverConfig = {
@@ -25,8 +25,7 @@ mainConfig = {
 #§ List response config §#
 listConfig = {
     
-  "itemReturnLimit": 10,
-  "homeFeedItemReturnLimit": 20,
+  "itemReturnLimit": 50, #originally 10 for levels/players, 20 for comments, 20 for emblems
 
   "gamerListTypes": {
       "active": {
@@ -42,6 +41,7 @@ listConfig = {
           "cursor_field": "builderPt"
       }
   },
+
   "levelListTypes": {
       "own": {
           "query": lambda internalId: Level.query.filter_by(gamerInternalId=internalId).order_by(Level.createdAt.desc()),
@@ -51,6 +51,13 @@ listConfig = {
           "query": lambda: Level.query.order_by(Level.createdAt.desc()),
           "cursor_field": "createdAt"
       },
+  },
+
+  "emblemListTypes": {
+      "own": {
+          "query": lambda internalId: Emblem.query.filter_by(gamerInternalId=internalId).order_by(Emblem.createdAt.desc()),
+          "cursor_field": "createdAt"
+      }
   }
 }
 #§ ----------------------- §#

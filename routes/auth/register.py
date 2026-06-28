@@ -56,7 +56,7 @@ def register():
         group_key = "feed"
 
     cursor_field = "createdAt"
-    items, cursorToReturn, allLoaded = load_comment_list_page(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), cursor_field, "", listConfig["homeFeedItemReturnLimit"])
+    items, cursorToReturn, allLoaded = load_comment_list_page(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), cursor_field, "", listConfig["itemReturnLimit"])
     jsonCommentList = [get_comment_data(c.internalId) for c in items]
 
     #§ Creating body to send §#

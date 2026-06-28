@@ -63,7 +63,7 @@ def alt_login():
     except:
         group_key = "feed"
 
-    items, cursorToReturn, allLoaded = load_comment_list_page(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), "createdAt", "", listConfig["homeFeedItemReturnLimit"])
+    items, cursorToReturn, allLoaded = load_comment_list_page(Comment.query.filter(Comment.groupKey == group_key).order_by(Comment.createdAt.desc()), "createdAt", "", listConfig["itemReturnLimit"])
     jsonCommentList = [get_comment_data(c.internalId) for c in items]
 
     #§ Creating body to send §#
