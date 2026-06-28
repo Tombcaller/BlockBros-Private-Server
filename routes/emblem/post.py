@@ -45,7 +45,7 @@ def post():
     db.session.commit()
 
     #§ Grabbing emblem data from database to send back (Including new emblemId) §#
-    result = get_emblem_data(newEmblem.internalId, loggedInId)
+    result = get_emblem_data(newEmblem.emblemInternalId, loggedInId)
 
     #§ Creating body to send §#
     body = {

@@ -44,7 +44,7 @@ listConfig = {
 
   "levelListTypes": {
       "own": {
-          "query": lambda internalId: Level.query.filter_by(gamerInternalId=internalId).order_by(Level.createdAt.desc()),
+          "query": lambda internalId: Emblem.query.filter_by(creatorInternalId=internalId).order_by(Emblem.createdAt.desc()),
           "cursor_field": "createdAt"
       },
       "new": {
@@ -55,7 +55,7 @@ listConfig = {
 
   "emblemListTypes": {
       "own": {
-          "query": lambda internalId: Emblem.query.filter_by(gamerInternalId=internalId).order_by(Emblem.createdAt.desc()),
+          "query": lambda internalId: Emblem.query.filter_by(creatorInternalId=internalId).order_by(Emblem.createdAt.desc()),
           "cursor_field": "createdAt"
       }
   }

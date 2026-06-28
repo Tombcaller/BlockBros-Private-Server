@@ -145,10 +145,10 @@ def build_emblem(title = "", desc = "", emblemMap = "", gamerInternalId = 0):
     data = {
         "title": title,
         "desc": desc,
-        "emblemMap": emblemMap,
-        "internalId": generate_internalId(),
+        "map": emblemMap,
+        "emblemInternalId": generate_internalId(),
         "createdAt": time.time(),
-        "gamerInternalId": gamerInternalId
+        "creatorInternalId": gamerInternalId
     }
     return Emblem(**data)
 

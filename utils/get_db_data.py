@@ -210,14 +210,15 @@ def get_level_data(internalId, gamerInternalId = None):
     }
     return levelToReturn
 
-def get_emblem_data(internalId, gamerInternalId = None):
-    emblemData = Emblem.query.filter_by(emblemInternalId=internalId).first()
+def get_emblem_data(emblemInternalId, gamerInternalId = None):
+    emblemData = Emblem.query.filter_by(emblemInternalId=emblemInternalId).first()
 
     emblemToReturn = {
         "createdAt": int(emblemData.createdAt),
         "creatorInternalId": emblemData.creatorInternalId,
         "desc": emblemData.desc,
         "emblemInternalId": emblemData.emblemInternalId,
+        "map": emblemData.map,
         "owners": emblemData.owners,
         "refId": emblemData.refId,
         "title": emblemData.title

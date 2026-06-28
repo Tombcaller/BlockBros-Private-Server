@@ -83,9 +83,10 @@ class Emblem(db.Model):
     createdAt = db.Column(db.Integer)
     creatorInternalId = db.Column(db.Integer)
     desc = db.Column(db.String)
-    emblemInternalId = db.Column(db.Integer, primary_key=True, unique=True)
+    emblemInternalId = db.Column(db.Integer)
+    map = db.Column(db.JSON)
     owners = db.Column(db.JSON)
-    refId = db.Column(db.Integer)
+    refId = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String)
 
 class Interactions(db.Model):

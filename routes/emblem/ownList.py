@@ -18,6 +18,7 @@ emblem_ownList_bp = Blueprint("emblem_ownList", __name__, url_prefix="/emblem")
 @emblem_ownList_bp.route("/ownList", methods=["POST"])
 
 def ownList():
+    print("0)")
     #§ Checking Request (Token + CRC) validity §#
     validity = check_request_validity(request)
     if not validity["success"]:
@@ -29,20 +30,16 @@ def ownList():
     decode_batch(requestData.get("batch"), loggedInId)
 
     index = int(requestData.get("index", 0))
-    cursor = requestData.get("cursor")
-
-    #§ Checking if request contains required paramaters §#
-    if "index" not in requestData or "cursor" not in requestData:
-        return error_response("missing_parameters")
+    cursor = requestData.get("cursor", "")
     
     #§ Grabbing config for specific list type from user request §#
     listTypeConfig = listConfig["emblemListTypes"]["own"]
-    query = listTypeConfig["query"](gamerId=loggedInId)
+    query = listTypeConfig["query"](internalId=int(loggedInId))
     cursor_field = listTypeConfig["cursor_field"]
 
     #§ Grabbing items, next cursor and allLoaded
     items, cursorToReturn, allLoaded = load_emblem_list_page(query, cursor_field, cursor, listConfig["itemReturnLimit"])
-    jsonEmblemList = [get_emblem_data(u.internalId) for u in items]
+    jsonEmblemList = [get_emblem_data(u.emblemInternalId) for u in items]
 
     body = {
         "success": True,

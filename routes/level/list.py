@@ -37,7 +37,7 @@ def list():
     
     listTypeConfig = listConfig["levelListTypes"][listType]
     if listType == "own":
-        query = listTypeConfig["query"](gamerId)
+        query = listTypeConfig["query"](internalId=loggedInId)
     else:
         query = listTypeConfig["query"]()
     cursor_field = listTypeConfig["cursor_field"]
